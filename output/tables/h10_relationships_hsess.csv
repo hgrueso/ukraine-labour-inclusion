@@ -1,0 +1,257 @@
+a,b,v
+Sex,Sex,NA
+Sex,Age group,0.018578719955635755
+Sex,Oblast,0.03291279828399439
+Sex,Rural,0.02201507492439056
+Sex,Frontline,0.04776093394984119
+Sex,IDP,0.05172020184027408
+Sex,Disability in household,0.06060208508211369
+Sex,Child under 6,0.18202537961139006
+Sex,Lives with own child,0.2202643176017331
+Sex,Poorest 40%,0.02029870309429861
+Sex,Partnered,0.2908844844140851
+Sex,Education,0.03328849440269994
+Sex,In education,0.10945900932774032
+Sex,Employed,0.01943729919981061
+Sex,NEET,0.12162972486130279
+Sex,Daily childcare,0.2508932805565736
+Age group,Sex,0.01857871995563576
+Age group,Age group,NA
+Age group,Oblast,0.060643538530945326
+Age group,Rural,0.08988781067685117
+Age group,Frontline,0.05128701727510506
+Age group,IDP,0.05683307235261534
+Age group,Disability in household,0.07301702503659184
+Age group,Child under 6,0.05112706934145796
+Age group,Lives with own child,0.15286082626765635
+Age group,Poorest 40%,0.15604990786498796
+Age group,Partnered,0.34399553255056636
+Age group,Education,0.6840196581200616
+Age group,In education,0.5203594522230367
+Age group,Employed,0.4431280399376799
+Age group,NEET,0.2286750539759733
+Age group,Daily childcare,0.11986474933039647
+Oblast,Sex,0.03291279828399439
+Oblast,Age group,0.060643538530945326
+Oblast,Oblast,NA
+Oblast,Rural,0.3015687318336918
+Oblast,Frontline,0.6305208270886017
+Oblast,IDP,0.11685498979550796
+Oblast,Disability in household,0.13428648376349359
+Oblast,Child under 6,0.06654576840157357
+Oblast,Lives with own child,0.07639105119580356
+Oblast,Poorest 40%,0.32497627660266926
+Oblast,Partnered,0.16632191109164157
+Oblast,Education,0.10742203347671438
+Oblast,In education,0.08115658154217605
+Oblast,Employed,0.16794789873554652
+Oblast,NEET,0.1328390116156336
+Oblast,Daily childcare,0.07391444916181346
+Rural,Sex,0.02201507492439056
+Rural,Age group,0.08988781067685117
+Rural,Oblast,0.3015687318336918
+Rural,Rural,NA
+Rural,Frontline,0.05416918495635561
+Rural,IDP,0.09802567340909496
+Rural,Disability in household,0.09996375808278855
+Rural,Child under 6,0.10228834183321116
+Rural,Lives with own child,0.044682811458492136
+Rural,Poorest 40%,0.27553488616902455
+Rural,Partnered,0.10278700430905291
+Rural,Education,0.17946561167158726
+Rural,In education,0.008131918553770774
+Rural,Employed,0.1539311664969657
+Rural,NEET,0.1430425928663743
+Rural,Daily childcare,0.053946241612225845
+Frontline,Sex,0.04776093394984119
+Frontline,Age group,0.05128701727510506
+Frontline,Oblast,0.6305208270886017
+Frontline,Rural,0.05416918495635557
+Frontline,Frontline,NA
+Frontline,IDP,0.0899911944255369
+Frontline,Disability in household,0.05694707022708895
+Frontline,Child under 6,0.011626697450429756
+Frontline,Lives with own child,0.05801541115480223
+Frontline,Poorest 40%,0.04358469939380139
+Frontline,Partnered,0.07392131865159533
+Frontline,Education,0.1223082174961343
+Frontline,In education,0.04527449996289195
+Frontline,Employed,0.03714529998742513
+Frontline,NEET,0.038937750785496626
+Frontline,Daily childcare,0.030111590442095354
+IDP,Sex,0.05172020184027408
+IDP,Age group,0.05683307235261534
+IDP,Oblast,0.11685498979550796
+IDP,Rural,0.09802567340909495
+IDP,Frontline,0.0899911944255369
+IDP,IDP,NA
+IDP,Disability in household,0.03656635184960154
+IDP,Child under 6,0.05893633011581155
+IDP,Lives with own child,0.05084056717359591
+IDP,Poorest 40%,0.04390137205123724
+IDP,Partnered,0.02909200786824364
+IDP,Education,0.08580155677384728
+IDP,In education,0.07942579996095409
+IDP,Employed,0.004550777313369803
+IDP,NEET,0.07873343098364803
+IDP,Daily childcare,0.08919338969427118
+Disability in household,Sex,0.06060208508211369
+Disability in household,Age group,0.07301702503659184
+Disability in household,Oblast,0.13428648376349359
+Disability in household,Rural,0.09996375808278855
+Disability in household,Frontline,0.05694707022708895
+Disability in household,IDP,0.03656635184960154
+Disability in household,Disability in household,NA
+Disability in household,Child under 6,0.03832367527657098
+Disability in household,Lives with own child,0.001859218734447895
+Disability in household,Poorest 40%,0.1442433229263508
+Disability in household,Partnered,0.08437299864466263
+Disability in household,Education,0.10209456944083092
+Disability in household,In education,0.0053818978352975526
+Disability in household,Employed,0.07163721332269316
+Disability in household,NEET,0.06793624893799961
+Disability in household,Daily childcare,0.02885362516412257
+Child under 6,Sex,0.18202537961139006
+Child under 6,Age group,0.05112706934145796
+Child under 6,Oblast,0.06654576840157356
+Child under 6,Rural,0.10228834183321112
+Child under 6,Frontline,0.011626697450429756
+Child under 6,IDP,0.05893633011581155
+Child under 6,Disability in household,0.03832367527657098
+Child under 6,Child under 6,NA
+Child under 6,Lives with own child,0.7269589320962323
+Child under 6,Poorest 40%,0.24847292657053968
+Child under 6,Partnered,0.2619861497859959
+Child under 6,Education,0.1624775524101541
+Child under 6,In education,0.15379991228899847
+Child under 6,Employed,0.07927057596103478
+Child under 6,NEET,0.2669426243869358
+Child under 6,Daily childcare,0.6207091388429009
+Lives with own child,Sex,0.22026431760173312
+Lives with own child,Age group,0.15286082626765635
+Lives with own child,Oblast,0.07639105119580356
+Lives with own child,Rural,0.044682811458492136
+Lives with own child,Frontline,0.05801541115480223
+Lives with own child,IDP,0.05084056717359591
+Lives with own child,Disability in household,0.001859218734447895
+Lives with own child,Child under 6,0.7269589320962323
+Lives with own child,Lives with own child,NA
+Lives with own child,Poorest 40%,0.12808138570090577
+Lives with own child,Partnered,0.42794436537889885
+Lives with own child,Education,0.22980962513660413
+Lives with own child,In education,0.3024042966389717
+Lives with own child,Employed,0.016515532998479156
+Lives with own child,NEET,0.37726688548040355
+Lives with own child,Daily childcare,0.7686413422477263
+Poorest 40%,Sex,0.02029870309429861
+Poorest 40%,Age group,0.15604990786498796
+Poorest 40%,Oblast,0.3249762766026692
+Poorest 40%,Rural,0.27553488616902455
+Poorest 40%,Frontline,0.04358469939380139
+Poorest 40%,IDP,0.04390137205123724
+Poorest 40%,Disability in household,0.1442433229263508
+Poorest 40%,Child under 6,0.24847292657053968
+Poorest 40%,Lives with own child,0.12808138570090577
+Poorest 40%,Poorest 40%,NA
+Poorest 40%,Partnered,0.1539523082172526
+Poorest 40%,Education,0.26070170700501344
+Poorest 40%,In education,0.040177597795332795
+Poorest 40%,Employed,0.25535885789866286
+Poorest 40%,NEET,0.16481692253226418
+Poorest 40%,Daily childcare,0.12565428245328858
+Partnered,Sex,0.2908844844140851
+Partnered,Age group,0.34399553255056636
+Partnered,Oblast,0.16632191109164163
+Partnered,Rural,0.1027870043090529
+Partnered,Frontline,0.07392131865159533
+Partnered,IDP,0.029092007868243643
+Partnered,Disability in household,0.08437299864466265
+Partnered,Child under 6,0.2619861497859959
+Partnered,Lives with own child,0.42794436537889885
+Partnered,Poorest 40%,0.1539523082172526
+Partnered,Partnered,NA
+Partnered,Education,0.31017015377655144
+Partnered,In education,0.4354921269260446
+Partnered,Employed,0.32257706061747415
+Partnered,NEET,0.21663747352720805
+Partnered,Daily childcare,0.37959825444357265
+Education,Sex,0.03328849440269993
+Education,Age group,0.6840196581200615
+Education,Oblast,0.10742203347671438
+Education,Rural,0.17946561167158723
+Education,Frontline,0.12230821749613426
+Education,IDP,0.08580155677384728
+Education,Disability in household,0.10209456944083097
+Education,Child under 6,0.1624775524101541
+Education,Lives with own child,0.2298096251366041
+Education,Poorest 40%,0.26070170700501344
+Education,Partnered,0.31017015377655144
+Education,Education,NA
+Education,In education,0.4490445374686002
+Education,Employed,0.43808552507718757
+Education,NEET,0.24717726292911013
+Education,Daily childcare,0.1569198729566797
+In education,Sex,0.10945900932774032
+In education,Age group,0.5203594522230367
+In education,Oblast,0.08115658154217605
+In education,Rural,0.008131918553770774
+In education,Frontline,0.04527449996289195
+In education,IDP,0.07942579996095409
+In education,Disability in household,0.005381897835297574
+In education,Child under 6,0.1537999122889985
+In education,Lives with own child,0.3024042966389717
+In education,Poorest 40%,0.040177597795332795
+In education,Partnered,0.4354921269260446
+In education,Education,0.44904453746860024
+In education,In education,NA
+In education,Employed,0.5188760102557082
+In education,NEET,0.527329041729918
+In education,Daily childcare,0.24032286588330112
+Employed,Sex,0.01943729919981061
+Employed,Age group,0.4431280399376799
+Employed,Oblast,0.16794789873554652
+Employed,Rural,0.15393116649696573
+Employed,Frontline,0.03714529998742517
+Employed,IDP,0.004550777313369805
+Employed,Disability in household,0.07163721332269316
+Employed,Child under 6,0.07927057596103478
+Employed,Lives with own child,0.016515532998479156
+Employed,Poorest 40%,0.25535885789866286
+Employed,Partnered,0.32257706061747415
+Employed,Education,0.4380855250771875
+Employed,In education,0.5188760102557082
+Employed,Employed,NA
+Employed,NEET,0.29920935664965304
+Employed,Daily childcare,0.0891175648115701
+NEET,Sex,0.12162972486130279
+NEET,Age group,0.2286750539759733
+NEET,Oblast,0.1328390116156336
+NEET,Rural,0.1430425928663743
+NEET,Frontline,0.038937750785496626
+NEET,IDP,0.07873343098364803
+NEET,Disability in household,0.06793624893799961
+NEET,Child under 6,0.2669426243869358
+NEET,Lives with own child,0.37726688548040355
+NEET,Poorest 40%,0.16481692253226418
+NEET,Partnered,0.21663747352720805
+NEET,Education,0.2471772629291101
+NEET,In education,0.527329041729918
+NEET,Employed,0.29920935664965304
+NEET,NEET,NA
+NEET,Daily childcare,0.3825376096146483
+Daily childcare,Sex,0.2508932805565736
+Daily childcare,Age group,0.11986474933039648
+Daily childcare,Oblast,0.07391444916181346
+Daily childcare,Rural,0.05394624161222583
+Daily childcare,Frontline,0.030111590442095354
+Daily childcare,IDP,0.08919338969427118
+Daily childcare,Disability in household,0.02885362516412257
+Daily childcare,Child under 6,0.6207091388429009
+Daily childcare,Lives with own child,0.7686413422477263
+Daily childcare,Poorest 40%,0.12565428245328858
+Daily childcare,Partnered,0.37959825444357265
+Daily childcare,Education,0.1569198729566797
+Daily childcare,In education,0.24032286588330112
+Daily childcare,Employed,0.0891175648115701
+Daily childcare,NEET,0.3825376096146483
+Daily childcare,Daily childcare,NA

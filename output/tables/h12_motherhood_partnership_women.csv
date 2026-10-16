@@ -1,0 +1,25 @@
+mp,estimate,lo,hi,indicator,n,share,mp_lab
+"Not married, no child",0.4572177540327674,0.37093574934735873,0.543499758718176,Employed,268,0.4577529388465103,"Not married, no child
+(n = 268)"
+"Married or cohabiting, no child",0.6413199936558457,0.532573967629656,0.7500660196820353,Employed,104,0.3597190815853923,"Married or cohabiting, no child
+(n = 104)"
+"Not married, with child",0.24036997019957762,0,0.5410877399616282,Employed,16,0.01664216735031432,"Not married, with child
+(n = 16)"
+"Married or cohabiting, with child",0.17818231477670068,0.06072839775468397,0.2956362317987174,Employed,68,0.1658858122177831,"Married or cohabiting, with child
+(n = 68)"
+"Not married, no child",0.4884827653576454,0.4033404891748853,0.5736250415404055,In education,268,0.4577529388465103,"Not married, no child
+(n = 268)"
+"Married or cohabiting, no child",0.23853519610102267,0.14168163947260443,0.3353887527294409,In education,104,0.3597190815853923,"Married or cohabiting, no child
+(n = 104)"
+"Not married, with child",0.07723125665106098,0,0.18921258897892723,In education,16,0.01664216735031432,"Not married, with child
+(n = 16)"
+"Married or cohabiting, with child",0.01043801453959569,0,0.02263534911439472,In education,68,0.1658858122177831,"Married or cohabiting, with child
+(n = 68)"
+"Not married, no child",0.17187571684191352,0.10879232483109051,0.23495910885273652,NEET,268,0.4577529388465103,"Not married, no child
+(n = 268)"
+"Married or cohabiting, no child",0.21218521152931602,0.12131847474179232,0.30305194831683974,NEET,104,0.3597190815853923,"Married or cohabiting, no child
+(n = 104)"
+"Not married, with child",0.6823987731493615,0.3727779014498859,0.9920196448488371,NEET,16,0.01664216735031432,"Not married, with child
+(n = 16)"
+"Married or cohabiting, with child",0.8113796706837035,0.6933186973846206,0.9294406439827865,NEET,68,0.1658858122177831,"Married or cohabiting, with child
+(n = 68)"

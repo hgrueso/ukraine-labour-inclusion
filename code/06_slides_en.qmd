@@ -1,0 +1,458 @@
+---
+title: "Young Women's Labour-Market Inclusion"
+subtitle: "Preliminary findings, Ukraine"
+author: "Hernando Grueso, PhD · UNICEF"
+date: "12 October 2026"
+lang: en
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    transition: fade
+    embed-resources: true
+    fig-align: center
+    include-in-header:
+      text: |
+        <style>
+        .reveal .section-divider h1,
+        .reveal .section-divider h2 { color:#fff !important; }
+        .reveal em { color:#E2007A; font-style:normal; font-weight:600; }
+        .reveal .placeholder {
+        border:2px dashed #b9c2cc; border-radius:12px; background:#f6f8fa;
+        padding:.7em 1em; color:#5a6b73; font-size:.8em; }
+        .reveal .placeholder .ph-tag {
+        font-family:monospace; color:#00377C; font-weight:700;
+        text-transform:uppercase; font-size:.8em; letter-spacing:.04em; }
+        .reveal table { font-size:.46em; }
+        .reveal table th { color:#00377C; border-bottom:2px solid #d9e2ec; }
+        .reveal .tight-table table { font-size:.74em; border-collapse:collapse; width:100%; }
+        .reveal .tight-table table td, .reveal .tight-table table th { padding:2px 5px; }
+        .reveal .assump-table table { font-size:.6em; border-collapse:collapse; width:100%; }
+        .reveal .kv-table table { font-size:.66em; border-collapse:collapse; width:100%; }
+        .reveal .kv-table td, .reveal .kv-table th { padding:3px 6px; line-height:1.25; }
+        .reveal .kv-small table { font-size:.5em; border-collapse:collapse; width:100%; }
+        .reveal .kv-small td, .reveal .kv-small th { padding:1px 5px; }
+        .reveal .assump-table td, .reveal .assump-table th { padding:3px 8px; }
+        .toc-grid { font-size:.9em; line-height:1.6; margin-top:1.2em; }
+        .toc-grid p { margin-bottom:.9em; }
+        .toc-grid b { color:#00377C; }
+        .kf-list { font-size:.9em; line-height:1.4; }
+        .kf-list p { margin-bottom:.7em; }
+        .kf-list b { color:#E2007A; }
+        .reveal h2 { font-size:1.25em !important; line-height:1.15 !important; }
+        .vmid { margin-top:2.2em; }
+        .vmid-s { margin-top:1.2em; }
+        .vmid-l { margin-top:3.5em; }
+        .reveal section.bigtitle h2 { font-size:1.6em !important; }
+        .stat-row { display:flex; justify-content:center; gap:1em; margin-top:1em; }
+        .stat { flex:1; text-align:center; background:#f6f8fa; border-radius:12px; padding:.8em .4em; }
+        .stat .n { font-size:1.9em; font-weight:800; color:#E2007A; line-height:1.1; }
+        .stat .l { font-size:.55em; color:#374649; margin-top:.4em; }
+        </style>
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+suppressPackageStartupMessages({ library(readr); library(dplyr); library(knitr); library(tibble); library(stringr) })
+OUT <- file.path("..", "output")
+FIG <- function(file, width = "90%") {
+  p <- file.path(OUT, "figures", file)
+  if (file.exists(p))
+    cat(sprintf("![](%s){fig-align=\"center\" width=%s}\n", p, width))
+  else
+    cat("::: {.placeholder}\n<span class='ph-tag'>\u25a2 pending data</span><br>Figure pending: run the corresponding script (see README) to generate it.\n:::\n")
+}
+.rdc <- function(p) tryCatch(readr::read_csv(file.path(OUT, p), show_col_types = FALSE), error = function(e) NULL)
+.hd <- .rdc("tables/lfs_headlines.csv")
+H <- function(k, d = 0) { if (is.null(.hd)) return("n/a"); v <- .hd$value[.hd$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d) }
+.hh <- .rdc("tables/hsess_headlines.csv")
+GAP <- function(k) { if (is.null(.hh)) return("n/a"); v <- .hh$value[.hh$key == k]
+  if (!length(v) || is.na(v[1])) return("n/a"); sprintf("%.0f%% %s", abs(v[1]), ifelse(v[1] >= 0, "below", "above")) }
+HS <- function(k, d = 0) { if (is.null(.hh)) return("n/a"); v <- .hh$value[.hh$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d, big.mark = ",") }
+.kv <- .rdc("inventory/key_variables.csv")
+.tests <- .rdc("models/lfs_tests.csv")
+.htests <- .rdc("models/hsess_tests.csv")
+ptab <- function(t) t %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, format = "f", digits = 3)))
+```
+
+## Content
+
+::: {.toc-grid}
+1 · Data and variables
+
+2 · Labour Force Survey 2021
+
+3 · Household Social and Economic Status Survey 2023/24
+
+4 · Regression analysis
+
+5 · Next steps
+
+Appendix
+:::
+
+# 1 · Data and variables {.section-divider background-color="#00377C"}
+
+## Data sources {.smaller}
+
+- **SSSU Labour Force Survey 2021** (anonymised public-use file): 265.6k interviews from 151.7k persons aged 15+ in 88.1k households; rotation panel; collected before February 2022. Age is released in bands (15–24, 25–29 and older); the file has no earnings, household composition, displacement or disability variables.
+- **UNICEF Household Social and Economic Status Survey (HSESS)**, December 2023 to February 2024, Institute of Demography and Quality of Life Problems: 18,838 individuals in 8,024 households, all regions except the occupied territories and Luhansk oblast. Single-year age; employment questions from age 15; displacement, disability (household level), childcare, earnings and household income.
+- **MICS-7 2025/26**: access pending.
+
+## Age groups {.smaller}
+
+::: {.vmid-s}
+::: {.tight-table}
+| Age group | Indicators | Notes |
+|---|---|---|
+| **15–18** | Education, training, NEET | Ages 14–17 are legal minors; HSESS asks employment questions from age 15 |
+| **19–24** | Labour-force participation, employment, job quality, earnings, NEET | |
+| **15–24** | Education-to-work transition, NEET | UNICEF programme age range |
+| **15–29** | NEET | ILO age range for NEET, shown for reference |
+:::
+:::
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+The LFS 2021 public file releases age in bands, so LFS results are shown for 15–24 (and 15–29 for NEET). The 15–18 and 19–24 groups use HSESS 2023/24, and MICS-7 once available.
+:::
+
+## Variables and definitions {.smaller}
+
+::: {.tight-table}
+| Concept | Definition | LFS 2021 |
+|---|---|---|
+| **Labour-force participation** | Employed or unemployed (ILO) | `labour_force` 1–2 |
+| **Employed** | Worked at least one hour for pay or profit in the reference week, or temporarily absent | `labour_force` = 1 |
+| **Unemployment rate** | Unemployed (no work, searched in last 4 weeks, available) as share of the labour force | `labour_force` = 2 |
+| **NEET** | Not employed and not in education. In the LFS public file, unemployed students cannot be identified, so the LFS rate is an upper bound | `labour_force`, `reason_inactiv` |
+| **Care burden (proxy)** | Outside the labour force because of home or family duties | `reason_inactiv` = 3 |
+| **Informal employment** | No social contributions, no paid leave or sick leave, or oral agreement | `informal_empl` = 1 |
+| **Short hours** | Under 30 hours actually worked in the reference week | `actual_duration` 1–2 |
+| **Occupational segregation** | Dissimilarity index: share of women (or men) who would have to change occupation for equal distributions | `occupation` (9 groups) |
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+HSESS uses the same definitions: employment from IND_B1 (production for own household use only is not counted as employment), education from IND_A9, and labour-force participation as employed or looking for work or starting a business (IND_B21).
+:::
+
+## Key variables (1/2) {.smaller}
+
+::: {.kv-table}
+```{r kv1}
+if (!is.null(.kv)) kable(.kv[1:11, ], col.names = c("Concept", "Use", "LFS 2021", "HSESS 2023/24"))
+```
+:::
+
+## Key variables (2/2) {.smaller}
+
+::: {.kv-table}
+```{r kv2}
+if (!is.null(.kv)) kable(.kv[12:nrow(.kv), ], col.names = c("Concept", "Use", "LFS 2021", "HSESS 2023/24"))
+```
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+HSESS codes follow the questionnaire (A = demographics and education, B = employment, V = income; D1 = household characteristics). Full list of variables: output/inventory/variable_report.xlsx.
+:::
+
+# 2 · Labour Force Survey 2021 {.section-divider background-color="#00377C"}
+
+## NEET rate at 15–24: `r H("neet_w")`% for women and `r H("neet_m")`% for men {.smaller}
+```{r f1a, results='asis'}
+FIG("f1a_outcomes_by_sex_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Ages 15–24, 2021. Labour-force participation: women `r H("lfp_w")`%, men `r H("lfp_m")`%. Employed: women `r H("emp_w")`%, men `r H("emp_m")`%. Unemployment rate: women `r H("unemp_w")`%, men `r H("unemp_m")`%. The public file releases age in bands, so 19–24 cannot be shown separately; HSESS results for 19–24 are in section 3.
+:::
+
+## NEET rate at 15–29 (ILO age range): `r H("neet_w_1529")`% for women and `r H("neet_m_1529")`% for men {.smaller}
+```{r f1b, results='asis'}
+FIG("f1b_neet_age_groups_en.png", "62%")
+```
+
+## Outcomes by urban and rural area, 15–24 {.smaller}
+```{r f1c, results='asis'}
+FIG("f1c_outcomes_by_area_en.png", "85%")
+```
+
+## Outcomes by education level, 15–24 {.smaller}
+```{r f1d, results='asis'}
+FIG("f1d_outcomes_by_education_en.png", "92%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Highest level completed. "Vocational" is vocational-technical education; "Secondary or less" includes those still studying.
+:::
+
+## Outcomes by marital status, 15–24 {.smaller}
+```{r f1e, results='asis'}
+FIG("f1e_outcomes_by_marital_en.png", "85%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+The public file has no information on children; marital status is the closest available indicator of household formation. Results by motherhood use HSESS 2023/24 (section 3).
+:::
+
+## Home duties as main reason for inactivity: `r H("home_w_1524")`% of inactive women and `r H("home_m_1524")`% of inactive men, 15–24 {.smaller}
+```{r f2, results='asis'}
+FIG("f2_inactivity_reasons_en.png", "80%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Main reason for being outside the labour force, among those outside it. The category "Home duties / dependent" includes care for family members.
+:::
+
+## Informal employment: `r H("inf_w_1524")`% of employed women and `r H("inf_m_1524")`% of employed men, 15–24 {.smaller}
+```{r f3, results='asis'}
+FIG("f3_job_quality_en.png", "66%")
+```
+
+## Occupational dissimilarity index: `r H("duncan_1524", 1)` at 15–24 and `r H("duncan_all", 1)` for all ages {.smaller}
+```{r f4, results='asis'}
+FIG("f4_occupation_share_en.png", "86%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Share of employed women (or men) who would have to change occupation group for women and men to have the same distribution. Occupations at the first digit of the national classification (9 groups).
+:::
+
+## NEET rate at 15–24 by oblast {.smaller}
+```{r f5, results='asis'}
+FIG("f5_neet_by_oblast_en.png", "56%")
+```
+
+## Long-term unemployment and unemployment after completing education, 15–24 {.smaller}
+```{r f6, results='asis'}
+FIG("f6_unemployment_en.png", "66%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Among those unemployed at the time of the interview: share who have been looking for work for 12 months or more (long-term unemployment), and share whose main reason for unemployment is not having been placed in a job after completing education. Both groups were still unemployed when interviewed; the survey does not record later outcomes.
+:::
+
+## Association between key variables, 15–24 {.smaller}
+```{r f7, results='asis'}
+FIG("f7_relationships_lfs_en.png", "62%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Cramer's V between each pair of variables, weighted (0 = no association, 1 = perfect association).
+:::
+
+# 3 · Household Social and Economic Status Survey 2023/24 {.section-divider background-color="#00377C"}
+
+## In education at 15–24: `r HS("educ_w_1524")`% of women and `r HS("educ_m_1524")`% of men {.smaller}
+```{r h0, results='asis'}
+FIG("h0_education_by_institution_en.png", "90%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Share of each age group currently in education, by type of institution. In higher education at 19–24: women `r HS("higher_w_1924")`%, men `r HS("higher_m_1924")`%. General secondary includes general schools; vocational includes professional-technical institutions.
+:::
+
+## Labour-force participation at 19–24: `r HS("lfp_w")`% for women and `r HS("lfp_m")`% for men {.smaller}
+```{r h1, results='asis'}
+FIG("h1_outcomes_by_sex_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Ages 19–24 (n = `r HS("n_1924")`). Employed: women `r HS("emp_w")`%, men `r HS("emp_m")`%. In education: women `r HS("educ_w")`%, men `r HS("educ_m")`%. NEET: women `r HS("neet_w_1924")`%, men `r HS("neet_m_1924")`%. Labour-force participation: employed, or looking for work or starting a business.
+:::
+
+## NEET rate at 15–24: `r HS("neet_w")`% for women and `r HS("neet_m")`% for men {.smaller}
+```{r h2, results='asis'}
+FIG("h2_neet_by_age_en.png", "72%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+NEET at 15–29 (ILO age range): women `r HS("neet_w_1529")`%, men `r HS("neet_m_1529")`%.
+:::
+
+## NEET rate at 15–24 by displacement, disability, income, location and parenthood {.smaller}
+```{r h3, results='asis'}
+FIG("h3_neet_by_vulnerability_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Disability refers to any household member (recorded at household level). Poorest 40%: household income per member. Lives with own child: own child under 18 in the household. Frontline oblasts: Donetsk, Kharkiv, Zaporizhzhia, Kherson, Mykolaiv, Sumy, Chernihiv, Dnipropetrovsk (to be confirmed). Displaced and disability groups have small samples; see the confidence intervals.
+:::
+
+## Women 19–24 by motherhood and partnership: `r HS("mothers_unpartnered")`% of mothers are not married or cohabiting {.smaller}
+```{r h12, results='asis'}
+FIG("h12_motherhood_partnership_en.png", "96%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Mothers: women living with their own child under 18, identified from the household roster (relationships are recorded relative to the household respondent; n = `r HS("n_mothers_1924")` mothers aged 19–24). NEET among mothers: `r HS("neet_mother")`%; among women without children: `r HS("neet_nochild")`%.
+:::
+
+## Daily care of own children: `r HS("care_w")`% of women and `r HS("care_m")`% of men aged 19–24 {.smaller}
+```{r h4a, results='asis'}
+FIG("h4a_daily_childcare_en.png", "66%")
+```
+
+## NEET rate by daily childcare, 19–24 {.smaller}
+```{r h4b, results='asis'}
+FIG("h4b_neet_by_daily_childcare_en.png", "62%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Daily care or teaching of own children and the NEET rate, by sex.
+:::
+
+## Main reason for not working and not looking for work, 19–24 {.smaller}
+```{r h5, results='asis'}
+FIG("h5_reasons_not_working_en.png", "80%")
+```
+
+## Informal employment: `r HS("inf_w")`% of employed women and `r HS("inf_m")`% of employed men aged 19–24 {.smaller}
+```{r h6, results='asis'}
+FIG("h6_job_quality_en.png", "76%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Informal: paid on a verbal agreement, own-account work without registration, or family farm work for sale.
+:::
+
+## Women's share of employment by occupation {.smaller}
+```{r h7, results='asis'}
+FIG("h7_occupation_share_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Occupation group as reported by the respondent (IND_B6_2), not coded from job titles. Groups for 19–24 have small samples (n shown); bars show 95% confidence intervals. The dashed line marks women's share of all employment at 19–24.
+:::
+
+## Median monthly wage of women: `r GAP("gap_1924")` men's at 19–24 and `r GAP("gap_2564")` at 25–64 {.smaller}
+```{r h8, results='asis'}
+FIG("h8_median_wage_en.png", "62%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Net monthly wage reported by those whose main income is wages. Unadjusted difference in medians, which includes differences in hours, occupation and sector.
+:::
+
+## Main reason children of preschool age do not attend preschool {.smaller}
+```{r h9, results='asis'}
+FIG("h9_preschool_reasons_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Children who would attend a preschool facility at their age but do not; main reason reported by the household.
+:::
+
+## Association between key variables, 15–24 {.smaller}
+```{r h10, results='asis'}
+FIG("h10_relationships_hsess_en.png", "58%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Cramer's V between each pair of variables, weighted (0 = no association, 1 = perfect association).
+:::
+
+# 4 · Regression analysis {.section-divider background-color="#00377C"}
+
+## Linear probability models: NEET and labour-force participation, 15–24 (LFS 2021) {.smaller}
+```{r f8, results='asis'}
+FIG("f8_coefficients_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Oblast fixed effects, weighted, standard errors clustered by person. Interaction terms show how the difference between women and men varies with marital status, area and higher education. Associations, not causal effects.
+:::
+
+## Estimates, LFS 2021 {.smaller}
+
+::: {.vmid-s}
+::: {.tight-table}
+```{r tests}
+if (!is.null(.tests)) kable(ptab(.tests), align = "llrrrr")
+```
+:::
+:::
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Effects in percentage points. Controls: urban/rural, education and marital status (except where interacted), oblast fixed effects. The 15–29 estimate also controls for age band.
+:::
+
+## Linear probability model: NEET, 15–24 (HSESS 2023/24) {.smaller}
+```{r h11, results='asis'}
+FIG("h11_coefficients_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Oblast fixed effects, weighted, standard errors clustered by household. Associations, not causal effects.
+:::
+
+## Estimates, HSESS 2023/24 {.smaller}
+
+::: {.vmid-s}
+::: {.tight-table}
+```{r htests}
+if (!is.null(.htests)) kable(ptab(.htests), align = "llrrrr")
+```
+:::
+:::
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Effects in percentage points. Controls: age 19–24, rural, displacement, disability in household, poorest 40%, lives with own child, partnership and tertiary education (except where interacted), oblast fixed effects.
+:::
+
+# 5 · Next steps {.section-divider background-color="#00377C"}
+
+## Points for discussion {.smaller .bigtitle}
+
+::: {.vmid}
+::: {.kf-list style="font-size:.84em;"}
+**1. Age groups:** 15–18 and 19–24, with 15–24 and 15–29 for NEET.
+
+**2. Sectors** to cover in the analysis of occupations: reconstruction, technical and digital, energy, manufacturing, green and care.
+
+**3. Frontline oblasts** used for the regional breakdown.
+
+**4. Data:** MICS-7 2025/26 microdata, SSSU wage statistics by occupation and sex, and public expenditure on skills, employment services and childcare.
+:::
+:::
+
+## Next analyses {.smaller .bigtitle}
+
+::: {.vmid}
+::: {.kf-list style="font-size:.84em;"}
+**Regressions:** contribution of childcare, displacement, disability, income and location to NEET, separately for 15–18 and 19–24; the same models on MICS-7 once available.
+
+**Cost of inaction:** forgone earnings, output and fiscal revenue associated with differences in participation and NEET, using the benefit-cost framework of *A Brighter Future* (2024).
+
+**Occupations:** check the self-reported occupation groups against the reported job titles, in particular the shares of women among machine operators and managers.
+
+**Private sector:** costs and returns for employers of internships and apprenticeships combined with childcare support.
+:::
+:::
+
+# Appendix {.section-divider background-color="#00377C"}
+
+## HSESS variables used {.smaller}
+
+::: {.kv-small}
+```{r hvars}
+hv <- .rdc("tables/hsess_variables_used.csv")
+if (!is.null(hv)) {
+  hv <- hv %>% filter(!is.na(code)) %>%
+    mutate(code = case_when(role == "key" ~ "questionnaire key", role == "weight" ~ "final weight",
+                            grepl("[^ -~]", code) ~ role, TRUE ~ code),
+           v = paste0(role, " (", ifelse(file == "individual", "ind", "hh"), ")"))
+  k <- ceiling(nrow(hv) / 3); pad <- function(x) c(x, rep("", 3 * k - length(x)))
+  v <- pad(hv$v); cd <- pad(hv$code); i <- function(j) ((j - 1) * k + 1):(j * k)
+  kable(data.frame(v[i(1)], cd[i(1)], v[i(2)], cd[i(2)], v[i(3)], cd[i(3)]), col.names = rep(c("Variable", "Code"), 3))
+}
+```
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Codes as in the questionnaire and the "variables_ukr" sheet of each HSESS file; "ind" = individual file, "hh" = household file.
+:::

@@ -1,0 +1,27 @@
+# Raw microdata: not redistributed
+data/
+*.sav
+*.dta
+
+# Individual-level derived files and the variable report (it lists free-text answers)
+output/*.rds
+output/inventory/
+
+# Quarto build artefacts
+code/*_files/
+code/.quarto/
+code/*.html
+code/*.knit.md
+
+# R and OS files
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+Rplots.pdf
+.DS_Store
+
+# Other project documents kept in this folder
+*.docx
+*.xlsx
+*.xls

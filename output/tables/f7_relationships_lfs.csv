@@ -1,0 +1,145 @@
+a,b,v
+Sex,Sex,NA
+Sex,Area,0.002422935903710875
+Sex,Region,0.009281619531892212
+Sex,Education,0.07266081119232067
+Sex,Married,0.14240752623096167
+Sex,Diploma,0.2138128321265039
+Sex,Labour status,0.056083000156558135
+Sex,NEET,0.10546904814406868
+Sex,Reason inactive,0.20162696666882934
+Sex,Occupation,0.43123862400791374
+Sex,Informal,0.09310118280114509
+Sex,Hours,0.14067908071980892
+Area,Sex,0.002422935903710872
+Area,Area,NA
+Area,Region,0.34901103856546223
+Area,Education,0.1465411550667931
+Area,Married,1.767040163810225e-4
+Area,Diploma,0.15806687045316278
+Area,Labour status,0.07108719399677745
+Area,NEET,0.10654881558783932
+Area,Reason inactive,0.17693331128886297
+Area,Occupation,0.4155420615434645
+Area,Informal,0.2503462495881178
+Area,Hours,0.1357126643830027
+Region,Sex,0.009281619531892224
+Region,Area,0.34901103856546223
+Region,Region,NA
+Region,Education,0.14657946359092838
+Region,Married,0.12316349180109226
+Region,Diploma,0.10648134861479545
+Region,Labour status,0.11835073629300986
+Region,NEET,0.13584922718837164
+Region,Reason inactive,0.12393148963200856
+Region,Occupation,0.2256519496174606
+Region,Informal,0.3582396932559746
+Region,Hours,0.1888724315912666
+Education,Sex,0.07266081119232067
+Education,Area,0.1465411550667931
+Education,Region,0.14657946359092835
+Education,Education,NA
+Education,Married,0.2925120211152437
+Education,Diploma,0.9856488119823517
+Education,Labour status,0.4551327312293047
+Education,NEET,0.2644675600753899
+Education,Reason inactive,0.37190014461910303
+Education,Occupation,0.4650455659875857
+Education,Informal,0.2913551706163501
+Education,Hours,0.08632751341160623
+Married,Sex,0.14240752623096167
+Married,Area,1.767040163810225e-4
+Married,Region,0.12316349180109226
+Married,Education,0.2925120211152437
+Married,Married,NA
+Married,Diploma,0.301163064540437
+Married,Labour status,0.22166537795139313
+Married,NEET,0.2518952020064626
+Married,Reason inactive,0.6294793170061331
+Married,Occupation,0.15372959940540226
+Married,Informal,0.05027170154170254
+Married,Hours,0.0884160692107519
+Diploma,Sex,0.2138128321265039
+Diploma,Area,0.15806687045316278
+Diploma,Region,0.10648134861479548
+Diploma,Education,0.9856488119823517
+Diploma,Married,0.301163064540437
+Diploma,Diploma,NA
+Diploma,Labour status,0.45969230283472284
+Diploma,NEET,0.26866003759761875
+Diploma,Reason inactive,0.2433859796750863
+Diploma,Occupation,0.36889927076490087
+Diploma,Informal,0.3025525151934071
+Diploma,Hours,0.10306607887176611
+Labour status,Sex,0.05608300015655814
+Labour status,Area,0.07108719399677749
+Labour status,Region,0.11835073629300986
+Labour status,Education,0.4551327312293047
+Labour status,Married,0.22166537795139313
+Labour status,Diploma,0.45969230283472284
+Labour status,Labour status,NA
+Labour status,NEET,0.6211907421588546
+Labour status,Reason inactive,NA
+Labour status,Occupation,NA
+Labour status,Informal,NA
+Labour status,Hours,NA
+NEET,Sex,0.10546904814406868
+NEET,Area,0.10654881558783932
+NEET,Region,0.1358492271883716
+NEET,Education,0.26446756007538996
+NEET,Married,0.2518952020064626
+NEET,Diploma,0.26866003759761875
+NEET,Labour status,0.6211907421588546
+NEET,NEET,NA
+NEET,Reason inactive,1
+NEET,Occupation,NA
+NEET,Informal,NA
+NEET,Hours,NA
+Reason inactive,Sex,0.20162696666882932
+Reason inactive,Area,0.17693331128886297
+Reason inactive,Region,0.1239314896320086
+Reason inactive,Education,0.37190014461910303
+Reason inactive,Married,0.6294793170061331
+Reason inactive,Diploma,0.24338597967508632
+Reason inactive,Labour status,NA
+Reason inactive,NEET,1
+Reason inactive,Reason inactive,NA
+Reason inactive,Occupation,NA
+Reason inactive,Informal,NA
+Reason inactive,Hours,NA
+Occupation,Sex,0.43123862400791374
+Occupation,Area,0.4155420615434645
+Occupation,Region,0.22565194961746055
+Occupation,Education,0.46504556598758573
+Occupation,Married,0.1537295994054023
+Occupation,Diploma,0.3688992707649008
+Occupation,Labour status,NA
+Occupation,NEET,NA
+Occupation,Reason inactive,NA
+Occupation,Occupation,NA
+Occupation,Informal,0.5073231534314093
+Occupation,Hours,0.152409390123309
+Informal,Sex,0.09310118280114515
+Informal,Area,0.2503462495881178
+Informal,Region,0.3582396932559746
+Informal,Education,0.2913551706163501
+Informal,Married,0.050271701541702504
+Informal,Diploma,0.30255251519340715
+Informal,Labour status,NA
+Informal,NEET,NA
+Informal,Reason inactive,NA
+Informal,Occupation,0.5073231534314093
+Informal,Informal,NA
+Informal,Hours,0.29673349355172224
+Hours,Sex,0.14067908071980892
+Hours,Area,0.1357126643830027
+Hours,Region,0.18887243159126657
+Hours,Education,0.08632751341160627
+Hours,Married,0.08841606921075189
+Hours,Diploma,0.1030660788717661
+Hours,Labour status,NA
+Hours,NEET,NA
+Hours,Reason inactive,NA
+Hours,Occupation,0.15240939012330904
+Hours,Informal,0.2967334935517222
+Hours,Hours,NA

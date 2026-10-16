@@ -1,0 +1,10 @@
+Estimate,Sample,Effect (pp),SE,p,N
+NEET: women vs men,15-24,5.9,0.9,1.1e-10,19975
+NEET: women vs men,15-29 (ILO frame),11.7,0.8,7.299999999999999e-47,31012
+Labour-force participation: women vs men,15-24,-5.6,0.9,1.5e-10,19975
+Employment: women vs men,15-24,-5.8,0.9,2.1e-10,19975
+NEET: woman x married,15-24,42.5,3.6,2.6e-31,19975
+NEET: woman x rural,15-24,2.7,1.9,0.16,19975
+NEET: woman x higher education,15-24,4.2,2.8,0.14,19975
+Informal employment: women vs men,15-24 employed,-4.3,1.9,0.025,4904
+Home duties as reason for inactivity: women vs men,15-24 inactive,3.9,0.6,8.8e-12,14687

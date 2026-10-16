@@ -1,0 +1,21 @@
+sexo,reason,estimate
+Young women,Disability,0.04188533127772612
+Young women,Does not need to work,0.06583886251757515
+Young women,Housework and caring for children,0.23648762168639553
+Young women,Maternity or childcare leave,0.5480837060487448
+Young women,No suitable work or opportunities,0.0506031074503124
+Young women,Other,0.030680249357626012
+Young women,Psychological state due to the war,0.01806131183686419
+Young women,Seasonal work,0.0057049637871231535
+Young women,Starting a job soon,0
+Young women,Studying,0.002654846037632189
+Young men,Disability,0.190461561406634
+Young men,Does not need to work,0.051367793130261456
+Young men,Housework and caring for children,0.010185540709071609
+Young men,Maternity or childcare leave,0
+Young men,No suitable work or opportunities,0.19892582779288392
+Young men,Other,0.308800165066835
+Young men,Psychological state due to the war,0.06682132294530502
+Young men,Seasonal work,0.05052378101577056
+Young men,Starting a job soon,0.06202439766963835
+Young men,Studying,0.060889610263600014

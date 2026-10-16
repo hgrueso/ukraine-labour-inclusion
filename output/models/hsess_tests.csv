@@ -1,0 +1,9 @@
+Estimate,Sample,Effect (pp),SE,p,N
+NEET: women vs men,15-24,3.9,2.1,0.067,1687
+NEET: woman x lives with own child,15-24,55.5,15.6,3.8e-4,1687
+NEET: woman x married or cohabiting,15-24,19.7,6.4,0.0022,1687
+NEET: internally displaced,15-24,4,6.9,0.56,1687
+NEET: person with disability in household,15-24,10,6,0.095,1687
+NEET: poorest 40% of households,15-24,6.5,2.8,0.019,1687
+NEET: woman x poorest 40%,15-24,3.5,4.7,0.47,1687
+NEET: rural,15-24,7.8,2.6,0.003,1687
