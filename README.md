@@ -2,7 +2,7 @@
 
 This repository contains the R code and slide deck for an analysis of adolescent girls' and young women's labour-market inclusion in Ukraine, prepared for the UNICEF Ukraine Country Office. The main source is the Multiple Indicator Cluster Survey (MICS 2025/26), complemented by the UNICEF Household Social and Economic Status Survey (HSESS 2023/24) for comparisons between women and men, and by the State Statistics Service of Ukraine Labour Force Survey 2021 as a reference. The analysis covers education, employment, NEET status, marriage and motherhood, care work, informality, occupations, earnings and childcare, with breakdowns by disability, displacement, wealth, location and changes in households since the beginning of the conflict.
 
-The deck presents the findings, the cost of young women remaining NEET under pessimistic, central and optimistic scenarios, an illustrative comparison of intervention types with break-even thresholds, and recommendations grouped by the GenU priorities. Employer returns and programme-specific costing are left for a later stage.
+The deck presents the findings, the annual cost of the gender gap in NEET to the economy and to public revenues (with a budget perspective and break-even thresholds), and recommendations grouped by the GenU priorities. Employer returns and programme-specific costing are left for a later stage.
 
 ---
 
@@ -32,9 +32,8 @@ analysis/
 │   ├── 02c_mics_descriptive.R       # MICS figures and tables
 │   ├── 02d_groups.R                 # barriers by group, poverty, child poverty, VET
 │   ├── 03_regressions.R             # linear probability models, adjusted comparisons, wage equation
-│   ├── 04_cost_of_inaction.R        # cost of inaction: pessimistic, central and optimistic scenarios
-│   ├── 05_interventions.R           # illustrative comparison of intervention types
-│   ├── intervention_parameters.csv  # editable costs and effects per intervention
+│   ├── 04_cost_of_inaction.R        # cost of the gender gap, budget perspective, sensitivity, break-even
+│   ├── archive/                     # earlier illustrative intervention comparison (not run)
 │   └── 06_slides_en.qmd             # revealjs deck (exported to PDF)
 │
 ├── data/                            # input data (NOT committed)
@@ -83,9 +82,9 @@ Weighted shares with 95% confidence intervals by sex, age group, urban/rural are
 
 NEET among women aged 18–24 by motherhood, single-headed household, poverty (wealth quintiles in MICS; income per member below 60% of the median in HSESS), rural residence, displacement and disability; the number of disadvantages; poverty combined with motherhood; child poverty in households with a NEET young woman; a profile of vocational graduates and the vocational gap in NEET with and without controls.
 
-### Cost of inaction and intervention options
+### Cost of the gender gap
 
-Pessimistic, central and optimistic scenarios for the economic and fiscal cost of young women aged 18–24 remaining NEET (lost net earnings, output, income tax and levy, employer contributions, VAT), per 1,000 NEET young women, lifetime per woman, by group, and nationally once a 2026 population figure is set in `04_cost_of_inaction.R`. An illustrative comparison of intervention types (employment services, internships and first jobs, childcare and flexible work, and a combined package) with editable costs and effects in `code/intervention_parameters.csv`.
+The annual cost of the gender gap in NEET at ages 18–24: how much more the economy (value of the work) and public revenues (income tax, military levy, social contributions, VAT) would receive if young women were NEET at the same rate as young men, using Mincer-predicted wages; expressed as a share of 2024 GDP, public revenues and preschool spending, with a sensitivity analysis and break-even thresholds.
 
 ### Multivariate analysis
 
@@ -128,33 +127,24 @@ MICS 2025/26 data are available after registration at mics.unicef.org; their ter
 **Hernando Grueso, UNICEF**
 `hgrueso@unicef.org`
 
-## Assumptions behind the cost of inaction and the investment options
+## Cost of the gender gap: assumptions
 
-All scenario parameters are computed from the surveys in `code/04_cost_of_inaction.R`:
+The cost of inaction is the earning potential lost each year that young women aged 18–24 remain NEET at a higher rate than young men: how much more the economy and public revenues would receive if the gap were closed (`code/04_cost_of_inaction.R`).
 
 | Element | Assumption | Source |
 |---|---|---|
-| Population | NEET women aged 18–24 (MICS rate). National total: weighted count of NEET women aged 18–24 in HSESS 2023/24, whose weights are scaled to the population of the areas it covers; override with an official 2026 estimate in `COI$pop_w1824`. Results also per 1,000 NEET young women | MICS 2025/26; HSESS 2023/24 |
-| Potential earnings | Central: wage predicted for each NEET young woman by a wage equation estimated on employed women aged 18–64 (log wage on education level, age, age squared, area and oblast; smearing retransformation). Bounds: 25th percentile and median wage of employed women aged 18–24 | HSESS 2023/24 |
+| Gap | NEET rate of women aged 18–24 minus that of men aged 18–24 | HSESS 2023/24 (the only source with both sexes) |
+| Population | Weighted count of women aged 18–24 in the areas covered by HSESS (weights are population-scaled); override with an official estimate in `COI$pop_w1824` | HSESS 2023/24 |
+| Earnings | Wage predicted for each NEET young woman by a Mincer equation estimated on employed women aged 18–64 (log wage on education level, age, age squared, area and oblast; smearing retransformation); no wage growth | HSESS 2023/24, nominal UAH, Dec 2023 to Feb 2024 |
 | Counterfactual | Zero earnings while NEET | Assumption |
-| Share who could work | Those already looking for work; those needed to close the NEET gap with young men; those looking for work or out of work because of care duties | HSESS 2023/24 |
-| Formal jobs | Formal share among employed women aged 18–24: without tertiary education, overall, with tertiary education | HSESS 2023/24 |
-| Government receipts | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings | Statutory rates; consumption share assumed |
-| Time | Annual cost; present value over 5 years at 5%; lifetime to age 60 | Discount rate as in A Brighter Future (UNICEF Ukraine, 2024) |
-| Labour demand | Jobs assumed available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys in 2026 report widespread labour shortages |
-| Not included | Employer returns, women's work-related expenses, effects on children and other household members | |
+| Formal jobs | Formal share among employed women aged 18–24 | HSESS 2023/24 |
+| Economy | Gross wage plus employer social contribution for formal jobs, net wage for informal jobs (a lower bound on the value of the work) | Statutory rates |
+| Public revenues | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution (ESV); 20% VAT on 80% of net earnings | Statutory rates; consumption share assumed |
+| Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys in 2026 report widespread shortages |
+| Budget comparators (2024) | GDP UAH 7,658.7 bn; state budget taxes and fees over UAH 3,100 bn plus ESV UAH 546.1 bn; preschool spending budgeted at UAH 52.6 bn | State Statistics Service of Ukraine; Ministry of Finance; UNICEF Ukraine (2024), A Brighter Future |
+| Not included | Effects on children, employers and the wider economy; lost experience; women's work-related expenses | |
 
-For each parameter the lowest survey value goes to the pessimistic scenario and the highest to the optimistic one.
+A sensitivity table (`output/tables/coi_sensitivity.csv`) changes one assumption at a time: the wage (25th percentile and median of employed women aged 18–24), formality (with and without tertiary education), and the number of women (only those already looking for work; the gap measured with the MICS NEET rate). A break-even table (`output/tables/coi_break_even.csv`) shows the share of participants who would need to move into work for a programme of a given cost to recover it, using only these estimates.
 
-Investment options (`code/05_interventions.R`, parameters in `code/intervention_parameters.csv`):
+An earlier illustrative comparison of intervention types, based on evaluations in other countries, is kept in `code/archive/` and is not part of the pipeline or the deck.
 
-| Service | Cost per participant | Employment effect |
-|---|---|---|
-| Employment services | UAH 3,000 to 8,000 (assumption; no public unit cost) | +1.6 to +5.4 pp (Card, Kluve and Weber 2018) |
-| Employer-supported internships and first jobs | 3 to 6 months of the 2026 minimum wage (UAH 8,647) | +5.4 to +8.7 pp (Card, Kluve and Weber 2018) |
-| Childcare support with flexible work | 12 to 24 months of the eYasla payment (UAH 8,000 a month) | +7 to +14 pp (Berlinski and Galiani 2007; Clark et al. 2019; Halim, Perova and Reynolds 2023) |
-| Package | Sum of the two above | Sum of the two above (assumption) |
-
-None of the evaluations comes from a country in conflict; the ranges are indicative and should be replaced with Ukrainian evidence when available.
-
-References: Card, D., Kluve, J. and Weber, A. (2018), What works? A meta analysis of recent active labor market program evaluations, Journal of the European Economic Association 16(3). Berlinski, S. and Galiani, S. (2007), The effect of a large expansion of pre-primary school facilities on preschool attendance and maternal employment, Labour Economics 14. Clark, S., Kabiru, C., Laszlo, S. and Muthuri, S. (2019), The impact of childcare on poor urban women's economic empowerment in Africa, Demography 56. Halim, D., Perova, E. and Reynolds, S. (2023), Childcare and mothers' labor market outcomes in lower- and middle-income countries, World Bank Research Observer 38(1). Kluve, J., Puerto, S., Robalino, D., Romero, J. M., Rother, F., Stöterau, J., Weidenkaff, F. and Witte, M. (2019), Do youth employment programs improve labor market outcomes? A quantitative review, World Development 114. UNICEF Ukraine (2024), A Brighter Future: An Investment Case in Early Childhood Development in Ukraine.

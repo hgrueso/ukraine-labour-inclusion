@@ -11,6 +11,5 @@ Rscript code/02b_hsess_descriptive.R  # HSESS figures   -> output/figures/h*_en.
 Rscript code/02c_mics_descriptive.R   # MICS figures    -> output/figures/m*_en.png
 Rscript code/02d_groups.R             # groups, poverty, VET -> output/figures/g*_en.png
 Rscript code/03_regressions.R         # LFS, HSESS and MICS models -> output/models/
-Rscript code/04_cost_of_inaction.R    # cost of inaction scenarios -> output/figures/c1, c3, c4
-Rscript code/05_interventions.R       # intervention comparison (parameters in code/intervention_parameters.csv) -> c5, c6
+Rscript code/04_cost_of_inaction.R    # cost of the gender gap, budget perspective, sensitivity -> output/figures/c1, c4
 bash RENDER.sh                         # deck (HTML) and PDF export, with a Playwright fallback

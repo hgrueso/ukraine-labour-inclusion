@@ -31,12 +31,17 @@ format:
         .reveal .kv-table table { font-size:.56em; border-collapse:collapse; width:100%; }
         .reveal .kv-table td, .reveal .kv-table th { padding:3px 6px; line-height:1.25; }
         .reveal .kv-small table { font-size:.5em; border-collapse:collapse; width:100%; }
-        .reveal .kv-small td, .reveal .kv-small th { padding:1px 5px; }
+        .reveal .kv-small td, .reveal .kv-small th { padding:2px 6px; line-height:1.3; }
         .reveal .assump-table td, .reveal .assump-table th { padding:3px 8px; }
         .toc-grid { font-size:.9em; line-height:1.6; margin-top:1.2em; }
         .toc-grid p { margin-bottom:.9em; }
         .toc-grid b { color:#00377C; }
         .kf-list { font-size:.9em; line-height:1.4; }
+        .bn-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1em; margin-top:1.4em; }
+        .bn-tile { border-top:6px solid #E2007A; background:#f7f9fb; border-radius:8px; padding:1em .9em; text-align:center; }
+        .bn-num { display:block; font-size:2.1em; font-weight:700; color:#00377C; line-height:1.1; }
+        .bn-lab { display:block; font-size:.7em; font-weight:600; color:#1f2a30; margin-top:.3em; }
+        .bn-sub { display:block; font-size:.5em; color:#5a6b73; margin-top:.6em; line-height:1.35; }
         .eq-wrap { display:flex; flex-direction:column; gap:.9em; margin-top:.6em; }
         .eq-card { border:1px solid #d9e2ec; border-left:6px solid #00377C; border-radius:8px; background:#f7f9fb; padding:.6em 1em .65em; }
         .eq-card.pink { border-left-color:#E2007A; }
@@ -93,7 +98,7 @@ MH <- function(k, d = 0) { if (is.null(.mh)) return("n/a"); v <- .mh$value[.mh$k
 .mincer <- .rdc("models/hsess_mincer.csv")
 .ch <- .rdc("tables/coi_headlines.csv")
 .gh <- .rdc("tables/groups_headlines.csv")
-.sct <- .rdc("tables/coi_scenario_table.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
+.sens <- .rdc("tables/coi_sensitivity.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
 CHK <- function(k) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else format(round(v[1], -3), big.mark = ",", scientific = FALSE) }
 CHM <- function(k, d = 1) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
@@ -119,11 +124,9 @@ ptab <- function(t) t %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, forma
 
 3 · From education to earnings
 
-4 · The cost of inaction
+4 · The cost of the gender gap
 
-5 · Investment options
-
-6 · Conclusions and recommendations
+5 · Conclusions and recommendations
 
 Appendix
 :::
@@ -248,34 +251,64 @@ FIG("h20_mincer_by_education_en.png", "82%")
 HSESS 2023/24, wage earners aged 18–64. Predicted net monthly wage at age 30 in an urban area. Gap at comparable age and area: `r MM("gap_sec_adj", 0)`% with complete secondary, `r MM("gap_higher_adj", 0)`% with higher education. Each additional year of education is associated with `r MM("ret_w")`% higher wages for women and `r MM("ret_m")`% for men. Not adjusted for hours, occupation or sector.
 :::
 
-# 4 · The cost of inaction {.section-divider background-color="#00377C"}
+# 4 · The cost of the gender gap {.section-divider background-color="#00377C"}
 
-## How the cost of inaction is calculated {.smaller}
+## How the cost of the gender gap is calculated {.smaller}
 
 ::: {.kv-table}
 | Step | What is used | Source |
 |---|---|---|
-| **1. Who** | NEET women aged 18–24: `r CH("neet_w", 1)`% of young women, about `r CHK("n_neet_nat")` in the areas covered by the survey | MICS 2025/26; HSESS 2023/24 weights |
-| **2. What they could earn** | Wage predicted for each NEET young woman from her education, age and place of residence, using a wage equation estimated on employed women: UAH `r CH("wage_cent")` a month on average | HSESS 2023/24 |
-| **3. How many could work** | Pessimistic: `r tolower(.sct$Basis[1])` (`r CH("avoid_pess")`%). Central: `r tolower(.sct$Basis[2])` (`r CH("avoid_cent")`%). Optimistic: `r tolower(.sct$Basis[3])` (`r CH("avoid_opt")`%) | HSESS 2023/24 |
-| **4. How many jobs are formal** | `r CH("formal_pess")`% to `r CH("formal_opt")`%: formal share among employed young women, by level of education | HSESS 2023/24 |
-| **5. Who gains** | Young women (net earnings) and the budget (income tax, military levy, employer social contribution, VAT) | Statutory rates |
+| **1. The gap** | `r CH("neet_w_h", 1)`% of women aged 18–24 are NEET, against `r CH("neet_m_h", 1)`% of men: a gap of `r CH("gap_pp", 1)` percentage points | HSESS 2023/24 |
+| **2. How many women** | The gap applied to the `r CHK("pop_w1824")` women aged 18–24 in the areas covered by the survey: about `r CHK("n_gap")` more young women would be in work if the gap were closed | HSESS 2023/24 (population-scaled weights) |
+| **3. What they would earn** | The wage predicted for each NEET young woman from her education, age and place of residence by a Mincer wage equation estimated on employed women: UAH `r CH("wage_c")` a month on average | HSESS 2023/24 |
+| **4. Formal jobs** | `r CH("formal_c")`% of the new jobs are formal, as among employed young women today | HSESS 2023/24 |
+| **5. What the economy and the budget gain** | Economy: what employers would pay for this work (gross wage plus employer social contribution). Public revenues: income tax, military levy, employer social contribution (ESV) and VAT | Statutory rates |
 :::
 
 ::: {style="font-size:0.56em; color:#7a7a7a;"}
-The cost of inaction is what is forgone each year that these young women remain NEET. Results are shown for the country and per 1,000 NEET young women (about `r CH("young_per1000")` women aged 18–24). Full assumptions and the wage equation are at the start of the appendix.
+The cost of inaction is the earning potential lost each year that the gap remains: how much more the economy and public revenues would receive if young women were NEET at the same rate as young men. Wages are from December 2023 to February 2024, so all comparisons use 2024 values. Assumptions, the wage equation and a sensitivity analysis are at the start of the appendix.
 :::
 
-## Young women remaining NEET cost about UAH `r CH("nat_year_c", 0)` billion a year {.smaller}
-```{r c2, results='asis'}
-FIG("c2_cost_of_inaction_national_en.png", "80%")
+## Closing the gender gap would add UAH `r CH("nat_economy", 1)` billion a year to the economy and UAH `r CH("nat_revenue", 1)` billion to public revenues {.smaller}
+```{r c1, results='asis'}
+FIG("c1_cost_of_gender_gap_en.png", "88%")
 ```
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-Central scenario, of which UAH `r CH("nat_fiscal_c", 1)` billion would reach the budget; UAH `r CH("nat_year_pess", 0)` to `r CH("nat_year_opt", 0)` billion across scenarios. About `r CHK("n_neet_nat")` women aged 18–24 are NEET in the areas covered by HSESS 2023/24 (weighted count, out of about `r CHK("pop_w1824")` women of that age). The figure excludes areas the survey could not cover and should be updated with an official 2026 population estimate when available.
+About `r CHK("n_gap")` more young women in work, each earning UAH `r CH("wage_c")` a month on average (predicted by the wage equation). Public revenues: income tax and military levy UAH `r CH("nat_pit_levy", 1)` billion, employer social contribution UAH `r CH("nat_esv", 1)` billion, VAT UAH `r CH("nat_vat", 1)` billion. Over a working life to age 60, each of these young women would generate about UAH `r CHM("lifetime_economy")` million for the economy and UAH `r CHM("lifetime_revenue")` million in public revenues (present values at 5%).
 :::
 
-## How to read the cost of inaction {.smaller}
+## What this means for the budget {.smaller}
+
+::: {.bn-grid}
+::: {.bn-tile}
+[`r CH("pct_gdp", 2)`%]{.bn-num}
+
+[of GDP in 2024]{.bn-lab}
+
+[UAH `r CH("nat_economy", 1)` billion against GDP of UAH 7,659 billion]{.bn-sub}
+:::
+::: {.bn-tile}
+[`r CH("pct_revenue", 2)`%]{.bn-num}
+
+[of public revenues in 2024]{.bn-lab}
+
+[UAH `r CH("nat_revenue", 1)` billion against UAH 3,646 billion in state budget taxes and social contributions]{.bn-sub}
+:::
+::: {.bn-tile}
+[`r CH("pct_preschool", 0)`%]{.bn-num}
+
+[of public spending on preschool education in 2024]{.bn-lab}
+
+[UAH `r CH("nat_revenue", 1)` billion against UAH 52.6 billion budgeted for preschool education]{.bn-sub}
+:::
+:::
+
+::: {style="font-size:0.56em; color:#7a7a7a; margin-top:1em;"}
+Each year the gender gap remains, the public budget forgoes revenues equal to about `r CH("pct_preschool", 0)`% of what it spends on preschool education, the service most closely linked to young mothers' ability to work. Sources: GDP, State Statistics Service of Ukraine (2024 estimate); state budget taxes and fees (general and special funds) and ESV, Ministry of Finance (2024 execution); preschool spending, A Brighter Future (UNICEF Ukraine, 2024). All values in 2024 prices, the year the wages were collected.
+:::
+
+## How to read this estimate {.smaller}
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -292,7 +325,7 @@ Central scenario, of which UAH `r CH("nat_fiscal_c", 1)` billion would reach the
 **What the estimate does and does not capture**
 
 ::: {style="font-size:.62em; line-height:1.35;"}
-*Likely to understate the cost:* it counts only earnings and taxes; it leaves out effects on children, on young women's future careers (lost experience), on employers, and the wider economy; the pessimistic case counts only women already looking for work.
+*Likely to understate the cost:* it counts only earnings and taxes; it leaves out effects on children, on young women's future careers (lost experience), on employers, and the wider economy; it counts only the gap with young men, not all NEET young women.
 
 *Likely to overstate it:* it assumes jobs are available at the wage of employed women with the same education, age and location, that new workers do not displace others, and that NEET women would earn as much as employed women with the same profile.
 
@@ -301,54 +334,42 @@ Central scenario, of which UAH `r CH("nat_fiscal_c", 1)` billion would reach the
 :::
 :::
 
-## Per 1,000 NEET young women: UAH `r CH("year_per1000_c")` million a year {.smaller}
-```{r c1, results='asis'}
-FIG("c1_cost_of_inaction_scenarios_en.png", "86%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-1,000 NEET young women correspond to about `r CH("young_per1000")` women aged 18–24. Central scenario, of which UAH `r CH("fiscal_per1000_c")` million would reach the budget. The pessimistic, central and optimistic scenarios (UAH `r CH("year_per1000_pess")`, `r CH("year_per1000_c")` and `r CH("year_per1000_opt")` million) combine the lowest, middle and highest values found in the surveys for the wage, the share who would work and the share of formal jobs; the labels under each bar show the values used. Per 100,000 women aged 18–24, the central cost is UAH `r CH("per100k_c", 1)` billion a year.
-:::
-
-## Over five years, UAH `r CH("pv_per1000_pess")` to `r CH("pv_per1000_opt")` million per 1,000 {.smaller}
-```{r c3, results='asis'}
-FIG("c3_cost_of_inaction_pv_en.png", "80%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Present value of five years at a 5% discount rate (UAH `r CH("pv_per1000_cent")` million in the central scenario); the horizon and discount rate are the same in all three scenarios, which differ only in the survey-based parameters. A woman who remains NEET to age 60 forgoes about UAH `r CHM("lifetime_pv")` million in earnings and the budget UAH `r CHM("lifetime_fiscal_pv")` million (present values, central wage).
-:::
-
 ## Mothers are `r CH("share_mothers")`% of NEET young women {.smaller}
 ```{r c4, results='asis'}
 FIG("c4_cost_by_group_en.png", "82%")
 ```
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-MICS 2025/26, women aged 18–24. This describes who the NEET young women are: the share of them in each group. Groups overlap, and `r CH("share_any")`% belong to at least one of the first five, so not every NEET young woman has one of these characteristics. Mothers are the largest identifiable group, so support that works for young mothers addresses the largest part of the cost.
+MICS 2025/26, women aged 18–24. Groups overlap, and `r CH("share_any")`% of NEET young women belong to at least one of the first five. Mothers are the largest identifiable group, so support that works for young mothers addresses the largest part of the gap.
 :::
 
-# 5 · Investment options {.section-divider background-color="#00377C"}
+## What this means for investment decisions {.smaller}
 
-## What employment gain would justify each service? {.smaller}
-```{r c7, results='asis'}
-FIG("c7_break_even_by_intervention_en.png", "96%")
+::: {.columns}
+::: {.column width="44%"}
+::: {style="font-size:.66em; line-height:1.4;"}
+Each young woman who moves into work generates about **UAH `r CH("pw_revenue")` a year in public revenues** and UAH `r CH("pw_economy")` for the economy.
+
+The table shows the share of participants in a programme who would need to move into work, and stay in work, for the programme to recover its cost.
+
+For example, a programme costing UAH 25,000 per participant recovers its cost from public revenues alone if `r CH("be_25k_1y_rev")`% of participants work for one year, or `r CH("be_25k_3y_rev")`% for three years.
+
+These thresholds use only the estimates in this analysis; whether a given service reaches them is for programme data to show.
+:::
+:::
+::: {.column width="56%"}
+::: {.kv-table}
+```{r betab}
+if (!is.null(.bet)) kable(.bet %>% mutate(`Cost per participant (UAH)` = format(`Cost per participant (UAH)`, big.mark = ",")), align = "rrrr")
 ```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Blue: share of participants who must gain additional employment for three years to cover the cost. Costs use existing Ukrainian amounts: 3 to 6 months of the minimum wage (UAH 8,647) for first-job support and 12 to 24 months of the eYasla payment (UAH 8,000 a month) for childcare; the cost of employment services is an assumption. Pink: employment effects from evaluations in other countries (Card, Kluve and Weber 2018 for employment programmes; Berlinski and Galiani 2007 and Clark et al. 2019 for childcare). None of these evaluations comes from a country in conflict, so the pink ranges are indicative for Ukraine; sources and caveats are in the appendix.
+:::
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Additional employment attributable to the programme, at the central wage and formality, discounted at 5%. Costs are the present value of total programme cost per participant.
+:::
+:::
 :::
 
-## Illustrative returns by type of service {.smaller}
-```{r c5, results='asis'}
-FIG("c5_interventions_en.png", "96%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Benefits per UAH of cost, from the least to the most favourable combination of cost and effect, for young women's earnings, government receipts and both. Same costs and evidence as the previous slide. Employment services need the smallest employment gains to pay for themselves and first-job support gains close to those found in evaluations; childcare support at the level of the eYasla payment needs larger or longer-lasting gains to pay for itself through earnings and receipts alone. Benefits to children and employers are not counted.
-:::
-
-# 6 · Conclusions and recommendations {.section-divider background-color="#00377C"}
+# 5 · Conclusions and recommendations {.section-divider background-color="#00377C"}
 
 ## Key messages {.smaller .bigtitle}
 
@@ -362,9 +383,9 @@ Benefits per UAH of cost, from the least to the most favourable combination of c
 
 **4. Poverty compounds it.** Among poor young mothers NEET reaches `r GH("g4_mics_poor_mother")`% to `r GH("g4_hsess_poor_mother")`%; displacement is not associated with higher NEET.
 
-**5. Inaction is costly.** Young women remaining NEET cost about UAH `r CH("nat_year_c", 0)` billion a year (range UAH `r CH("nat_year_pess", 0)` to `r CH("nat_year_opt", 0)` billion), of which UAH `r CH("nat_fiscal_c", 1)` billion would reach the budget.
+**5. The gender gap is costly.** Closing it would bring about `r CHK("n_gap")` more young women into work, adding UAH `r CH("nat_economy", 1)` billion a year to the economy (`r CH("pct_gdp", 2)`% of GDP) and UAH `r CH("nat_revenue", 1)` billion to public revenues, about `r CH("pct_preschool", 0)`% of public spending on preschool education.
 
-**6. Services differ widely in cost.** Employment services need small employment gains to pay for themselves; first-job support needs gains close to those found in evaluations; childcare support needs the largest.
+**6. Support pays back through the budget.** Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues.
 :::
 :::
 
@@ -373,9 +394,9 @@ Benefits per UAH of cost, from the least to the most favourable combination of c
 ::: {.kv-table}
 | Finding | Recommendation, building on existing mechanisms | Who | What the model indicates |
 |---|---|---|---|
-| At 18–24, young women and men are employed at the same rate; the NEET gap (`r HS("st_neet_w")`% against `r HS("st_neet_m")`%) mirrors lower education participation (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%) | Support young women to stay in education and training, and bridge the exit with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy; State Employment Service; employers; education and VET institutions; UNICEF (GenU) | The employment gain first-job support needs to cover its cost is of the same order as the effects found in evaluations; shorter subsidies pay off more easily |
+| At 18–24, young women and men are employed at the same rate; the NEET gap (`r HS("st_neet_w")`% against `r HS("st_neet_m")`%) mirrors lower education participation (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%) | Support young women to stay in education and training, and bridge the exit with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy; State Employment Service; employers; education and VET institutions; UNICEF (GenU) | Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues |
 | NEET is lower with tertiary education (`r GH("tert_neet_w")`% against `r GH("vet_neet_w")`% vocational and `r GH("sec_neet_w")`% secondary, women 18–29); the vocational gap against secondary disappears once motherhood and area are accounted for | Do not treat vocational education as the cause: focus on the transition after it, especially for young mothers and rural women, and on guidance towards fields with employer demand | Ministry of Education and Science; VET institutions; State Employment Service; employers | Needs vacancy, pay and entry-requirement data by occupation (SES dashboard, SSSU) |
-| Women earn less than men at every level of education (median wage gap at 18–24: `r HS("gap_1824")`%), although informal work is less common among women (`r HS("inf_w")`% against `r HS("inf_m")`%) | Pair first-job pathways with formal contracts and decent-work standards; monitor the pay gap by occupation | Employers; State Labour Service; State Employment Service | Each formal job adds about UAH `r CH("fiscal_year_c")` a year to the budget |
+| Women earn less than men at every level of education (median wage gap at 18–24: `r HS("gap_1824")`%), although informal work is less common among women (`r HS("inf_w")`% against `r HS("inf_m")`%) | Pair first-job pathways with formal contracts and decent-work standards; monitor the pay gap by occupation | Employers; State Labour Service; State Employment Service | Formality raises the return: `r CH("formal_c")`% of jobs held by young women are formal today |
 :::
 
 ## Priority 2: Inclusive Access and Navigation (protection and employment) {.smaller}
@@ -383,39 +404,40 @@ Benefits per UAH of cost, from the least to the most favourable combination of c
 ::: {.kv-table}
 | Finding | Recommendation, building on existing mechanisms | Who | What the model indicates |
 |---|---|---|---|
-| Motherhood is the main factor: NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`%, and mothers are `r CH("share_mothers")`% of NEET young women | Build on eYasla (UAH 8,000 a month for parents who return to full-time work): combine it with flexible working arrangements and family-friendly workplace policies, and give young mothers priority in employment services | Ministry of Social Policy, Family and National Unity; local authorities; employers; UNICEF | Childcare support is the most expensive option: it pays for itself through earnings and receipts only if a large share of supported mothers would not have worked otherwise, or if their employment lasts longer than three years |
+| Motherhood is the main factor: NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`%, and mothers are `r CH("share_mothers")`% of NEET young women | Build on eYasla (UAH 8,000 a month for parents who return to full-time work): combine it with flexible working arrangements and family-friendly workplace policies, and give young mothers priority in employment services | Ministry of Social Policy, Family and National Unity; local authorities; employers; UNICEF | Mothers are `r CH("share_mothers")`% of NEET young women, so closing the gap depends mostly on them; the cost of support should be judged against the UAH `r CH("pw_revenue")` a year each one returns in revenues |
 | Poverty compounds it: NEET is `r GH("g1_poor20_yes")`% in the poorest fifth against `r GH("g1_poor20_no")`%, and `r GH("g4_mics_poor_mother")`% to `r GH("g4_hsess_poor_mother")`% among poor young mothers; it is also higher in single-headed households (`r GH("g2_single_yes_w")`% against `r GH("g2_single_no_w")`% in HSESS) | Link social assistance for low-income and single-headed households with employment services (referrals, case management), so that benefits and job support reach the same young women | Ministry of Social Policy; State Employment Service; hromadas | Existing benefit registries can identify most poor young mothers |
 | Displacement is not associated with higher NEET (`r GH("g1_idp_yes")`% against `r GH("g1_idp_no")`%); disability groups are too small to estimate | Keep inclusive outreach through existing services for displaced young women and young women with disabilities, without a separate programme stream | Hromadas; IDP councils; UNICEF and partners | Not estimated; track outcomes as programmes report |
 :::
 
 # Appendix {.section-divider background-color="#00377C"}
 
-## Cost of inaction: key assumptions {.smaller}
+## Cost of the gender gap: key assumptions {.smaller}
 
-::: {.kv-table}
+::: {.kv-small}
 | Element | Assumption | Source |
 |---|---|---|
-| Population | NEET women aged 18–24: `r CH("neet_w", 1)`% (MICS). National total: weighted count of NEET women aged 18–24 in HSESS (about `r CHK("n_neet_nat")`). Per 1,000 NEET young women = about `r CH("young_per1000")` women aged 18–24 | MICS 2025/26; HSESS 2023/24 weights; override with an official 2026 estimate in COI$pop_w1824 |
-| Potential earnings | Central: wage predicted for each NEET young woman by the wage equation on the next slide (UAH `r CH("wage_cent")` a month on average, n = `r CH("n_neet_pred")`). Bounds: 25th percentile and median wage of employed women aged 18–24 (n = `r CH("n_wage")`) | HSESS 2023/24; nominal UAH, Dec 2023 to Feb 2024 prices; no wage growth |
+| Gap | NEET rate of women aged 18–24 minus NEET rate of men aged 18–24: `r CH("neet_w_h", 1)`% − `r CH("neet_m_h", 1)`% = `r CH("gap_pp", 1)` pp | HSESS 2023/24 (the only source with both sexes) |
+| Population | `r CHK("pop_w1824")` women aged 18–24, the weighted count in the areas covered by HSESS (excluding areas the survey could not reach); can be replaced by an official estimate (COI$pop_w1824) | HSESS 2023/24 weights |
+| Earnings | Wage predicted for each NEET young woman by the Mincer equation (n = `r CH("n_neet_pred")`): UAH `r CH("wage_c")` a month on average; no wage growth | HSESS 2023/24, nominal UAH, Dec 2023 to Feb 2024 |
 | Counterfactual | Zero earnings while NEET | Assumption |
-| Share who could work | Already looking for work: `r CH("share_seeking")`%. Closing the gap with young men (`r CH("neet_w_h", 1)`% against `r CH("neet_m_h", 1)`%): `r CH("share_gap")`%. Looking for work or out of work because of care duties: `r CH("share_care_plus")`% | HSESS 2023/24 |
-| Formal jobs | Formal share among employed women aged 18–24: `r CH("formal_low")`% without tertiary education, `r CH("formal_all")`% overall, `r CH("formal_high")`% with tertiary education | HSESS 2023/24 |
-| Government receipts | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings (consumption share assumed) | Statutory rates |
-| Time | Annual cost; present value over 5 years at a 5% social discount rate; lifetime to age 60 | Same discount rate as A Brighter Future (UNICEF Ukraine, 2024) |
-| Labour demand | Jobs assumed available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys report shortages (see main deck) |
-| Not included | Employer returns; women's work-related expenses; effects on children and other household members; wider economic effects | |
+| Formal jobs | `r CH("formal_c")`% formal, as among employed women aged 18–24 | HSESS 2023/24 |
+| Economy | Gross wage plus employer social contribution for formal jobs, net wage for informal jobs: a lower bound on the value of the work | Statutory rates |
+| Public revenues | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings (consumption share assumed) | Statutory rates |
+| Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys report shortages |
+| Budget comparators | GDP 2024: UAH 7,659 bn. State budget taxes and fees 2024: over UAH 3,100 bn; ESV 2024: UAH 546 bn. Preschool spending budgeted for 2024: UAH 52.6 bn | State Statistics Service; Ministry of Finance; A Brighter Future (UNICEF Ukraine, 2024) |
+| Not included | Effects on children, employers and the wider economy; lost experience; women's work-related expenses | |
 :::
 
-## Cost of inaction: the three scenarios {.smaller}
+## Sensitivity: changing one assumption at a time {.smaller}
 
 ::: {.kv-table}
-```{r sctab}
-if (!is.null(.sct)) kable(.sct)
+```{r senstab}
+if (!is.null(.sens)) kable(.sens %>% mutate(`Women in work` = format(`Women in work`, big.mark = ",")), align = "llrrr")
 ```
 :::
 
 ::: {style="font-size:0.55em; color:#7a7a7a;"}
-For each parameter, the lowest survey-based value goes to the pessimistic scenario and the highest to the optimistic one. The horizon (5 years) and the discount rate (5%) are the same in all scenarios.
+Each row changes one assumption and keeps the others at their central values. The central estimate uses the gap measured in HSESS, the only survey that covers both young women and young men.
 :::
 
 ## Wage equation behind the cost of inaction {.smaller}
@@ -492,45 +514,6 @@ if (!is.null(.mzt)) kable(.mzt, align = "lrrr")
 Dependent variable: log of monthly net wage, employed women aged 18–64, HSESS 2023/24. Reference education level: basic secondary or less. Oblast effects not shown.
 :::
 
-## Investment options: sources for costs and employment effects {.smaller}
-
-::: {.kv-small}
-```{r srctab}
-if (!is.null(.src)) kable(.src)
-```
-:::
-
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-Card, Kluve and Weber (2018), Journal of the European Economic Association 16(3); Berlinski and Galiani (2007), Labour Economics 14; Clark, Kabiru, Laszlo and Muthuri (2019), Demography 56; Halim, Perova and Reynolds (2023), World Bank Research Observer 38(1). None of these evaluations comes from a country in conflict. In Ukraine, labour shortages could make effects larger, while safety, displacement and childcare closures could make them smaller; Card, Kluve and Weber find larger effects for women and in weak labour markets. The ranges should be replaced with Ukrainian evidence, for example State Employment Service follow-up data, when available.
-:::
-
-## Evidence on employment effects (1/2): employment programmes {.smaller}
-
-::: {.kv-table}
-| Study | Where and when | Design | What was tested | Effect on employment | Comparability with Ukraine |
-|---|---|---|---|---|---|
-| **Card, Kluve and Weber (2018)**, Journal of the European Economic Association | 207 evaluations, 857 estimates, 47 countries; mostly European and other high-income countries | Meta-analysis of impact evaluations (experimental and non-experimental) | Training, job search assistance, subsidised employment, public works | +1.6 pp within a year; +5.4 pp after one to two years; +8.7 pp after two years | Not specific to youth. Medium- and long-run effects are similar in high- and middle-income countries; effects are larger for women and in weak labour markets. Used for the employment services and first-job ranges |
-| **Kluve et al. (2019)**, World Development | 113 evaluations of 107 youth programmes in 31 countries | Meta-analysis of youth employment programmes | Training, entrepreneurship, employment services, subsidised employment | Small on average; about one third of estimates positive and significant; employment services and subsidised employment small and often not significant | Specific to youth. Larger effects in low- and middle-income countries, for disadvantaged youth, and for programmes combining several services. Suggests the upper ranges for employment services alone may be optimistic |
-:::
-
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-No published impact evaluation of a State Employment Service programme for young women in Ukraine was found. None of the studies comes from a country in conflict.
-:::
-
-## Evidence on employment effects (2/2): childcare {.smaller}
-
-::: {.kv-table}
-| Study | Where and when | Design | What was tested | Effect on employment | Comparability with Ukraine |
-|---|---|---|---|---|---|
-| **Berlinski and Galiani (2007)**, Labour Economics | Argentina, national expansion of public preschool places in the 1990s | Natural experiment: timing of new preschool places across areas | Free public preschool for children aged 3 to 5 | Maternal employment +7 to +14 pp | Middle-income country with formal labour markets. Places for children aged 3 to 5, while eYasla is a cash payment for children aged 1 to 3 |
-| **Clark, Kabiru, Laszlo and Muthuri (2019)**, Demography | Kenya, informal settlement in Nairobi, from 2015 | Randomised controlled trial | Vouchers for subsidised early childcare | +8.5 pp for mothers offered vouchers (about +20 pp among those who used the care); gains mostly among married mothers | Closest in mechanism to eYasla (a subsidy that mothers choose how to use), but low-income setting with mostly informal work |
-| **Halim, Perova and Reynolds (2023)**, World Bank Research Observer | 22 studies in low- and middle-income countries | Review of studies with credible causal designs | Public childcare, longer care hours, lower childcare costs | Positive in all but one study | Confirms the direction of the effect across very different settings; no single effect size |
-:::
-
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-eYasla started in January 2026 and could be evaluated directly, for example by comparing employment of eligible mothers before and after it started or across eligibility thresholds; that would replace these ranges with Ukrainian evidence.
-:::
-
 ## How this builds on earlier investment cases {.smaller}
 
 ::: {.vmid-s}
@@ -538,7 +521,7 @@ eYasla started in January 2026 and could be evaluated directly, for example by c
 | | A Brighter Future (UNICEF Ukraine, 2024) | This analysis |
 |---|---|---|
 | **Focus** | Early childhood development: children under six | Young women aged 18–24 who are not in education, employment or training |
-| **Question** | Returns to scaling up childcare, preschool, health, social protection and WASH services to 2050 | Who is excluded, why, what it costs each year, and what employment gain would justify each service |
+| **Question** | Returns to scaling up childcare, preschool, health, social protection and WASH services to 2050 | Who is excluded, why, and what the gender gap costs the economy and public revenues each year |
 | **Data** | National statistics, mostly from before 2022, and regional assumptions | Microdata collected since 2022: MICS 2025/26 and HSESS 2023/24 |
 | **Link** | Estimates that expanding childcare would allow caregivers, mainly women, to return to work | Measures that link directly: motherhood and childcare are the main reasons young women are out of work |
 :::
@@ -546,22 +529,6 @@ eYasla started in January 2026 and could be evaluated directly, for example by c
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
 The two are complementary: the earlier case argues for expanding early childhood services; this one identifies the young women who would use them and what their exclusion costs. Both use a 5% social discount rate.
-:::
-
-## How the intervention parameters are built and updated {.smaller}
-
-::: {.kv-table}
-| Step | What was done | How the country office can update it |
-|---|---|---|
-| 1. Intervention types | Four types from the GenU priorities: employment services (counselling and job matching), employer-supported internships and first jobs, childcare services with flexible work, and a combined package for young mothers | Add rows to code/intervention_parameters.csv (one per intervention or package), with a target group |
-| 2. Costs | Present value of the total cost per participant over the support period, low and high, from existing Ukrainian programme amounts where available | Replace with State Employment Service, partner and UNICEF unit costs |
-| 3. Employment effects | Additional, sustained employment attributable to the intervention, low and high, from published evaluations in other countries (sources on the previous slide) | Replace with Ukrainian evaluations where available (for example SES programme follow-up data) |
-| 4. Benefits | Effect multiplied by the annual value of a job (net earnings; income tax, levy, contributions and VAT) over the years sustained, discounted at 5% | Change wage, formality or duration in 04_cost_of_inaction.R to test scenarios |
-| 5. Outputs | Benefit-cost ratios by perspective, break-even employment gains, and the comparison with the evidence range | Re-run bash UPDATE_RESULTS.sh; all slides update |
-:::
-
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-Employer returns (productivity, retention, vacancy costs) are not included and would be the next step for the private sector case.
 :::
 
 ## Age groups {.smaller}
@@ -789,24 +756,6 @@ FIG("h16_predicted_wage_by_education_en.png", "80%")
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
 Return per additional year: women `r MM("ret_w")`%, men `r MM("ret_m")`%.
-:::
-
-## Break-even curves by cost per participant (illustrative) {.smaller}
-```{r a_c6, results='asis'}
-FIG("c6_break_even_en.png", "86%")
-```
-
-## Break-even applications by intervention, 1, 3 and 5 years {.smaller}
-
-::: {.kv-small}
-```{r c7tab}
-.bt <- .rdc("tables/interventions_break_even_table.csv")
-if (!is.null(.bt)) kable(.bt)
-```
-:::
-
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-"Needed": share of participants who must gain additional employment, sustained for the number of years shown, for benefits to equal the cost per participant (from the low to the high cost). "Evidence range": employment effects reported in evaluations in other contexts. Central-scenario wage and fiscal rates, 5% discount.
 :::
 
 ## Model of NEET, women 18–24 (MICS) {.smaller}

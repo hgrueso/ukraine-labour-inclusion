@@ -1,61 +1,9 @@
-cost,perspective,effect_needed
-5000,Net earnings perspective,0.016051927556272612
-5000,Earnings plus receipts,0.010199597956193532
-10000,Net earnings perspective,0.032103855112545224
-10000,Earnings plus receipts,0.020399195912387064
-15000,Net earnings perspective,0.048155782668817836
-15000,Earnings plus receipts,0.030598793868580592
-20000,Net earnings perspective,0.06420771022509045
-20000,Earnings plus receipts,0.04079839182477413
-25000,Net earnings perspective,0.08025963778136305
-25000,Earnings plus receipts,0.05099798978096766
-30000,Net earnings perspective,0.09631156533763567
-30000,Earnings plus receipts,0.061197587737161184
-35000,Net earnings perspective,0.11236349289390828
-35000,Earnings plus receipts,0.07139718569335472
-40000,Net earnings perspective,0.1284154204501809
-40000,Earnings plus receipts,0.08159678364954825
-45000,Net earnings perspective,0.1444673480064535
-45000,Earnings plus receipts,0.09179638160574179
-50000,Net earnings perspective,0.1605192755627261
-50000,Earnings plus receipts,0.10199597956193532
-55000,Net earnings perspective,0.17657120311899874
-55000,Earnings plus receipts,0.11219557751812885
-60000,Net earnings perspective,0.19262313067527134
-60000,Earnings plus receipts,0.12239517547432237
-65000,Net earnings perspective,0.20867505823154395
-65000,Earnings plus receipts,0.1325947734305159
-70000,Net earnings perspective,0.22472698578781655
-70000,Earnings plus receipts,0.14279437138670945
-75000,Net earnings perspective,0.24077891334408918
-75000,Earnings plus receipts,0.15299396934290296
-80000,Net earnings perspective,0.2568308409003618
-80000,Earnings plus receipts,0.1631935672990965
-85000,Net earnings perspective,0.2728827684566344
-85000,Earnings plus receipts,0.17339316525529003
-90000,Net earnings perspective,0.288934696012907
-90000,Earnings plus receipts,0.18359276321148357
-95000,Net earnings perspective,0.3049866235691796
-95000,Earnings plus receipts,0.1937923611676771
-100000,Net earnings perspective,0.3210385511254522
-100000,Earnings plus receipts,0.20399195912387064
-105000,Net earnings perspective,0.33709047868172487
-105000,Earnings plus receipts,0.21419155708006415
-110000,Net earnings perspective,0.3531424062379975
-110000,Earnings plus receipts,0.2243911550362577
-115000,Net earnings perspective,0.3691943337942701
-115000,Earnings plus receipts,0.23459075299245122
-120000,Net earnings perspective,0.3852462613505427
-120000,Earnings plus receipts,0.24479035094864474
-125000,Net earnings perspective,0.4012981889068153
-125000,Earnings plus receipts,0.2549899489048383
-130000,Net earnings perspective,0.4173501164630879
-130000,Earnings plus receipts,0.2651895468610318
-135000,Net earnings perspective,0.4334020440193605
-135000,Earnings plus receipts,0.2753891448172253
-140000,Net earnings perspective,0.4494539715756331
-140000,Earnings plus receipts,0.2855887427734189
-145000,Net earnings perspective,0.46550589913190576
-145000,Earnings plus receipts,0.2957883407296124
-150000,Net earnings perspective,0.48155782668817837
-150000,Earnings plus receipts,0.3059879386858059
+Cost per participant (UAH),Years in work,Public revenues only,Value to the economy
+"10,000",1,16%,6%
+"10,000",3,6%,2%
+"25,000",1,40%,16%
+"25,000",3,14%,6%
+"50,000",1,80%,32%
+"50,000",3,28%,11%
+"100,000",1,160%,64%
+"100,000",3,56%,22%

@@ -8,5 +8,4 @@ Rscript code/02c_mics_descriptive.R
 Rscript code/02d_groups.R
 Rscript code/03_regressions.R
 Rscript code/04_cost_of_inaction.R
-Rscript code/05_interventions.R
 bash RENDER.sh
