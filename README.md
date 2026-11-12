@@ -134,13 +134,14 @@ All scenario parameters are computed from the surveys in `code/04_cost_of_inacti
 
 | Element | Assumption | Source |
 |---|---|---|
-| Population | NEET women aged 18–24; results per 1,000 NEET young women (a unit of account) and per 100,000 women aged 18–24. A national total needs a 2026 population count (`COI$pop_w1824`) | MICS 2025/26 |
+| Population | NEET women aged 18–24 (MICS rate). National total: weighted count of NEET women aged 18–24 in HSESS 2023/24, whose weights are scaled to the population of the areas it covers; override with an official 2026 estimate in `COI$pop_w1824`. Results also per 1,000 NEET young women | MICS 2025/26; HSESS 2023/24 |
 | Potential earnings | Central: wage predicted for each NEET young woman by a wage equation estimated on employed women aged 18–64 (log wage on education level, age, age squared, area and oblast; smearing retransformation). Bounds: 25th percentile and median wage of employed women aged 18–24 | HSESS 2023/24 |
 | Counterfactual | Zero earnings while NEET | Assumption |
 | Share who could work | Those already looking for work; those needed to close the NEET gap with young men; those looking for work or out of work because of care duties | HSESS 2023/24 |
 | Formal jobs | Formal share among employed women aged 18–24: without tertiary education, overall, with tertiary education | HSESS 2023/24 |
 | Government receipts | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings | Statutory rates; consumption share assumed |
 | Time | Annual cost; present value over 5 years at 5%; lifetime to age 60 | Discount rate as in A Brighter Future (UNICEF Ukraine, 2024) |
+| Labour demand | Jobs assumed available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys in 2026 report widespread labour shortages |
 | Not included | Employer returns, women's work-related expenses, effects on children and other household members | |
 
 For each parameter the lowest survey value goes to the pessimistic scenario and the highest to the optimistic one.
@@ -156,4 +157,4 @@ Investment options (`code/05_interventions.R`, parameters in `code/intervention_
 
 None of the evaluations comes from a country in conflict; the ranges are indicative and should be replaced with Ukrainian evidence when available.
 
-References: Card, D., Kluve, J. and Weber, A. (2018), What works? A meta analysis of recent active labor market program evaluations, Journal of the European Economic Association 16(3). Berlinski, S. and Galiani, S. (2007), The effect of a large expansion of pre-primary school facilities on preschool attendance and maternal employment, Labour Economics 14. Clark, S., Kabiru, C., Laszlo, S. and Muthuri, S. (2019), The impact of childcare on poor urban women's economic empowerment in Africa, Demography 56. Halim, D., Perova, E. and Reynolds, S. (2023), Childcare and mothers' labor market outcomes in lower- and middle-income countries, World Bank Research Observer 38(1). UNICEF Ukraine (2024), A Brighter Future: An Investment Case in Early Childhood Development in Ukraine.
+References: Card, D., Kluve, J. and Weber, A. (2018), What works? A meta analysis of recent active labor market program evaluations, Journal of the European Economic Association 16(3). Berlinski, S. and Galiani, S. (2007), The effect of a large expansion of pre-primary school facilities on preschool attendance and maternal employment, Labour Economics 14. Clark, S., Kabiru, C., Laszlo, S. and Muthuri, S. (2019), The impact of childcare on poor urban women's economic empowerment in Africa, Demography 56. Halim, D., Perova, E. and Reynolds, S. (2023), Childcare and mothers' labor market outcomes in lower- and middle-income countries, World Bank Research Observer 38(1). Kluve, J., Puerto, S., Robalino, D., Romero, J. M., Rother, F., Stöterau, J., Weidenkaff, F. and Witte, M. (2019), Do youth employment programs improve labor market outcomes? A quantitative review, World Development 114. UNICEF Ukraine (2024), A Brighter Future: An Investment Case in Early Childhood Development in Ukraine.

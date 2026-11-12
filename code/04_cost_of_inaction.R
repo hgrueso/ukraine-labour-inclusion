@@ -79,11 +79,32 @@ SC <- tibble(
          per1000_women_pv = per1000_women_year * pv_factor, per1000_fiscal_pv = per1000_fiscal_year * pv_factor,
          per1000_total_pv = per1000_women_pv + per1000_fiscal_pv,
          per100k_women_year = 100 * neet_w * (per1000_women_year + per1000_fiscal_year))   # per 100,000 women aged 18-24
-if (is.na(COI$pop_w1824) && sum(wm$wmweight) > 1e5) COI$pop_w1824 <- sum(wm$wmweight)
-n_neet_nat <- if (!is.na(COI$pop_w1824)) COI$pop_w1824 * neet_w else NA_real_
+# National anchor: HSESS weights are scaled to the population of the areas it covers (Dec 2023 to Feb 2024),
+# so the weighted count of women aged 18-24 and of NEET women among them gives a national order of magnitude.
+# Set COI$pop_w1824 to an official 2026 figure to override (the MICS NEET rate is then applied).
+hwo <- hs %>% filter(female == 1, age >= 18, age <= 24, !is.na(neet))
+pop_source <- if (is.na(COI$pop_w1824)) "HSESS 2023/24 weighted count" else "User-supplied population"
+if (is.na(COI$pop_w1824)) COI$pop_w1824 <- sum(hwo$w)
+n_neet_nat <- if (pop_source == "User-supplied population") COI$pop_w1824 * neet_w else sum(hwo$w[hwo$neet == 1])
+if (COI$pop_w1824 < 1e5) { COI$pop_w1824 <- NA_real_; n_neet_nat <- NA_real_ }   # weights not population-scaled: no national total
 SC <- SC %>% mutate(national_year = (per1000_women_year + per1000_fiscal_year) * n_neet_nat / 1000, national_fiscal_year = per1000_fiscal_year * n_neet_nat / 1000,
                     pct_gdp_year = if (!is.na(COI$gdp_uah_bn)) 100 * national_year / (COI$gdp_uah_bn * 1e9) else NA_real_)
 write_table(SC, "coi_scenarios")
+# ---- c2: national annual cost by scenario --------------------------------------------------------------
+if (!is.na(n_neet_nat)) {
+  c2 <- SC %>% transmute(scenario, `Net earnings of young women` = per1000_women_year * n_neet_nat / 1000 / 1e9,
+                         `Government receipts (taxes, levy, contributions, VAT)` = per1000_fiscal_year * n_neet_nat / 1000 / 1e9) %>%
+    tidyr::pivot_longer(-scenario, names_to = "who", values_to = "uah_bn") %>%
+    mutate(who = factor(who, levels = c("Government receipts (taxes, levy, contributions, VAT)", "Net earnings of young women")))
+  tot2 <- c2 %>% group_by(scenario) %>% summarise(fiscal = sum(uah_bn[grepl("Government", who)]), uah_bn = sum(uah_bn), .groups = "drop")
+  save_fig(ggplot(c2, aes(scenario, uah_bn, fill = who)) + geom_col(width = .62) +
+             geom_text(data = tot2, aes(scenario, uah_bn, label = sprintf("UAH %.1f bn a year\nof which budget %.1f bn", uah_bn, fiscal)), inherit.aes = FALSE, vjust = -0.3, size = 3.3, colour = GREY_DARK, lineheight = .9) +
+             scale_fill_manual(values = c("Net earnings of young women" = ACCENT_GIRL, "Government receipts (taxes, levy, contributions, VAT)" = UNICEF_DARK)) +
+             scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(0, .25))) +
+             labs(subtitle = sprintf("Annual cost of about %s NEET young women aged 18-24 remaining NEET (UAH billion)", format(round(n_neet_nat, -3), big.mark = ",")), x = NULL, y = NULL,
+                  caption = "Number of NEET young women: HSESS 2023/24 weighted count for the areas it covers. Scenario parameters from MICS 2025/26 and HSESS 2023/24.") +
+             theme_ukr(), "c2_cost_of_inaction_national_en", width = 10, height = 5)
+}
 ages <- 21:COI$working_life_end
 lifetime_pv <- sum(SC$annual_net[2] * (1 + COI$discount)^(-(ages - 21))); lifetime_fiscal_pv <- sum(SC$fiscal[2] * (1 + COI$discount)^(-(ages - 21)))
 
@@ -135,13 +156,15 @@ heads <- tibble(
   key = c("neet_w", "neet_w_h", "neet_m_h", "share_seeking", "share_gap", "share_care_plus", "wage_pess", "wage_cent", "wage_opt", "n_mincer", "n_neet_pred", "n_wage",
           "formal_low", "formal_all", "formal_high", "annual_net_c", "fiscal_year_c", "year_per1000_pess", "year_per1000_c", "year_per1000_opt", "fiscal_per1000_c",
           "pv_per1000_pess", "pv_per1000_cent", "pv_per1000_opt", "per100k_c", "lifetime_pv", "lifetime_fiscal_pv", "pop_w1824", "n_neet_nat", "nat_year_c", "pct_gdp_c",
-          "share_mothers", "share_poor40", "share_any", "avoid_pess", "avoid_cent", "avoid_opt", "formal_pess", "formal_cent", "formal_opt", "r2_mincer"),
+          "share_mothers", "share_poor40", "share_any", "avoid_pess", "avoid_cent", "avoid_opt", "formal_pess", "formal_cent", "formal_opt", "r2_mincer",
+          "young_per1000", "nat_year_pess", "nat_year_opt", "nat_fiscal_c", "nat_fiscal_pess", "nat_fiscal_opt"),
   value = c(100 * neet_w, 100 * neet_w_h, 100 * neet_m_h, 100 * share_seeking, 100 * share_gap, 100 * (share_seeking + share_care), SC$wage_month, nobs(mz), nrow(nw), nrow(ew),
             100 * formal_low, 100 * formal_all, 100 * formal_high, SC$annual_net[2], SC$fiscal[2],
             (SC$per1000_women_year + SC$per1000_fiscal_year) / 1e6, SC$per1000_fiscal_year[2] / 1e6, SC$per1000_total_pv / 1e6, SC$per100k_women_year[2] / 1e9,
             lifetime_pv, lifetime_fiscal_pv, COI$pop_w1824, n_neet_nat, SC$national_year[2] / 1e9, SC$pct_gdp_year[2],
             100 * c4$share_of_neet[c4$group == "Mothers"], 100 * c4$share_of_neet[c4$group == "Poorest 40%"], 100 * share_any,
-            100 * SC$avoidable, 100 * SC$formal, r2(mz, "r2")))
+            100 * SC$avoidable, 100 * SC$formal, r2(mz, "r2"),
+            1000 / neet_w, SC$national_year[1] / 1e9, SC$national_year[3] / 1e9, SC$national_fiscal_year[2] / 1e9, SC$national_fiscal_year[1] / 1e9, SC$national_fiscal_year[3] / 1e9))
 write_table(heads, "coi_headlines"); print(heads, n = Inf); print(SC %>% select(scenario, wage_month, avoidable, formal), width = Inf)
 if (is.na(COI$pop_w1824)) cat("\nNational totals not computed: set COI$pop_w1824 (women aged 18-24, 2026) in code/04_cost_of_inaction.R\n")
 

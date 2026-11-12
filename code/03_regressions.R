@@ -182,7 +182,7 @@ if (file.exists(hp)) {
   save_fig(plot_diff(h17, "Adjusted difference in the NEET rate at 18-24 (Yes minus No); labels show the predicted rates", hcap), "h17_adjusted_neet_en", width = 11, height = 5)
   save_fig(plot_diff(h18, "Adjusted difference in the employment rate at 18-24 (Yes minus No); labels show the predicted rates", hcap), "h18_adjusted_employment_en", width = 11, height = 5)
 
-  # Mincer wage equation: returns to a year of education, wage earners 19-64
+  # Mincer wage equation: returns to a year of education, wage earners 18-64
   wg <- readRDS(hp) %>% filter(!is.na(wage), wage > 0, !is.na(educ_years), !is.na(sexo), age >= 18, age <= 64, w > 0) %>%
     mutate(lnw = log(wage), age2 = age^2)
   mw_all <- feols(lnw ~ educ_years * female + age + age2 | oblast, data = wg, weights = ~w, cluster = ~key)
@@ -191,7 +191,7 @@ if (file.exists(hp)) {
   ret <- function(m, lab) { ct <- coeftable(m); tibble(Sample = lab, `Return per year (%)` = round(100 * (exp(ct["educ_years", 1]) - 1), 1),
     lo = round(100 * (exp(ct["educ_years", 1] - 1.96 * ct["educ_years", 2]) - 1), 1), hi = round(100 * (exp(ct["educ_years", 1] + 1.96 * ct["educ_years", 2]) - 1), 1),
     p = signif(ct["educ_years", 4], 2), N = nobs(m)) }
-  mincer <- bind_rows(ret(mw_w, "Women 19-64"), ret(mw_m, "Men 19-64"),
+  mincer <- bind_rows(ret(mw_w, "Women 18-64"), ret(mw_m, "Men 18-64"),
                       tibble(Sample = "Difference women vs men (interaction)", `Return per year (%)` = round(100 * coeftable(mw_all)["educ_years:female", 1], 1),
                              lo = NA, hi = NA, p = signif(coeftable(mw_all)["educ_years:female", 4], 2), N = nobs(mw_all)))
   gap_coef <- coeftable(mw_all)["female", 1]
@@ -206,7 +206,7 @@ if (file.exists(hp)) {
              scale_colour_manual(values = c(Women = ACCENT_GIRL, Men = ACCENT_BOY)) + scale_fill_manual(values = c(Women = ACCENT_GIRL, Men = ACCENT_BOY)) +
              scale_y_continuous(labels = percent_format(1)) + scale_x_continuous(breaks = c(9, 11, 12, 13, 15, 17)) +
              labs(subtitle = "Predicted monthly wage by years of education, relative to complete secondary (11 years), by sex", x = "Years of education", y = NULL,
-                  caption = "UNICEF HSESS 2023/24, wage earners 19-64. Log wage on years of education, age and age squared, oblast fixed effects, weighted, SE clustered by household.") +
+                  caption = "UNICEF HSESS 2023/24, wage earners 18-64. Log wage on years of education, age and age squared, oblast fixed effects, weighted, SE clustered by household.") +
              theme_ukr() + theme(panel.grid.major.x = element_line(colour = "grey92")), "h16_predicted_wage_by_education_en", width = 10, height = 5.2)
   # predicted wage by education level and sex, controlling for age, age squared, area and oblast
   wg2 <- wg %>% filter(!is.na(educ), !is.na(rural)) %>% mutate(educ = droplevels(educ))
@@ -227,7 +227,7 @@ if (file.exists(hp)) {
              scale_colour_manual(values = c(Women = ACCENT_GIRL, Men = ACCENT_BOY)) + scale_fill_manual(values = c(Women = ACCENT_GIRL, Men = ACCENT_BOY)) +
              scale_x_discrete(labels = label_wrap(12)) + scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(.1, .2))) +
              labs(subtitle = "Predicted monthly net wage (UAH) by education level and sex, at age 30, urban; 95% CI", x = NULL, y = NULL,
-                  caption = "UNICEF HSESS 2023/24, wage earners 19-64. Log wage on education level interacted with sex, age, age squared, area and oblast; weighted, SE clustered by household.") +
+                  caption = "UNICEF HSESS 2023/24, wage earners 18-64. Log wage on education level interacted with sex, age, age squared, area and oblast; weighted, SE clustered by household.") +
              theme_ukr() + theme(panel.grid.major.x = element_line(colour = "grey92")), "h20_mincer_by_education_en", width = 10, height = 5.2)
   write_table(gap20, "h20_adjusted_gap_by_education")
   write_table(tibble(key = c("ret_w", "ret_m", "wage_gap_adj", "gap_sec_adj", "gap_higher_adj"),

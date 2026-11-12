@@ -168,7 +168,7 @@ save_fig(ggplot(h14, aes(educ, share, fill = type)) + geom_col(width = .7) +
            labs(subtitle = "Type of employment by highest level of education, employed people aged 19-29", x = NULL, y = NULL, caption = cap) +
            theme_ukr(12) + theme(axis.text.x = element_text(size = 7.5)), "h14_job_type_by_education_en", width = 11, height = 5)
 
-# h15: median monthly wage by education level and sex, wage earners 19-64 -------------------
+# h15: median monthly wage by education level and sex, wage earners 18-64 -------------------
 h15 <- d %>% filter(!is.na(wage), !is.na(sexo), !is.na(educ), age >= 18, age <= 64) %>%
   mutate(sex = ifelse(sexo == "Young women", "Women", "Men")) %>%
   group_by(educ, sex) %>% summarise(median_wage = wmedian(wage, w), n = n(), .groups = "drop")
@@ -178,7 +178,7 @@ save_fig(ggplot(h15, aes(educ, median_wage, fill = factor(sex, levels = c("Women
            geom_text(aes(label = format(round(median_wage), big.mark = ",")), position = position_dodge(.75), vjust = -0.6, size = 3, colour = GREY_DARK) +
            scale_fill_manual(values = c(Women = ACCENT_GIRL, Men = ACCENT_BOY)) + scale_x_discrete(labels = label_wrap(11)) +
            scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(0, .15))) +
-           labs(subtitle = "Median monthly net wage (UAH), wage earners aged 19-64, by education and sex", x = NULL, y = NULL, caption = cap) +
+           labs(subtitle = "Median monthly net wage (UAH), wage earners aged 18-64, by education and sex", x = NULL, y = NULL, caption = cap) +
            theme_ukr(), "h15_wage_by_education_en", width = 10, height = 5)
 
 # h19: mutually exclusive transition status by sex: in education / employed, not in education / NEET ----
