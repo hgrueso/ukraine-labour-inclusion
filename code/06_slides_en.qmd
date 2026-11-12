@@ -98,7 +98,7 @@ MH <- function(k, d = 0) { if (is.null(.mh)) return("n/a"); v <- .mh$value[.mh$k
 .mincer <- .rdc("models/hsess_mincer.csv")
 .ch <- .rdc("tables/coi_headlines.csv")
 .gh <- .rdc("tables/groups_headlines.csv")
-.sens <- .rdc("tables/coi_sensitivity.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
+.sens <- .rdc("tables/coi_sensitivity.csv"); .bud <- .rdc("tables/coi_budget_table.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
 CHK <- function(k) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else format(round(v[1], -3), big.mark = ",", scientific = FALSE) }
 CHM <- function(k, d = 1) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
@@ -282,30 +282,30 @@ About `r CHK("n_gap")` more young women in work, each earning UAH `r CH("wage_c"
 
 ::: {.bn-grid}
 ::: {.bn-tile}
-[`r CH("pct_gdp", 2)`%]{.bn-num}
-
-[of GDP in 2024]{.bn-lab}
-
-[UAH `r CH("nat_economy", 1)` billion against GDP of UAH 7,659 billion]{.bn-sub}
-:::
-::: {.bn-tile}
-[`r CH("pct_revenue", 2)`%]{.bn-num}
-
-[of public revenues in 2024]{.bn-lab}
-
-[UAH `r CH("nat_revenue", 1)` billion against UAH 3,646 billion in state budget taxes and social contributions]{.bn-sub}
-:::
-::: {.bn-tile}
 [`r CH("pct_preschool", 0)`%]{.bn-num}
 
-[of public spending on preschool education in 2024]{.bn-lab}
+[of public spending on preschool education]{.bn-lab}
 
-[UAH `r CH("nat_revenue", 1)` billion against UAH 52.6 billion budgeted for preschool education]{.bn-sub}
+[UAH `r CH("nat_revenue", 1)` billion a year against UAH 52.6 billion budgeted in 2024]{.bn-sub}
+:::
+::: {.bn-tile}
+[`r CH("pct_lowincome", 0)`%]{.bn-num}
+
+[of state support to low-income families]{.bn-lab}
+
+[UAH `r CH("nat_revenue", 1)` billion a year against UAH 17.9 billion in 2024]{.bn-sub}
+:::
+::: {.bn-tile}
+[`r CH("pct_health", 1)`%]{.bn-num}
+
+[of public spending on health]{.bn-lab}
+
+[UAH `r CH("nat_revenue", 1)` billion a year against UAH 238.7 billion in 2024; `r CH("pct_pmg", 1)`% of the Programme of Medical Guarantees]{.bn-sub}
 :::
 :::
 
 ::: {style="font-size:0.56em; color:#7a7a7a; margin-top:1em;"}
-Each year the gender gap remains, the public budget forgoes revenues equal to about `r CH("pct_preschool", 0)`% of what it spends on preschool education, the service most closely linked to young mothers' ability to work. Sources: GDP, State Statistics Service of Ukraine (2024 estimate); state budget taxes and fees (general and special funds) and ESV, Ministry of Finance (2024 execution); preschool spending, A Brighter Future (UNICEF Ukraine, 2024). All values in 2024 prices, the year the wages were collected.
+Public revenues forgone each year the gender gap remains, compared with what the state spent on these services in 2024, the year the wages were collected. As a share of the whole economy the cost is about `r CH("pct_gdp", 2)`% of GDP (UAH `r CH("nat_economy", 1)` billion), and `r CH("pct_education", 1)`% of public spending on education. Sources: Ministry of Finance (2024 budget execution and 2025 budget overview), National Health Service of Ukraine, State Statistics Service of Ukraine, A Brighter Future (UNICEF Ukraine, 2024); full list in the appendix.
 :::
 
 ## How to read this estimate {.smaller}
@@ -383,7 +383,7 @@ Additional employment attributable to the programme, at the central wage and for
 
 **4. Poverty compounds it.** Among poor young mothers NEET reaches `r GH("g4_mics_poor_mother")`% to `r GH("g4_hsess_poor_mother")`%; displacement is not associated with higher NEET.
 
-**5. The gender gap is costly.** Closing it would bring about `r CHK("n_gap")` more young women into work, adding UAH `r CH("nat_economy", 1)` billion a year to the economy (`r CH("pct_gdp", 2)`% of GDP) and UAH `r CH("nat_revenue", 1)` billion to public revenues, about `r CH("pct_preschool", 0)`% of public spending on preschool education.
+**5. The gender gap is costly.** Closing it would bring about `r CHK("n_gap")` more young women into work, adding UAH `r CH("nat_economy", 1)` billion a year to the economy and UAH `r CH("nat_revenue", 1)` billion to public revenues: about `r CH("pct_preschool", 0)`% of what the state spends on preschool education, or `r CH("pct_lowincome", 0)`% of its support to low-income families.
 
 **6. Support pays back through the budget.** Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues.
 :::
@@ -424,8 +424,20 @@ Additional employment attributable to the programme, at the central wage and for
 | Economy | Gross wage plus employer social contribution for formal jobs, net wage for informal jobs: a lower bound on the value of the work | Statutory rates |
 | Public revenues | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings (consumption share assumed) | Statutory rates |
 | Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys report shortages |
-| Budget comparators | GDP 2024: UAH 7,659 bn. State budget taxes and fees 2024: over UAH 3,100 bn; ESV 2024: UAH 546 bn. Preschool spending budgeted for 2024: UAH 52.6 bn | State Statistics Service; Ministry of Finance; A Brighter Future (UNICEF Ukraine, 2024) |
+| Budget comparators | 2024 values (the year the wages were collected): GDP, public revenues, health, Programme of Medical Guarantees, education, preschool education, support to low-income families | See the next slide for values and sources |
 | Not included | Effects on children, employers and the wider economy; lost experience; women's work-related expenses | |
+:::
+
+## Budget comparators and sources {.smaller}
+
+::: {.kv-small}
+```{r budtab}
+if (!is.null(.bud)) kable(.bud, align = "lrlrl")
+```
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Value to the economy is compared with GDP; public revenues forgone with the other items. Health and education spending cover all budgets (state and local); support to low-income families is the 2024 amount implied by the 2025 budget overview (UAH 19.7 billion in 2025, UAH 1.8 billion more than in 2024). Local budgets receive part of the personal income tax, so comparisons with state budget items slightly overstate the share.
 :::
 
 ## Sensitivity: changing one assumption at a time {.smaller}

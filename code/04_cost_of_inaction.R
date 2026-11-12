@@ -20,11 +20,9 @@ COI <- list(
   pop_w1824 = NA_real_,   # override with an official estimate of women aged 18-24; NA = HSESS weighted count
   pit = 0.18, levy = 0.05, usc = 0.22, vat = 0.20, consumption_share = 0.80,   # statutory rates; VAT base assumed
   discount = 0.05, working_life_end = 60,                                      # 5% as in A Brighter Future (UNICEF Ukraine, 2024)
-  # Budget perspective, 2024, UAH billion
-  gdp_2024 = 7658.7,           # nominal GDP 2024, State Statistics Service of Ukraine (estimate published 31 March 2025)
-  taxes_2024 = 3100,           # taxes, fees and other payments to the state budget (general and special funds), Ministry of Finance: "over 3.1 trillion"
-  esv_2024 = 546.1,            # unified social contribution (ESV) to the pension and social insurance funds, Ministry of Finance
-  preschool_2024 = 52.6        # public spending on preschool education budgeted for 2024 (A Brighter Future, UNICEF Ukraine 2024)
+  # Budget perspective, 2024, UAH billion (same year as the HSESS wages); sources in BUDGET below
+  gdp_2024 = 7658.7, taxes_2024 = 3100, esv_2024 = 546.1, health_2024 = 238.7, pmg_2024 = 159, education_2024 = 348.4,
+  preschool_2024 = 52.6, lowincome_2024 = 17.9
 )
 hs <- readRDS(here::here("output", "hsess_analysis_ready.rds")) %>% filter(w > 0)
 wm <- readRDS(here::here("output", "mics_women.rds")) %>% filter(age >= 18, age <= 24, !is.na(neet))
@@ -72,12 +70,20 @@ central <- pw %>% mutate(women = n_gap, across(c(net, pit_levy, esv, vat, econom
 write_table(central, "coi_central")
 
 # ---- 5. Budget perspective -------------------------------------------------------------------------------------------
-budget <- tibble(
-  comparator = c("GDP 2024", "Public revenues 2024 (state budget taxes and fees plus ESV)", "Public spending on preschool education 2024"),
-  value_bn = c(COI$gdp_2024, COI$taxes_2024 + COI$esv_2024, COI$preschool_2024),
-  measure = c("Economy", "Public revenues", "Public revenues"),
-  coi_bn = c(central$nat_economy, central$nat_revenue, central$nat_revenue)) %>% mutate(share = 100 * coi_bn / value_bn)
+BUDGET <- tibble::tribble(
+  ~key,         ~comparator,                                                        ~value_bn,          ~measure,          ~source,
+  "gdp",        "GDP",                                                              COI$gdp_2024,       "Economy",         "State Statistics Service of Ukraine, GDP estimate for 2024 (31 March 2025)",
+  "revenue",    "Public revenues: state budget taxes and fees plus social contributions", COI$taxes_2024 + COI$esv_2024, "Public revenues", "Ministry of Finance, 2024 budget execution: over UAH 3.1 trillion in taxes, fees and other payments (general and special funds) and UAH 546.1 billion in ESV",
+  "health",     "Public spending on health",                                        COI$health_2024,    "Public revenues", "Ministry of Finance, 31 January 2025: health spending in 2024 (all budgets)",
+  "pmg",        "Programme of Medical Guarantees",                                  COI$pmg_2024,       "Public revenues", "National Health Service of Ukraine, 1 January 2024: budget of the 2024 programme (over UAH 159 billion)",
+  "education",  "Public spending on education",                                     COI$education_2024, "Public revenues", "Ministry of Finance: education spending in 2024 (all budgets)",
+  "preschool",  "Public spending on preschool education",                           COI$preschool_2024, "Public revenues", "A Brighter Future (UNICEF Ukraine, 2024): amount budgeted for 2024",
+  "lowincome",  "State support to low-income families",                             COI$lowincome_2024, "Public revenues", "Ministry of Finance, State Budget 2025 overview: UAH 19.7 billion in 2025, UAH 1.8 billion more than in 2024")
+budget <- BUDGET %>% mutate(coi_bn = ifelse(measure == "Economy", central$nat_economy, central$nat_revenue), share = 100 * coi_bn / value_bn)
 write_table(budget, "coi_budget")
+write_table(budget %>% transmute(`Compared with (2024)` = comparator, `UAH bn` = format(value_bn, big.mark = ",", trim = TRUE),
+                                 `Measured against` = ifelse(measure == "Economy", "Economy", "Revenues"),
+                                 `Share` = sprintf("%.1f%%", share), Source = source), "coi_budget_table")
 
 # ---- 6. Sensitivity: one assumption at a time ---------------------------------------------------------------------------
 sens_row <- function(lab, value_lab, wage, formal, n) { p <- per_woman(wage, formal); tibble(Assumption = lab, Value = value_lab,
@@ -127,17 +133,17 @@ share_any <- wmean(rowSums(sapply(c("mother", "bottom40", "rural", "idp", "singl
 write_table(c4, "coi_by_group")
 save_fig(ggplot(c4, aes(reorder(group, share_of_neet), share_of_neet)) + geom_col(fill = ACCENT_GIRL, width = .65) +
            geom_text(aes(label = sprintf("%s (n = %d)", percent(share_of_neet, accuracy = 1), n)), hjust = -0.1, size = 3.1, colour = GREY_DARK) +
-           coord_flip() + scale_y_continuous(labels = percent_format(1), limits = c(0, 1), expand = expansion(mult = c(0, 0))) +
-           labs(subtitle = "Share of NEET young women aged 18-24 who belong to each group", x = NULL, y = NULL,
-                caption = sprintf("MICS 2025/26. Groups overlap, so shares do not add up to 100%%. %s of NEET young women belong to at least one of the first five groups.", percent(share_any, accuracy = 1))) +
-           theme_ukr() + theme(panel.grid.major.y = element_blank()), "c4_cost_by_group_en", width = 10, height = 4.8)
+           coord_flip() + scale_y_continuous(labels = percent_format(1), limits = c(0, 1), breaks = seq(0, 1, .25), expand = expansion(mult = c(0, .02))) +
+           labs(subtitle = "Share of NEET young women aged 18-24 who belong to each group", x = NULL, y = NULL, caption = "MICS 2025/26 (SSSU and UNICEF), weighted.") +
+           theme_ukr() + theme(panel.grid.major.y = element_blank(), plot.caption = element_text(hjust = 0), plot.caption.position = "plot",
+                               plot.title.position = "plot", plot.margin = margin(6, 28, 6, 6)), "c4_cost_by_group_en", width = 10, height = 4.8)
 
 # ---- headlines --------------------------------------------------------------------------------------------------------------
 ages <- 21:COI$working_life_end; dfac <- sum((1 + COI$discount)^(-(ages - 21)))
 heads <- tibble(
   key = c("neet_w_h", "neet_m_h", "gap_pp", "pop_w1824", "n_neet_w", "n_gap", "neet_mics", "wage_c", "wage_p25", "wage_med", "formal_c", "formal_lo", "formal_hi",
           "share_seeking", "n_mincer", "r2_mincer", "n_neet_pred", "n_wage", "pw_net", "pw_economy", "pw_revenue", "nat_economy", "nat_revenue", "nat_net",
-          "nat_pit_levy", "nat_esv", "nat_vat", "pct_gdp", "pct_revenue", "pct_preschool", "lifetime_economy", "lifetime_revenue", "share_mothers", "share_poor40", "share_any",
+          "nat_pit_levy", "nat_esv", "nat_vat", paste0("pct_", budget$key), "lifetime_economy", "lifetime_revenue", "share_mothers", "share_poor40", "share_any",
           "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev"),
   value = c(100 * neet_w, 100 * neet_m, 100 * gap, pop, n_neet_w, n_gap, 100 * neet_mics, wage_c, wage_p25, wage_med, 100 * formal_c, 100 * formal_lo, 100 * formal_hi,
             100 * share_seeking, nobs(mz), r2(mz, "r2"), nrow(nw), nrow(ew), pw$net, pw$economy, pw$revenue, central$nat_economy, central$nat_revenue, central$nat_net,

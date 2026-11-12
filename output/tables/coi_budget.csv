@@ -1,4 +1,8 @@
-comparator,value_bn,measure,coi_bn,share
-GDP 2024,7658.7,Economy,20.451791684401055,0.2670399896118278
-Public revenues 2024 (state budget taxes and fees plus ESV),3646.1,Public revenues,8.146663443723998,0.22343499749661277
-Public spending on preschool education 2024,52.6,Public revenues,8.146663443723998,15.487953315064635
+key,comparator,value_bn,measure,source,coi_bn,share
+gdp,GDP,7658.7,Economy,"State Statistics Service of Ukraine, GDP estimate for 2024 (31 March 2025)",20.451791684401055,0.2670399896118278
+revenue,Public revenues: state budget taxes and fees plus social contributions,3646.1,Public revenues,"Ministry of Finance, 2024 budget execution: over UAH 3.1 trillion in taxes, fees and other payments (general and special funds) and UAH 546.1 billion in ESV",8.146663443723998,0.22343499749661277
+health,Public spending on health,238.7,Public revenues,"Ministry of Finance, 31 January 2025: health spending in 2024 (all budgets)",8.146663443723998,3.4129298046602425
+pmg,Programme of Medical Guarantees,159,Public revenues,"National Health Service of Ukraine, 1 January 2024: budget of the 2024 programme (over UAH 159 billion)",8.146663443723998,5.123687700455345
+education,Public spending on education,348.4,Public revenues,Ministry of Finance: education spending in 2024 (all budgets),8.146663443723998,2.3383075326417906
+preschool,Public spending on preschool education,52.6,Public revenues,"A Brighter Future (UNICEF Ukraine, 2024): amount budgeted for 2024",8.146663443723998,15.487953315064635
+lowincome,State support to low-income families,17.9,Public revenues,"Ministry of Finance, State Budget 2025 overview: UAH 19.7 billion in 2025, UAH 1.8 billion more than in 2024",8.146663443723998,45.5120862777877
