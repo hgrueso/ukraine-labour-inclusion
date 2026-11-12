@@ -1,0 +1,30 @@
+sexo,educ,type,wt,n,share,n_cell
+Young women,Basic secondary or less,Employee with contract,18199.80710757924,8,0.3797576151306773,19
+Young women,Basic secondary or less,Informal or unregistered,27472.657011828636,10,0.5732451254261018,19
+Young women,Basic secondary or less,Registered business owner,2252.33417941375,1,0.04699725944322087,19
+Young women,Complete secondary,Employee with contract,34226.59164803327,22,0.34946147345712814,49
+Young women,Complete secondary,Informal or unregistered,52103.05839357931,24,0.5319843630672845,49
+Young women,Complete secondary,Registered business owner,11611.30839777939,3,0.11855416347558743,49
+Young women,Vocational,Employee with contract,179595.48770142873,94,0.7069278920880474,129
+Young women,Vocational,Informal or unregistered,56414.33044767292,29,0.22205938588631202,129
+Young women,Vocational,Registered business owner,18040.827908955165,6,0.07101272202564048,129
+Young women,Short-cycle tertiary,Employee with contract,91398.10992128032,32,0.8150400248837006,43
+Young women,Short-cycle tertiary,Informal or unregistered,13856.832974952871,8,0.12356791078548668,43
+Young women,Short-cycle tertiary,Registered business owner,6884.47005385114,3,0.061392064330812623,43
+Young women,Higher (bachelor+),Employee with contract,383591.2134336507,170,0.8075560820297308,211
+Young women,Higher (bachelor+),Informal or unregistered,57287.13013522265,26,0.12060383226356072,211
+Young women,Higher (bachelor+),Registered business owner,34124.22525523032,15,0.07184008570670852,211
+Young men,Basic secondary or less,Employee with contract,13738.615511616343,9,0.3499905630208728,18
+Young men,Basic secondary or less,Informal or unregistered,25515.6300687052,9,0.6500094369791273,18
+Young men,Complete secondary,Employee with contract,91200.56491895087,29,0.5815895531804254,52
+Young men,Complete secondary,Informal or unregistered,63908.99921804658,20,0.4075501761690123,52
+Young men,Complete secondary,Registered business owner,1703.027183152838,3,0.01086027065056223,52
+Young men,Vocational,Employee with contract,334671.0777888122,104,0.6598168954333387,171
+Young men,Vocational,Informal or unregistered,153544.33405178165,58,0.30271855720187596,171
+Young men,Vocational,Registered business owner,19002.69685760037,9,0.037464547364785404,171
+Young men,Short-cycle tertiary,Employee with contract,84336.8068846317,28,0.5499681242282554,49
+Young men,Short-cycle tertiary,Informal or unregistered,53654.79353806964,18,0.349887875152215,49
+Young men,Short-cycle tertiary,Registered business owner,15356.93591834135,3,0.10014400061952969,49
+Young men,Higher (bachelor+),Employee with contract,563865.3805507876,158,0.746387072197799,217
+Young men,Higher (bachelor+),Informal or unregistered,102945.93006174717,33,0.13626924791589695,217
+Young men,Higher (bachelor+),Registered business owner,88648.42543358801,26,0.11734367988630409,217

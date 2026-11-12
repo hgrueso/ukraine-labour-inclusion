@@ -1,4 +1,4 @@
-# Raw microdata: not redistributed
+# Raw microdata: not redistributed (SSSU, UNICEF HSESS, MICS terms of use)
 data/
 *.sav
 *.dta
@@ -25,3 +25,6 @@ Rplots.pdf
 *.docx
 *.xlsx
 *.xls
+
+# local Python environment used only for the PDF fallback
+.pdfenv/

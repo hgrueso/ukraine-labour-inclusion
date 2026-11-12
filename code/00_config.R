@@ -12,16 +12,17 @@ find1 <- function(dir, pattern) {
   if (length(f)) f[1] else NA_character_
 }
 PATHS <- list(
-  # SSSU Labour Force Survey 2021, anonymised public-use file (pre-war baseline)
+  # SSSU Labour Force Survey 2021, anonymised public-use file (reference year 2021)
   lfs      = find1("data/mic_poc_rob_syly_21", "\\.sav$"),
   lfs_xlsx = find1("data/mic_poc_rob_syly_21", "^Ukr_2021\\.xlsx$"),
   # UNICEF Household Social and Economic Status Survey (HSESS), Dec 2023 to Feb 2024
+  mics7_dir = here::here("data", "mics7"),   # MICS 2025/26 SPSS files (hh, hl, wm, bh, ch, fs)
   hsess_hh  = find1("data", "SESH .*Household.*\\.xlsx$"),
   hsess_ind = find1("data", "SESHS IND.*\\.xlsx$")
 )
 
-# Age groups: 15-18 education, training and apprenticeships (14-17 are legal minors);
-# 19-24 labour market (participation, employment); 15-24 education-to-work transition;
+# Age groups: 15-17 education, training and apprenticeships (14-17 are legal minors);
+# 18-24 labour market (participation, employment); 15-24 education-to-work transition;
 # 15-29 ILO NEET frame, reported for reference. HSESS has no labour module below age 15.
 AGE_MIN <- 15; AGE_MAX <- 24
 
@@ -98,26 +99,33 @@ FRONTLINE <- c("Donetsk", "Kharkiv", "Zaporizhzhia", "Kherson", "Mykolaiv", "Sum
 
 # ---- Key variables (shown on the slides and in the report) ---------------------
 KEY_VARS <- tribble(
-  ~concept, ~use, ~lfs, ~hsess,
-  "Age", "Groups 15-18, 19-24; 15-29 for NEET", "age_gr (bands: 15-24, 25-29)", "IND_A2 age in years",
-  "Sex", "Breakdown by sex", "sex", "IND_A3 sex",
-  "Survey weight / design", "Weighted estimates", "weight_year; kod_res", "Final weight; household key",
-  "Region", "Regional breakdown", "rg", "OBLAST",
-  "Urban / rural", "Urban/rural breakdown", "tp_ar", "SETTL_TYPE",
-  "Displacement", "Breakdown by displacement status", "not available", "IND_A19 IDP status",
-  "Disability", "Breakdown by disability in household", "not available", "D1_Mult3/4 household member with disability",
-  "Marital status", "Household formation", "marital_st", "IND_A6 marital status",
-  "Motherhood", "Breakdown by motherhood", "not available", "Lives with own child under 18 (IND_A1 relationship, roster ages)",
-  "Young children", "Childcare responsibilities", "not available", "Child under 6 in household (roster ages)",
-  "Daily childcare", "Childcare responsibilities", "reason_inactiv = 3 (proxy)", "IND_B28_1 cares for own children daily",
-  "Childcare access", "Preschool attendance", "not available", "IND_A14 why a child does not attend preschool",
-  "Household income", "Income breakdown, costing", "not available", "V1 household income per member",
-  "Education level", "Education-to-work transition", "education; special_dipl", "IND_A7 education level",
-  "In education", "Enrolment, NEET", "reason_inactiv = 2", "IND_A9 currently in education; IND_A10 type of institution",
-  "Employment", "Participation, employment, NEET", "labour_force", "IND_B1 status in reference week",
-  "Job search", "Unemployment", "labour_force = 2; durat_job_search", "IND_B21 looking for work",
-  "Reason not working", "Reasons for inactivity", "reason_inactiv; reason_unempl", "IND_B24 reason not working or seeking",
-  "Occupation / sector", "Occupational distribution, earnings", "occupation", "IND_B6_2 occupation; IND_B5_2 sector",
-  "Job quality", "Informality, hours", "informal_empl; actual_duration", "IND_B3_1 contract; IND_B9_1 hours; IND_B10_1",
-  "Earnings", "Wage differences, costing", "not available", "IND_V1_1_1 monthly amount (wages)"
+  ~concept, ~use, ~mics, ~hsess, ~lfs,
+  "Age", "Groups 15-17, 18-24; 15-29 for NEET", "HL6; WB4 (women)", "IND_A2 age in years", "age_gr (bands)",
+  "Sex", "Breakdown by sex", "HL4 (household members)", "IND_A3", "sex",
+  "Survey design", "Weighted estimates", "hhweight, wmweight, fsweight; psu; stratum", "Final weight; household key", "weight_year; kod_res",
+  "Region / area", "Regional and urban/rural breakdown", "HH7 oblast; macroregion; HH6", "OBLAST; SETTL_TYPE", "rg; tp_ar",
+  "Displacement", "Breakdown by displacement", "WB10A IDP status; PE3 household moved", "IND_A19 IDP status", "not available",
+  "Disability", "Breakdown by disability", "disability (functioning, 18-49)", "D1_Mult3/4 household member", "not available",
+  "Marital status", "Household formation", "MSTATUS", "IND_A6", "marital_st",
+  "Motherhood", "Breakdown by motherhood", "CEB children ever born; WDOBFC", "Own child under 18 (roster)", "not available",
+  "Care work", "Care responsibilities", "CL11E/F caring for children or the sick (5-17)", "IND_B28_1 daily care of own children", "reason_inactiv = 3 (proxy)",
+  "Childcare access", "Preschool attendance", "ED9, ED10A (ages 3-5)", "IND_A14 reason not attending", "not available",
+  "Economic status", "Breakdown by income or wealth", "windex5 wealth quintile; PE20 income", "V1 household income per member", "not available",
+  "Changes since 2022", "Household context", "PE3 moved; PE5 dwelling damaged; PE12 members separated", "not available", "not applicable",
+  "Education level", "Education-to-work transition", "welevel; ED10A level attended", "IND_A7", "education; special_dipl",
+  "In education", "School attendance, NEET", "ED9 (members 3-24); NE3 (women 15-24)", "IND_A9; IND_A10 type", "reason_inactiv = 2",
+  "Training", "NEET", "NE6 courses or training (women 15-24)", "not available", "not available",
+  "Employment", "Employment, NEET", "NE8-NE11, NE20-NE21 (women 15-24)", "IND_B1", "labour_force",
+  "Job search", "Unemployment, participation", "not available", "IND_B21", "labour_force = 2",
+  "Reason not working", "Reasons for inactivity", "not available", "IND_B24", "reason_inactiv",
+  "Occupation / sector", "Occupational distribution", "not available", "IND_B6_2; IND_B5_2", "occupation",
+  "Job quality", "Informality, hours", "not available", "IND_B3_1; IND_B9_1; IND_B10_1", "informal_empl; actual_duration",
+  "Earnings", "Wage differences, costing", "not available", "IND_V1_1_1 (wages)", "not available"
 )
+
+# ---- MICS 2025/26 ----------------------------------------------------------------
+MICS <- list(dir = here::here("data", "mics7"))
+MICS$files <- c(hh = "hh.sav", hl = "hl.sav", wm = "wm.sav", fs = "fs.sav")
+# Education level codes (ED10A / ED5A)
+MICS_LEVEL <- c("0" = "Preschool", "11" = "General secondary", "21" = "General secondary", "31" = "General secondary",
+                "41" = "Vocational", "51" = "Higher education", "61" = "Higher education", "71" = "Higher education", "81" = "Higher education")

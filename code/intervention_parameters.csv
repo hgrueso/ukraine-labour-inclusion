@@ -1,0 +1,5 @@
+intervention,target_group,cost_low,cost_high,effect_low,effect_high,years,source_note
+Employment services (counselling and job matching),All NEET young women,3000,8000,0.03,0.08,3,"Illustrative: SES counselling and job-matching cost per client; effects from ALMP meta-analyses (Card Kluve Weber 2018). To confirm with the country office."
+Employer-supported internships and first jobs,All NEET young women,25000,50000,0.08,0.15,3,"Illustrative: 6 months at about half the minimum wage plus administration; effects from youth employment programme evaluations (Kluve et al. 2019). To confirm."
+Childcare services and flexible work,NEET young mothers,40000,100000,0.10,0.20,3,"Illustrative: 12 to 18 months of childcare support or compensation; effects from studies of childcare subsidies on maternal employment. To confirm."
+Internships plus childcare (package),NEET young mothers,65000,150000,0.20,0.30,3,"Illustrative combination of the two above for young mothers. To confirm."

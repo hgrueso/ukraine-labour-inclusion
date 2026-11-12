@@ -16,7 +16,7 @@ profile_df <- function(df, file_tag, question = NULL, option = NULL) {
     xn  <- num(if (inherits(x, "haven_labelled")) haven::zap_labels(x) else x)
     isnum <- any(!is.na(xn)) && mean(!is.na(xn[!is.na(xs)])) > .95
     tb <- sort(table(xs, useNA = "no"), decreasing = TRUE); k <- seq_len(min(6, length(tb)))
-    tibble(file = file_tag, variable = v, question = lab,
+    tibble(file = file_tag, variable = v, question = as.character(lab),
            option = if (!is.null(option)) option[[v]] else "",
            type = if (isnum) "numeric" else "text",
            n_nonmissing = sum(!is.na(xs) & xs != ""), pct_missing = round(100 * mean(is.na(xs) | xs == ""), 1),
@@ -72,6 +72,32 @@ for (key in c("hsess_ind", "hsess_hh")) {
   reports[[key]] <- r; freqs[[key]] <- value_freqs(d, tag)
 }
 
+# ---- MICS 2025/26 (all SPSS files in data/mics7) ---------------------------------------
+MICS_FILES <- c(hh = "Households", hl = "Household members", wm = "Women 15-49", bh = "Birth histories",
+                ch = "Children under 5", fs = "Children 5-17")
+mics_lines <- c("MICS 2025/26 summary", strrep("=", 60))
+if (dir.exists(PATHS$mics7_dir)) {
+  for (f in sort(list.files(PATHS$mics7_dir, pattern = "\\.sav$", full.names = TRUE))) {
+    nm  <- tolower(tools::file_path_sans_ext(basename(f)))
+    tag <- paste0("MICS7 ", nm)
+    m   <- haven::read_sav(f, user_na = FALSE)
+    r   <- profile_df(m, tag); r$key_variable <- FALSE
+    reports[[tag]] <- r; freqs[[tag]] <- value_freqs(m, tag)
+    # modules = letters at the start of MICS variable names (HL, ED, WB, MA, ...)
+    mods <- sort(table(sub("^([A-Za-z]+).*", "\\1", names(m))), decreasing = TRUE)
+    hdr <- sprintf("\n-- MICS7 %s (%s): %s rows, %d variables", nm, MICS_FILES[nm], format(nrow(m), big.mark = ","), ncol(m))
+    cat(hdr, "\n   modules: ", paste(paste0(names(mods), " (", mods, ")"), collapse = ", "), "\n", sep = "")
+    mics_lines <- c(mics_lines, hdr, paste0("   modules: ", paste(paste0(names(mods), " (", mods, ")"), collapse = ", ")))
+    # variables relevant to the analysis, matched on their labels
+    rx <- "work|employ|job|paid|earn|income|business|occupat|disab|difficult|function|attend|school|educat|grade|level|marri|union|partner|child|birth|pregnan|displac|idp|move|resid|region|oblast|area|urban|rural|wealth|weight|stratum|cluster|age|sex"
+    hit <- r %>% filter(grepl(rx, question, ignore.case = TRUE)) %>%
+      transmute(line = sprintf("   %-12s %s  [%s values, %s%% missing]", variable, substr(question, 1, 80), n_distinct, pct_missing))
+    mics_lines <- c(mics_lines, "   relevant variables:", hit$line)
+    rm(m)
+  }
+} else cat("\n-- MICS 2025/26: folder data/mics7 not found\n")
+writeLines(mics_lines, here::here("output", "inventory", "mics7_summary.txt"))
+
 # ---- workbook ------------------------------------------------------------------------
 fnd <- bind_rows(found)
 kv <- KEY_VARS
@@ -83,7 +109,7 @@ book <- list(`Read me` = tibble(`How to use this report` = c(
   "HSESS variable names are the questionnaire codes (IND_A3, D1_Mult3...); 'question' and 'option' carry the Ukrainian wording.",
   "Sheet 'Value frequencies': full distribution of every variable with 30 or fewer distinct values.")),
   `Key variables` = kv, `HSESS key columns found` = fnd)
-for (k in names(reports)) book[[reports[[k]]$file[1]]] <- reports[[k]] %>% relocate(key_variable, .before = variable)
+for (k in names(reports)) book[[substr(reports[[k]]$file[1], 1, 31)]] <- reports[[k]] %>% relocate(key_variable, .before = variable)
 book$`Value frequencies` <- bind_rows(freqs)
 writexl::write_xlsx(book, here::here("output", "inventory", "variable_report.xlsx"))
 write_csv(bind_rows(reports), here::here("output", "inventory", "variable_report_all.csv"))

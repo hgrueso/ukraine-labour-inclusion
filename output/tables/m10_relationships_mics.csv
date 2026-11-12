@@ -1,0 +1,170 @@
+a,b,v
+Age group,Age group,NA
+Age group,Macroregion,0.11700312085764489
+Age group,Rural,0.12931706609395294
+Age group,Wealth quintile,0.1535043869596585
+Age group,Education,0.6740818729122791
+Age group,Married,0.37195939758399027
+Age group,Mother,0.2509586916214248
+Age group,IDP,0.05818007292281017
+Age group,Household moved,0.0947068482976038
+Age group,Income decreased,0.17043193160293021
+Age group,In education,0.5180957620852441
+Age group,Employed,0.3354986640710674
+Age group,NEET,0.29281438885996575
+Macroregion,Age group,0.11700312085764494
+Macroregion,Macroregion,NA
+Macroregion,Rural,0.29751396233954824
+Macroregion,Wealth quintile,0.15311122918376668
+Macroregion,Education,0.09381241301478557
+Macroregion,Married,0.10729688505867092
+Macroregion,Mother,0.0739331399720573
+Macroregion,IDP,0.1146556420870733
+Macroregion,Household moved,0.30031702071783817
+Macroregion,Income decreased,0.15129471480408965
+Macroregion,In education,0.11171788449551967
+Macroregion,Employed,0.1295562243278491
+Macroregion,NEET,0.0866577760112
+Rural,Age group,0.12931706609395294
+Rural,Macroregion,0.29751396233954824
+Rural,Rural,NA
+Rural,Wealth quintile,0.5422972678622321
+Rural,Education,0.17065152438080394
+Rural,Married,0.056728580655533635
+Rural,Mother,0.1169049695992074
+Rural,IDP,0.08018225653535119
+Rural,Household moved,0.1802031476491642
+Rural,Income decreased,0.1130170976268416
+Rural,In education,0.05443400105548067
+Rural,Employed,0.11748578762032903
+Rural,NEET,0.057360421028310384
+Wealth quintile,Age group,0.15350438695965848
+Wealth quintile,Macroregion,0.15311122918376668
+Wealth quintile,Rural,0.5422972678622321
+Wealth quintile,Wealth quintile,NA
+Wealth quintile,Education,0.12534567755581422
+Wealth quintile,Married,0.12626604761231355
+Wealth quintile,Mother,0.12244921526941913
+Wealth quintile,IDP,0.06866718342246354
+Wealth quintile,Household moved,0.18064385958486773
+Wealth quintile,Income decreased,0.17578002998980316
+Wealth quintile,In education,0.07187606550933179
+Wealth quintile,Employed,0.09437819712451154
+Wealth quintile,NEET,0.1122913044208635
+Education,Age group,0.6740818729122791
+Education,Macroregion,0.09381241301478559
+Education,Rural,0.17065152438080394
+Education,Wealth quintile,0.12534567755581422
+Education,Education,NA
+Education,Married,0.22122300393949004
+Education,Mother,0.16152665043998396
+Education,IDP,0.05760568750378845
+Education,Household moved,0.12681096184629084
+Education,Income decreased,0.18424341661727422
+Education,In education,0.2655294253516711
+Education,Employed,0.21447024475750892
+Education,NEET,0.1516560378707453
+Married,Age group,0.37195939758399027
+Married,Macroregion,0.10729688505867091
+Married,Rural,0.056728580655533635
+Married,Wealth quintile,0.12626604761231353
+Married,Education,0.22122300393949
+Married,Married,NA
+Married,Mother,0.40905898520246925
+Married,IDP,0.052363485117775346
+Married,Household moved,0.04090035826806358
+Married,Income decreased,0.079148755866746
+Married,In education,0.3940978259752973
+Married,Employed,0.16095500514165995
+Married,NEET,0.2795123505904056
+Mother,Age group,0.25095869162142487
+Mother,Macroregion,0.0739331399720573
+Mother,Rural,0.1169049695992074
+Mother,Wealth quintile,0.12244921526941911
+Mother,Education,0.16152665043998396
+Mother,Married,0.40905898520246925
+Mother,Mother,NA
+Mother,IDP,0.04293763737429951
+Mother,Household moved,0.04837244721315794
+Mother,Income decreased,0.1088507152210633
+Mother,In education,0.38492532253913525
+Mother,Employed,0.016715092929479407
+Mother,NEET,0.44195396569758305
+IDP,Age group,0.05818007292281017
+IDP,Macroregion,0.1146556420870733
+IDP,Rural,0.08018225653535119
+IDP,Wealth quintile,0.06866718342246354
+IDP,Education,0.057605687503788444
+IDP,Married,0.052363485117775346
+IDP,Mother,0.04293763737429951
+IDP,IDP,NA
+IDP,Household moved,0.2895446122037132
+IDP,Income decreased,0.18157621252671866
+IDP,In education,0.08933262712785299
+IDP,Employed,0.10448755962708059
+IDP,NEET,0.021310009506442948
+Household moved,Age group,0.0947068482976038
+Household moved,Macroregion,0.30031702071783817
+Household moved,Rural,0.1802031476491642
+Household moved,Wealth quintile,0.18064385958486773
+Household moved,Education,0.12681096184629084
+Household moved,Married,0.04090035826806358
+Household moved,Mother,0.04837244721315794
+Household moved,IDP,0.2895446122037132
+Household moved,Household moved,NA
+Household moved,Income decreased,0.0981737764497029
+Household moved,In education,0.0723743700482051
+Household moved,Employed,0.014216614270030972
+Household moved,NEET,0.026853073348173124
+Income decreased,Age group,0.17043193160293024
+Income decreased,Macroregion,0.15129471480408965
+Income decreased,Rural,0.11301709762684163
+Income decreased,Wealth quintile,0.17578002998980316
+Income decreased,Education,0.18424341661727422
+Income decreased,Married,0.079148755866746
+Income decreased,Mother,0.10885071522106327
+Income decreased,IDP,0.18157621252671866
+Income decreased,Household moved,0.0981737764497029
+Income decreased,Income decreased,NA
+Income decreased,In education,0.0902188617954771
+Income decreased,Employed,0.026670570545125272
+Income decreased,NEET,0.034236470726882864
+In education,Age group,0.5180957620852441
+In education,Macroregion,0.11171788449551967
+In education,Rural,0.05443400105548067
+In education,Wealth quintile,0.07187606550933183
+In education,Education,0.2655294253516711
+In education,Married,0.3940978259752973
+In education,Mother,0.38492532253913525
+In education,IDP,0.08933262712785299
+In education,Household moved,0.0723743700482051
+In education,Income decreased,0.0902188617954771
+In education,In education,NA
+In education,Employed,0.47229624194606695
+In education,NEET,0.6022980577600375
+Employed,Age group,0.3354986640710674
+Employed,Macroregion,0.1295562243278491
+Employed,Rural,0.11748578762032903
+Employed,Wealth quintile,0.09437819712451155
+Employed,Education,0.21447024475750892
+Employed,Married,0.16095500514165992
+Employed,Mother,0.016715092929479407
+Employed,IDP,0.10448755962708059
+Employed,Household moved,0.014216614270030972
+Employed,Income decreased,0.0266705705451253
+Employed,In education,0.47229624194606695
+Employed,Employed,NA
+Employed,NEET,0.2764111253861213
+NEET,Age group,0.29281438885996575
+NEET,Macroregion,0.08665777601120002
+NEET,Rural,0.057360421028310384
+NEET,Wealth quintile,0.1122913044208635
+NEET,Education,0.15165603787074527
+NEET,Married,0.2795123505904055
+NEET,Mother,0.44195396569758305
+NEET,IDP,0.021310009506442937
+NEET,Household moved,0.026853073348173124
+NEET,Income decreased,0.03423647072688287
+NEET,In education,0.6022980577600374
+NEET,Employed,0.2764111253861213
+NEET,NEET,NA

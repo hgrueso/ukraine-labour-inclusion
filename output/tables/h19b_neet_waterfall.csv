@@ -1,0 +1,9 @@
+sexo,x,bottom,top,label,v,step,fill
+Young women,1,0,1,All young people,1,all,all
+Young men,1,0,1,All young people,1,all,all
+Young women,2,0.614637199297182,1,In education,0.385362800702818,educ,out
+Young women,3,0.2753130853967941,0.614637199297182,"Employed, not in education",0.33932411390038786,emp,out
+Young women,4,2.220446049250313e-16,0.2753130853967942,NEET (remainder),0.275313085396794,neet,neet
+Young men,2,0.4876298288742148,1,In education,0.5123701711257852,educ,out
+Young men,3,0.15517440462271925,0.4876298288742148,"Employed, not in education",0.33245542425149555,emp,out
+Young men,4,-8.326672684688674e-17,0.15517440462271925,NEET (remainder),0.15517440462271934,neet,neet

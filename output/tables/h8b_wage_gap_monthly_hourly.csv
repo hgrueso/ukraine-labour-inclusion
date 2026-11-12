@@ -1,0 +1,9 @@
+group,sex,n,measure,median,gap_pct
+18-24,Men,190,Monthly wage (UAH),14000,28.6
+18-24,Men,190,Hourly wage (UAH),76.98229407236336,25
+18-24,Women,180,Monthly wage (UAH),10000,28.6
+18-24,Women,180,Hourly wage (UAH),57.73672055427252,25
+25-64,Men,2582,Monthly wage (UAH),14000,28.6
+25-64,Men,2582,Hourly wage (UAH),73.48309888725592,21.4
+25-64,Women,2932,Monthly wage (UAH),10000,28.6
+25-64,Women,2932,Hourly wage (UAH),57.73672055427252,21.4

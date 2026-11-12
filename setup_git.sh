@@ -11,7 +11,7 @@ echo "GitHub account: $(gh api user --jq .login)"
 [ -d .git ] || git init -b main
 
 # Stage code, documentation and aggregate outputs only
-git add .gitignore README.md REPLICATE.sh setup_git.sh .here code R
+git add .gitignore README.md REPLICATE.sh RENDER.sh UPDATE_RESULTS.sh setup_git.sh .here code R
 for p in output/figures output/tables output/models output/slides/06_slides_en.pdf output/slides/06_slides_en.html; do
   [ -e "$p" ] && git add "$p"
 done
@@ -21,7 +21,7 @@ if git diff --cached --name-only | grep -Ei '^data/|\.(rds|rdata|sav|dta|xlsx|xl
   echo "Stopped: microdata or the variable report is staged. Nothing was pushed."; exit 1
 fi
 
-git commit -q -m "Ukraine labour-market inclusion: analysis code, figures and preliminary findings deck" || echo "Nothing new to commit"
+git commit -q -m "Ukraine labour-market inclusion: final analysis code, figures and deck" || echo "Nothing new to commit"
 if git remote get-url origin > /dev/null 2>&1; then
   git push -u origin main
 elif gh repo view "$REPO" > /dev/null 2>&1; then

@@ -2,7 +2,7 @@
 title: "Young Women's Labour-Market Inclusion"
 subtitle: "Preliminary findings, Ukraine"
 author: "Hernando Grueso, PhD · UNICEF"
-date: "12 October 2026"
+date: "November 2026"
 lang: en
 format:
   revealjs:
@@ -28,7 +28,7 @@ format:
         .reveal .tight-table table { font-size:.74em; border-collapse:collapse; width:100%; }
         .reveal .tight-table table td, .reveal .tight-table table th { padding:2px 5px; }
         .reveal .assump-table table { font-size:.6em; border-collapse:collapse; width:100%; }
-        .reveal .kv-table table { font-size:.66em; border-collapse:collapse; width:100%; }
+        .reveal .kv-table table { font-size:.56em; border-collapse:collapse; width:100%; }
         .reveal .kv-table td, .reveal .kv-table th { padding:3px 6px; line-height:1.25; }
         .reveal .kv-small table { font-size:.5em; border-collapse:collapse; width:100%; }
         .reveal .kv-small td, .reveal .kv-small th { padding:1px 5px; }
@@ -75,6 +75,20 @@ GAP <- function(k) { if (is.null(.hh)) return("n/a"); v <- .hh$value[.hh$key == 
 HS <- function(k, d = 0) { if (is.null(.hh)) return("n/a"); v <- .hh$value[.hh$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d, big.mark = ",") }
 .kv <- .rdc("inventory/key_variables.csv")
+.mh <- .rdc("tables/mics_headlines.csv")
+MH <- function(k, d = 0) { if (is.null(.mh)) return("n/a"); v <- .mh$value[.mh$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d, big.mark = ",") }
+.mtests <- .rdc("models/mics_tests.csv")
+.mincer <- .rdc("models/hsess_mincer.csv")
+.ch <- .rdc("tables/coi_headlines.csv")
+.gh <- .rdc("tables/groups_headlines.csv")
+GH <- function(k, d = 0) { if (is.null(.gh)) return("n/a"); v <- .gh$value[.gh$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d, big.mark = ",") }
+CH <- function(k, d = 0) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d, big.mark = ",") }
+.mh2 <- .rdc("tables/hsess_model_headlines.csv")
+MM <- function(k, d = 1) { if (is.null(.mh2)) return("n/a"); v <- .mh2$value[.mh2$key == k]
+  if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d) }
 .tests <- .rdc("models/lfs_tests.csv")
 .htests <- .rdc("models/hsess_tests.csv")
 ptab <- function(t) t %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, format = "f", digits = 3)))
@@ -83,26 +97,377 @@ ptab <- function(t) t %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, forma
 ## Content
 
 ::: {.toc-grid}
-1 · Data and variables
+1 · NEET among young women aged 18–24 and the gap with young men
 
-2 · Labour Force Survey 2021
+2 · Who is most affected: poverty, motherhood, displacement and care
 
-3 · Household Social and Economic Status Survey 2023/24
+3 · Education, vocational training, earnings and job quality
 
-4 · Regression analysis
+4 · The cost of young women remaining NEET: scenarios
 
-5 · Next steps
+5 · Investment options: what returns, for whom, at what cost
+
+6 · Recommendations by GenU priority
 
 Appendix
 :::
 
-# 1 · Data and variables {.section-divider background-color="#00377C"}
-
 ## Data sources {.smaller}
 
-- **SSSU Labour Force Survey 2021** (anonymised public-use file): 265.6k interviews from 151.7k persons aged 15+ in 88.1k households; rotation panel; collected before February 2022. Age is released in bands (15–24, 25–29 and older); the file has no earnings, household composition, displacement or disability variables.
-- **UNICEF Household Social and Economic Status Survey (HSESS)**, December 2023 to February 2024, Institute of Demography and Quality of Life Problems: 18,838 individuals in 8,024 households, all regions except the occupied territories and Luhansk oblast. Single-year age; employment questions from age 15; displacement, disability (household level), childcare, earnings and household income.
-- **MICS-7 2025/26**: access pending.
+- **Multiple Indicator Cluster Survey (MICS) 2025/26**, State Statistics Service of Ukraine with UNICEF: 23,708 households, 37,315 household members, 8,213 women aged 15–49 selected for interview, and children 5–17. There is no men's questionnaire. Main source for education, NEET and employment among young women, marriage, motherhood, disability, displacement, wealth and changes in households since the beginning of the conflict.
+- **UNICEF Household Social and Economic Status Survey (HSESS)**, December 2023 to February 2024, Institute of Demography and Quality of Life Problems: 18,838 individuals in 8,024 households, all regions covered by the survey (Luhansk oblast is not included). Covers women and men: participation, employment, NEET, job quality, occupations, earnings and childcare.
+- **SSSU Labour Force Survey 2021** (anonymised public-use file), collected in 2021: 265.6k interviews from 151.7k persons aged 15+. Shown for reference only.
+
+# 1 · NEET among young women and the gap with young men {.section-divider background-color="#00377C"}
+
+## NEET among young women: `r MH("neet_w_1518")`% at ages 15–17 and `r MH("neet_w_1824")`% at ages 18–24 {.smaller}
+```{r q1, results='asis'}
+FIG("m2b_neet_women_by_age_en.png", "66%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26. NEET: not in education or training and not employed. The NEET questions are asked to women aged 15–24 only, so the men's rate comes from HSESS on the next slide. Ages 15–17 are mostly in education; 18–24 is the group where exclusion from both education and work concentrates.
+:::
+
+## At 18–24, women's higher NEET rate coincides with lower education participation, while employment outside education is similar {.smaller}
+```{r q2, results='asis'}
+FIG("h19b_neet_waterfall_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24. NEET: women `r HS("st_neet_w")`%, men `r HS("st_neet_m")`%. In education: women `r HS("st_educ_w")`%, men `r HS("st_educ_m")`%. Employed and not in education: women `r HS("st_emp_w")`%, men `r HS("st_emp_m")`%. The chart takes those in education and those employed out of all young people aged 18–24; NEET is the remainder.
+:::
+
+## Attending school or university at 15–24: `r MH("att_w_1524")`% of women and `r MH("att_m_1524")`% of men {.smaller}
+```{r q2b, results='asis'}
+FIG("m1_attendance_by_level_en.png", "88%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26, household members attending in the current school year, by level. Higher education at 18–24: women `r MH("higher_w_1824")`%, men `r MH("higher_m_1824")`%. HSESS (previous slide) shows lower education participation among young women at 18–24; MICS does not show the same gap in higher-education attendance. The surveys differ in date (2023/24 vs 2025/26), coverage, respondent (self-report vs household respondent) and definition (currently receiving education vs attended in the current school year), so the two findings need reconciling before either is used on its own.
+:::
+
+# 2 · Who is most affected? {.section-divider background-color="#00377C"}
+
+## NEET among women 18–24: `r GH("g1_mother_yes")`% of mothers vs `r GH("g1_mother_no")`% of others; `r GH("g1_poor20_yes")`% in the poorest fifth vs `r GH("g1_poor20_no")`% {.smaller}
+```{r g1, results='asis'}
+FIG("g1_mics_neet_by_group_en.png", "98%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26, women aged 18–24. Groups: mothers (children ever born), single-headed households (head without spouse in the roster, with children), wealth quintiles, rural, internally displaced, functional difficulty (Washington Group). Weighted rates with 95% confidence intervals and the unweighted n; small groups should not be ranked.
+:::
+
+## HSESS: among women 18–24 below 60% of median income, NEET is `r GH("g2_poor_yes_w")`% against `r GH("g2_poor_no_w")`%; in single-headed households `r GH("g2_single_yes_w")`% against `r GH("g2_single_no_w")`% {.smaller}
+```{r g2, results='asis'}
+FIG("g2_hsess_neet_by_group_en.png", "98%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, ages 18–24, women and men. Below 60% of median income: household income per member below 60% of the national median (relative poverty). Single-headed household: one adult living with children. Displacement is not consistently associated with higher NEET in either survey.
+:::
+
+## Disadvantages add up: NEET rises from `r GH("g3_mics_0")`% to `r GH("g3_mics_3")`% (MICS) and from `r GH("g3_hsess_0")`% to `r GH("g3_hsess_3")`% (HSESS) with three or more {.smaller}
+```{r g3, results='asis'}
+FIG("g3_multiple_disadvantage_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Women aged 18–24. Disadvantages counted: motherhood, poorest 40%, rural residence, internal displacement, single-headed household. Groups with few women have wide intervals.
+:::
+
+## Poverty and motherhood together: NEET is `r GH("g4_mics_poor_mother")`% among poor mothers (MICS) and `r GH("g4_hsess_poor_mother")`% (HSESS), against `r GH("g4_mics_other_nochild")`% and `r GH("g4_hsess_other_nochild")`% for women with neither {.smaller}
+```{r g4, results='asis'}
+FIG("g4_poverty_motherhood_en.png", "92%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Women aged 18–24. Poor mothers make up `r GH("comp_mics")`% of all NEET young women in MICS and `r GH("comp_hsess")`% in HSESS. Economic status: poorest 40% by wealth (MICS) or by income per member (HSESS).
+:::
+
+## Child poverty: `r GH("g5_poor40_neet")`% of children living with a NEET young woman are in the poorest 40% of households, against `r GH("g5_poor40_other")`% where she is not NEET {.smaller}
+```{r g5, results='asis'}
+FIG("g5_child_poverty_en.png", "76%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26, children under 18 living in a household with a woman aged 18–24. Household wealth quintiles. This links young women's exclusion to the economic situation of the children in their households.
+:::
+
+## HSESS, ages 18–24: `r HS("care_w")`% of women and `r HS("care_m")`% of men care for their children daily; NEET among women who care daily is `r HS("care_neet_w_yes")`%, among others `r HS("care_neet_w_no")`% {.smaller}
+```{r q4, results='asis'}
+FIG("h4c_parenthood_and_neet_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, ages 18–24. Left: share who care for or teach their own children every day. Right: NEET rate by daily childcare, for women and men.
+:::
+
+## Care work starts in adolescence: `r MH("care_g")`% of girls and `r MH("care_b")`% of boys aged 12–17 cared for children in the past week {.smaller}
+```{r q4b, results='asis'}
+FIG("m7_adolescent_care_work_en.png", "78%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26, one randomly selected child aged 5–17 per household; shown for ages 12–17.
+:::
+
+## Motherhood remains associated with NEET after adjusting for other characteristics {.smaller}
+```{r q5, results='asis'}
+FIG("s5_adjusted_motherhood_neet_en.png", "70%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Motherhood remains strongly associated with NEET in both surveys after accounting for measured individual and household characteristics. Left: predicted rates from linear probability models with oblast fixed effects (everyone set to 'No', then to 'Yes'). Right: the difference with its 95% confidence interval. Associations, not causal effects.
+:::
+
+## Why young women are not working and not looking for work {.smaller}
+```{r q6, results='asis'}
+FIG("h5b_reasons_simplified_en.png", "80%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24. Denominator: people aged 18–24 who were not employed and not looking for work at the time of the interview; those in education are included only if they were not working or seeking work. Maternity or childcare leave is shown separately from other care and housework.
+:::
+
+## Childcare barriers differ by the child's age; preschool attendance is `r MH("preschool")`% at ages 3–5 {.smaller}
+```{r q7, results='asis'}
+FIG("h9b_preschool_reasons_by_age_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24: main reason a child does not attend preschool, for children under 3 and aged 3–6 (n is the number of children in each group; the four most frequent reasons are shown, the rest grouped as other). Attendance at ages 3–5 is from MICS 2025/26 (by single year of age in the appendix). Barriers at the youngest ages concern admission age; at 3–6 they concern safety and places, which points to age-appropriate provision, safety measures and access support.
+:::
+
+# 3 · Education, vocational training, earnings and job quality {.section-divider background-color="#00377C"}
+
+## NEET at 18–24: `r HS("neet_w_higher")`% of women with higher education, `r HS("neet_w_sec")`% with complete secondary {.smaller}
+```{r q8, results='asis'}
+FIG("h13_outcomes_by_education_en.png", "96%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24. Highest level completed at the time of the interview, alongside the share still in education. Many 18–24 year olds are still studying, so rates by level should be read together with enrolment.
+:::
+
+## Vocational graduates: NEET is `r GH("vet_neet_w")`% among women aged 18–29 with vocational education, `r GH("sec_neet_w")`% with complete secondary and `r GH("tert_neet_w")`% with tertiary {.smaller}
+```{r g6, results='asis'}
+FIG("g6_vet_profile_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, ages 18–29. Vocational graduates compared with complete secondary and tertiary graduates on NEET, employment, informality, rural residence, motherhood and current enrolment, for women and men. Composition differences (more rural, more mothers, fewer still studying) are candidate explanations for the vocational finding.
+:::
+
+## Employed vocational graduates aged 18–29 work in different sectors by sex {.smaller}
+```{r g6b, results='asis'}
+FIG("g6b_vet_sectors_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, employed vocational graduates aged 18–29, six largest sectors by sex. Where women's and men's sectors differ, sector segregation is one channel through which vocational education can lead to lower-paid work for women.
+:::
+
+## The vocational gap in NEET moves from `r GH("g7_raw")` pp to `r GH("g7_full")` pp once motherhood, area, income and displacement are accounted for {.smaller}
+```{r g7, results='asis'}
+FIG("g7_vet_effect_controls_en.png", "80%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, women aged 18–29. Difference in the NEET rate between women with vocational and with complete secondary education, from linear probability models with oblast fixed effects, adding controls step by step. A gap that shrinks with controls points to composition (who enters vocational education); a gap that persists points to the match between vocational fields and available jobs.
+:::
+
+## Median wage by education: UAH `r HS("wage_w_higher")` for women with higher education, UAH `r HS("wage_w_sec")` with complete secondary {.smaller}
+```{r q8b, results='asis'}
+FIG("h15_wage_by_education_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, wage earners aged 19–64, net monthly wage, medians by level and sex. The returns to a year of education estimated in the appendix are `r MM("ret_w")`% for women and `r MM("ret_m")`% for men.
+:::
+
+## Adjusted for age and area, the wage gap between women and men is `r MM("gap_sec_adj", 0)`% with complete secondary and `r MM("gap_higher_adj", 0)`% with higher education {.smaller}
+```{r q8c, results='asis'}
+FIG("h20_mincer_by_education_en.png", "84%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, wage earners aged 19–64 (not specifically young women). Predicted net monthly wage at age 30 in an urban area, from a log-wage model with education level interacted with sex, age, age squared, area and oblast dummies. Women have lower predicted monthly wages at comparable ages, locations and qualifications; the model does not adjust for hours worked, occupation or sector, so the gap also reflects differences in working hours and occupations.
+:::
+
+## Job quality at 18–24: informal work `r HS("inf_w")`% of employed women vs `r HS("inf_m")`% of men; hourly wage gap `r HS("gap_h_1824")`% {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+```{r q9a, results='asis'}
+FIG("h6_job_quality_en.png", "100%")
+```
+:::
+::: {.column width="50%"}
+```{r q9b, results='asis'}
+FIG("h8b_wage_gap_monthly_hourly_en.png", "100%")
+```
+:::
+:::
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24. Left: employed people aged 18–24; young women have a lower measured rate of informal employment than young men. Right: median net wages of wage earners by sex; the monthly gap includes differences in hours, the hourly gap removes them. Neither adjusts for occupation or sector.
+:::
+
+## Young women and men work in different occupational groups; selecting pathways requires evidence on demand, pay and entry requirements {.smaller}
+```{r q10, results='asis'}
+FIG("h7_occupation_share_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24. Women's share of employment by occupation group, as reported by the respondent (IND_B6_2); groups at 18–24 are small (n shown). This answers where young women and men currently work; it does not identify which pathways to invest in. That requires current evidence on vacancies, pay and entry requirements by occupation, traditional and non-traditional, which the surveys do not contain.
+:::
+
+# 4 · The cost of young women remaining NEET {.section-divider background-color="#00377C"}
+
+## Each year, 1,000 NEET young women forgo about UAH `r CH("year_per1000_c")` million in earnings and receipts under the central scenario, of which UAH `r CH("fiscal_per1000_c")` million would reach the budget {.smaller}
+```{r c1, results='asis'}
+FIG("c1_cost_of_inaction_scenarios_en.png", "88%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Women aged 18–24 (NEET rate `r CH("neet_w", 1)`%, MICS 2025/26). Pessimistic: 10% could work, 25th percentile wage, 60% formal. Central: closing the gap with young men (`r CH("gap_share")`% of NEET women), median wage, 80% formal. Optimistic: 50%, 75th percentile wage, all formal. Wages from HSESS 2023/24 (n = `r CH("n_wage")` women aged 18–24 with wages). Fiscal receipts: income tax and levy, employer contributions and VAT on consumption. A woman who remains NEET to age 60 forgoes about UAH `r CH("lifetime_pv")` in net earnings and the budget about UAH `r CH("lifetime_fiscal_pv")` (present values, central scenario). National totals require a 2026 count of women aged 18–24.
+:::
+
+## Over each scenario's horizon, the present value per 1,000 NEET young women ranges from UAH `r CH("pv_per1000_pess")` million to UAH `r CH("pv_per1000_opt")` million {.smaller}
+```{r c3, results='asis'}
+FIG("c3_cost_of_inaction_pv_en.png", "82%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Pessimistic: 3 years of employment, 7% discount; central: 5 years, 5%; optimistic: 10 years, 3%. Government receipts are shown separately from young women's net earnings; employer returns are not included.
+:::
+
+## Mothers account for `r CH("share_mothers")`% of NEET young women and the poorest 40% for `r CH("share_poor40")`%: this is where most of the cost sits {.smaller}
+```{r c4, results='asis'}
+FIG("c4_cost_by_group_en.png", "86%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+MICS 2025/26, women aged 18–24. Share of NEET young women in each group and the corresponding part of the annual cost per 1,000 under the central scenario. Groups overlap. This shows where the potential gains are concentrated, not that interventions would reach each group equally.
+:::
+
+# 5 · Investment options {.section-divider background-color="#00377C"}
+
+## Illustrative returns by intervention type: employment services and internships for all young women; childcare and flexible work for young mothers {.smaller}
+```{r c5, results='asis'}
+FIG("c5_interventions_en.png", "96%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Benefit-cost ratios under low (high cost, low effect) and high (low cost, high effect) assumptions, for three perspectives. Costs and effects are illustrative placeholders in code/intervention_parameters.csv, drawn from international evidence on employment services, internships and childcare; they are to be replaced with country office and partner costs. Benefits: additional employment sustained for three years at the central-scenario wage and fiscal rates. Employer returns are not included.
+:::
+
+## Break-even: the additional employment each intervention would need to cover its cost, with the illustrative midpoints {.smaller}
+```{r c6, results='asis'}
+FIG("c6_break_even_en.png", "88%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Lines: share of participants who must gain additional, sustained employment (three years) for benefits to equal the present value of the total cost per participant, from the net earnings perspective and adding government receipts. Dots: midpoints of the illustrative cost and effect ranges. Recurring costs (childcare, transport) belong in the present value of cost.
+:::
+
+## Applying the break-even approach: the employment gain each intervention would need, against what the evidence suggests {.smaller}
+```{r c7, results='asis'}
+FIG("c7_break_even_by_intervention_en.png", "96%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Illustrative application for the State Employment Service, employer internships and first jobs, and childcare with flexible work. Blue: share of participants who would need to gain additional employment for three years to cover the cost, from the low to the high cost. Pink: employment effects reported in evaluations in other contexts. The country office can replace both with Ukrainian costs and evidence in code/intervention_parameters.csv; the table for 1, 3 and 5 years is in the appendix.
+:::
+
+## Break-even applications by intervention, 1, 3 and 5 years {.smaller}
+
+::: {.kv-small}
+```{r c7tab}
+.bt <- .rdc("tables/interventions_break_even_table.csv")
+if (!is.null(.bt)) kable(.bt)
+```
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+"Needed": share of participants who must gain additional employment, sustained for the number of years shown, for benefits to equal the cost per participant (from the low to the high cost). "Evidence range": employment effects reported in evaluations in other contexts. Central-scenario wage and fiscal rates, 5% discount.
+:::
+
+# 6 · Recommendations by GenU priority {.section-divider background-color="#00377C"}
+
+## Priority 1: Learning-to-Earning pathway, First Experience and Earning Engine {.smaller}
+
+::: {.kv-table}
+| Finding | Recommendation (strengthening existing mechanisms) | Who | Indication from the model |
+|---|---|---|---|
+| Employment at 18–24 is similar for women and men; the NEET gap mirrors lower education participation and the transition out of it | Keep young women in education and training to 18, and bridge the exit from education with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy and State Employment Service; employers; education and VET institutions; UNICEF (GenU) | Internships and first jobs: illustrative benefit-cost ratios above 1 in most assumptions; break-even at a few percentage points of additional employment |
+| Women with vocational education show higher NEET than women with secondary or tertiary education; vocational women work in trade and services, men in construction, industry and transport | Review the match between vocational fields open to young women and employer demand; include non-traditional, better-paid fields in vocational guidance and employer partnerships | Ministry of Education and Science; VET institutions; employers; State Employment Service | Requires vacancy, pay and entry-requirement data by occupation (SSSU, SES dashboard) |
+| Young women earn less than young men at every education level and the gap persists at comparable ages and areas; informality is lower for women | Pair first-job pathways with formal contracts and decent-work standards; use the gender pay gap by occupation as a monitoring indicator | Employers; State Labour Service; SES | Fiscal receipts depend on formality: each formal job adds about UAH `r CH("fiscal_year_c")` a year to the budget |
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Findings summarised from the preceding slides, to be confirmed against the final numbers; recommendations are for discussion and build on existing mechanisms rather than new programmes.
+:::
+
+## Priority 2: Inclusive Access and Navigation, linking protection and employment {.smaller}
+
+::: {.kv-table}
+| Finding | Recommendation (strengthening existing mechanisms) | Who | Indication from the model |
+|---|---|---|---|
+| Motherhood and daily childcare show the clearest association with NEET in both surveys; poor young mothers make up a large share of NEET young women | Combine childcare access with flexible working arrangements and family-friendly workplace policies; prioritise young mothers in employment services | Ministry of Social Policy, Family and National Unity; local authorities; employers; UNICEF | Childcare and flexible work for young mothers: returns depend strongly on cost; combined with internships, break-even at about one in four participants in the illustrative range |
+| Women in single-headed households and in the poorest households have higher NEET rates; children living with NEET young women are more often in poor households | Link social protection for single-headed households and low-income families with employment services (case management, referrals), so that benefits and job support reach the same young women | Ministry of Social Policy; State Employment Service; hromadas | Groups overlap: targeting through existing benefit registries reaches most poor young mothers |
+| Displacement is not consistently associated with higher NEET; disability groups are too small to estimate | Keep inclusive outreach for displaced young women and young women with disabilities through existing IDP and disability services rather than separate programmes | Hromadas; IDP councils; UNICEF and partners | Not estimated: samples too small; track outcomes once programmes report |
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Findings summarised from the preceding slides, to be confirmed against the final numbers; recommendations are for discussion and build on existing mechanisms rather than new programmes.
+:::
+
+## For discussion {.smaller .bigtitle}
+
+::: {.vmid}
+::: {.kf-list style="font-size:.9em;"}
+**Targeting:** poor young mothers and women in single-headed households are the clearest groups; inclusive outreach where the surveys cannot estimate precisely.
+
+**Scenarios:** pessimistic, central and optimistic values depend on assumed earnings, employment gains and formality; national scaling additionally requires a 2026 population estimate.
+
+**Proposed next step:** agree priority groups and two or three intervention packages under the two GenU priorities, replace the illustrative costs in code/intervention_parameters.csv with real costs, and identify the employer-demand data needed to complete the investment case.
+:::
+:::
+
+# Appendix {.section-divider background-color="#00377C"}
+
+## Assumptions behind the cost of inaction and the intervention comparison {.smaller}
+
+::: {.kv-table}
+| Element | Assumption | Source or note |
+|---|---|---|
+| Population at risk | NEET women aged 18–24 (`r CH("neet_w", 1)`% in MICS 2025/26); results per 1,000 NEET young women | National scaling needs a 2026 count of women aged 18–24 (COI$pop_w1824) |
+| Potential earnings | Net monthly wage of employed women aged 18–24: UAH `r CH("wage_pess")` (25th percentile), `r CH("wage_cent")` (median), `r CH("wage_opt")` (75th percentile) | HSESS 2023/24, nominal UAH, Dec 2023 to Feb 2024 prices; no real wage growth |
+| Share who could work | 10% (pessimistic), closing the gap with young men (`r CH("gap_share")`%, central), 50% (optimistic) | HSESS gap between women's and men's NEET at 18–24 |
+| Formality | 60%, 80%, 100% of the additional employment pays taxes and contributions | Scenario assumption |
+| Government receipts | 18% income tax and 5% levy on gross wages; 22% employer social contribution; 20% VAT on 80% of net earnings | Statutory rates, to confirm |
+| Duration and discounting | 3 years at 7%; 5 years at 5%; 10 years at 3%; lifetime to age 60 at 5% | A Brighter Future (2024) for the central rate |
+| Interventions | Cost per participant (present value of total cost, including recurring support) and additional employment effects, low and high | code/intervention_parameters.csv, illustrative; to be replaced with country office costs |
+| Not included | Employer returns; women's work-related expenses; effects on other household members; general-equilibrium effects | Subsequent analysis |
+:::
+
+## How the intervention parameters are built and updated {.smaller}
+
+::: {.kv-table}
+| Step | What was done | How the country office can update it |
+|---|---|---|
+| 1. Intervention types | Four types from the GenU priorities: employment services (counselling and job matching), employer-supported internships and first jobs, childcare services with flexible work, and a combined package for young mothers | Add rows to code/intervention_parameters.csv (one per intervention or package), with a target group |
+| 2. Costs | Present value of the total cost per participant over the support period, low and high; illustrative placeholders | Replace with SES, partner and UNICEF unit costs, including recurring childcare or transport support |
+| 3. Employment effects | Additional, sustained employment attributable to the intervention, low and high, from evaluations in other contexts (meta-analyses of active labour market programmes and youth employment, and studies of childcare support), as in A Brighter Future | Replace with Ukrainian evaluations where available (for example SES programme follow-up data) |
+| 4. Benefits | Effect multiplied by the annual value of a job (net earnings; income tax, levy, contributions and VAT) over the years sustained, discounted at 5% | Change wage, formality or duration in 04_cost_of_inaction.R to test scenarios |
+| 5. Outputs | Benefit-cost ratios by perspective, break-even employment gains, and the comparison with the evidence range | Re-run bash UPDATE_RESULTS.sh; all slides update |
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Employer returns (productivity, retention, vacancy costs) are not included and would be the next step for the private sector case.
+:::
 
 ## Age groups {.smaller}
 
@@ -110,41 +475,47 @@ Appendix
 ::: {.tight-table}
 | Age group | Indicators | Notes |
 |---|---|---|
-| **15–18** | Education, training, NEET | Ages 14–17 are legal minors; HSESS asks employment questions from age 15 |
-| **19–24** | Labour-force participation, employment, job quality, earnings, NEET | |
+| **15–17** | Education, training, NEET | Younger group; ages 14–17 are legal minors. HSESS asks employment questions from age 15; school attendance is available from age 3 in MICS and HSESS rosters |
+| **18–24** | Labour-force participation, employment, job quality, earnings, NEET, cost of inaction | Main group, in line with government statistics and UNICEF programming |
 | **15–24** | Education-to-work transition, NEET | UNICEF programme age range |
 | **15–29** | NEET | ILO age range for NEET, shown for reference |
 :::
 :::
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-The LFS 2021 public file releases age in bands, so LFS results are shown for 15–24 (and 15–29 for NEET). The 15–18 and 19–24 groups use HSESS 2023/24, and MICS-7 once available.
+MICS 2025/26 asks the NEET and employment questions to women aged 15–24 only; school attendance is recorded for all household members aged 3–24. HSESS 2023/24 covers women and men. The LFS 2021 public file releases age in bands, so it is shown for 15–24 only.
 :::
 
-## Variables and definitions {.smaller}
+## Variables and definitions (1/2) {.smaller}
 
-::: {.tight-table}
-| Concept | Definition | LFS 2021 |
-|---|---|---|
-| **Labour-force participation** | Employed or unemployed (ILO) | `labour_force` 1–2 |
-| **Employed** | Worked at least one hour for pay or profit in the reference week, or temporarily absent | `labour_force` = 1 |
-| **Unemployment rate** | Unemployed (no work, searched in last 4 weeks, available) as share of the labour force | `labour_force` = 2 |
-| **NEET** | Not employed and not in education. In the LFS public file, unemployed students cannot be identified, so the LFS rate is an upper bound | `labour_force`, `reason_inactiv` |
-| **Care burden (proxy)** | Outside the labour force because of home or family duties | `reason_inactiv` = 3 |
-| **Informal employment** | No social contributions, no paid leave or sick leave, or oral agreement | `informal_empl` = 1 |
-| **Short hours** | Under 30 hours actually worked in the reference week | `actual_duration` 1–2 |
-| **Occupational segregation** | Dissimilarity index: share of women (or men) who would have to change occupation for equal distributions | `occupation` (9 groups) |
+::: {.kv-table}
+| Concept | Definition | MICS 2025/26 | HSESS 2023/24 | LFS 2021 |
+|---|---|---|---|---|
+| **In education** | Attending school or university in the current school year | ED9 (members 3–24); NE3 (women 15–24) | IND_A9 | reason_inactiv = 2 (inactive students) |
+| **Employed** | Worked at least one hour for pay or profit in the reference week, or temporarily absent; production for own household use only is not counted | NE8–NE11, NE20–NE21 (women 15–24) | IND_B1 | labour_force = 1 |
+| **NEET** | Not in education or training and not employed | NEET module (women 15–24) | IND_A9, IND_B1 | labour_force, reason_inactiv (upper bound) |
+| **Labour-force participation** | Employed, or looking for work or starting a business | not available | IND_B1, IND_B21 | labour_force 1–2 |
+| **Informal employment** | Verbal agreement, unregistered own-account work, or family farm work for sale | not available | IND_B3_1 | informal_empl = 1 |
+| **Mother** | Has given birth (MICS) or lives with own child under 18 (HSESS) | CEB | household roster (IND_A1, ages) | not available |
 :::
 
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-HSESS uses the same definitions: employment from IND_B1 (production for own household use only is not counted as employment), education from IND_A9, and labour-force participation as employed or looking for work or starting a business (IND_B21).
+## Variables and definitions (2/2) {.smaller}
+
+::: {.kv-table}
+| Concept | Definition | MICS 2025/26 | HSESS 2023/24 | LFS 2021 |
+|---|---|---|---|---|
+| **Care work** | Caring for children or the sick in the past week (5–17); daily care of own children | CL11E, CL11F | IND_B28_1 | reason_inactiv = 3 (proxy) |
+| **Internally displaced** | Self-reported IDP status | WB10A | IND_A19 | not available |
+| **Disability** | Washington Group functional difficulty (18–49); any household member with disability | AF module | D1_Mult3/4 | not available |
+| **Economic status** | Wealth quintile; household income per member | windex5 | V1 / household size | not available |
+| **Years of education** | Years implied by the highest level completed (9 basic secondary, 11 complete secondary, 12 vocational, 13 short-cycle, 15 bachelor, 17 master) | welevel | IND_A7 | education |
 :::
 
 ## Key variables (1/2) {.smaller}
 
 ::: {.kv-table}
 ```{r kv1}
-if (!is.null(.kv)) kable(.kv[1:11, ], col.names = c("Concept", "Use", "LFS 2021", "HSESS 2023/24"))
+if (!is.null(.kv)) kable(.kv[1:11, ], col.names = c("Concept", "Use", "MICS 2025/26", "HSESS 2023/24", "LFS 2021"))
 ```
 :::
 
@@ -152,242 +523,160 @@ if (!is.null(.kv)) kable(.kv[1:11, ], col.names = c("Concept", "Use", "LFS 2021"
 
 ::: {.kv-table}
 ```{r kv2}
-if (!is.null(.kv)) kable(.kv[12:nrow(.kv), ], col.names = c("Concept", "Use", "LFS 2021", "HSESS 2023/24"))
+if (!is.null(.kv)) kable(.kv[12:nrow(.kv), ], col.names = c("Concept", "Use", "MICS 2025/26", "HSESS 2023/24", "LFS 2021"))
 ```
 :::
 
 ::: {style="font-size:0.55em; color:#7a7a7a;"}
-HSESS codes follow the questionnaire (A = demographics and education, B = employment, V = income; D1 = household characteristics). Full list of variables: output/inventory/variable_report.xlsx.
+Variable codes as in each questionnaire. Full list of variables in every file: output/inventory/variable_report.xlsx.
 :::
 
-# 2 · Labour Force Survey 2021 {.section-divider background-color="#00377C"}
+## Status at 15–17 and 18–24 by sex, stacked view (HSESS 2023/24) {.smaller}
+```{r a_h19, results='asis'}
+FIG("h19_transition_status_en.png", "76%")
+```
 
-## NEET rate at 15–24: `r H("neet_w")`% for women and `r H("neet_m")`% for men {.smaller}
-```{r f1a, results='asis'}
-FIG("f1a_outcomes_by_sex_en.png", "78%")
+## Preschool attendance by single year of age (MICS 2025/26) {.smaller}
+```{r a_m8b, results='asis'}
+FIG("m8b_preschool_by_age_en.png", "66%")
+```
+
+## NEET among women aged 15–24 by motherhood, area, wealth, displacement and disability (MICS 2025/26) {.smaller}
+```{r a_m4, results='asis'}
+FIG("m4_neet_by_group_en.png", "92%")
+```
+
+## Sensitivity: the same groups among women aged 18–24 (MICS 2025/26) {.smaller}
+```{r a_m4c, results='asis'}
+FIG("m4c_neet_by_group_1824_en.png", "92%")
+```
+
+## Young women by age group: education, training, employment and NEET (MICS 2025/26) {.smaller}
+```{r a_m2, results='asis'}
+FIG("m2_women_outcomes_by_age_en.png", "80%")
+```
+
+## Women 18–24 by marital status and motherhood (MICS 2025/26) {.smaller}
+```{r a_m3, results='asis'}
+FIG("m3_neet_marriage_motherhood_en.png", "92%")
+```
+
+## NEET and employment among women 18–24 by level of education (MICS 2025/26) {.smaller}
+```{r a_m12, results='asis'}
+FIG("m12_outcomes_by_education_en.png", "84%")
+```
+
+## NEET among women 15–24 by macroregion and wealth quintile (MICS 2025/26) {.smaller}
+```{r a_m5, results='asis'}
+FIG("m5_neet_region_wealth_en.png", "84%")
+```
+
+## NEET among women 15–24 by household changes since the beginning of the conflict (MICS 2025/26) {.smaller}
+```{r a_m4b, results='asis'}
+FIG("m4b_neet_by_household_change_en.png", "84%")
+```
+
+## Households since the beginning of the conflict: `r MH("hh_moved")`% moved and `r MH("hh_income_down")`% report lower income (MICS 2025/26) {.smaller}
+```{r a_m9, results='asis'}
+FIG("m9_household_changes_en.png", "74%")
+```
+
+## In education at 15–24 by type of institution (HSESS 2023/24) {.smaller}
+```{r a_h0, results='asis'}
+FIG("h0_education_by_institution_en.png", "88%")
+```
+
+## Labour-force participation at 18–24: `r HS("lfp_w")`% for women and `r HS("lfp_m")`% for men (HSESS 2023/24) {.smaller}
+```{r a_h1, results='asis'}
+FIG("h1_outcomes_by_sex_en.png", "76%")
+```
+
+## NEET rate by age group and sex (HSESS 2023/24) {.smaller}
+```{r a_h2, results='asis'}
+FIG("h2_neet_by_age_en.png", "70%")
+```
+
+## NEET at 15–24 by displacement, disability, income, location and parenthood (HSESS 2023/24) {.smaller}
+```{r a_h3, results='asis'}
+FIG("h3_neet_by_vulnerability_en.png", "80%")
+```
+
+## Women 18–24 by motherhood and partnership (HSESS 2023/24) {.smaller}
+```{r a_h12, results='asis'}
+FIG("h12_motherhood_partnership_en.png", "92%")
+```
+
+## Reasons for not working and not looking for work, detailed categories (HSESS 2023/24) {.smaller}
+```{r a_h5, results='asis'}
+FIG("h5_reasons_not_working_en.png", "78%")
+```
+
+## Type of employment by level of education, employed 19–29 (HSESS 2023/24) {.smaller}
+```{r a_h14, results='asis'}
+FIG("h14_job_type_by_education_en.png", "88%")
+```
+
+## Main reason children of preschool age do not attend preschool (HSESS 2023/24) {.smaller}
+```{r a_h9, results='asis'}
+FIG("h9_preschool_reasons_en.png", "76%")
+```
+
+## Association between key variables, women 15–24 (MICS 2025/26) {.smaller}
+```{r a_m10, results='asis'}
+FIG("m10_relationships_mics_en.png", "56%")
+```
+
+## Association between key variables, 15–24 (HSESS 2023/24) {.smaller}
+```{r a_h10, results='asis'}
+FIG("h10_relationships_hsess_en.png", "56%")
+```
+
+## Linear probability model of NEET, women 15–24 (MICS 2025/26) {.smaller}
+```{r a_m11, results='asis'}
+FIG("m11_coefficients_en.png", "76%")
+```
+
+## Adjusted differences in NEET by motherhood, marriage, displacement, wealth and household moves (MICS 2025/26) {.smaller}
+```{r a_m13, results='asis'}
+FIG("m13_adjusted_neet_en.png", "94%")
+```
+
+## Linear probability model of NEET, 15–24 (HSESS 2023/24) {.smaller}
+```{r a_h11, results='asis'}
+FIG("h11_coefficients_en.png", "76%")
+```
+
+## Adjusted differences in NEET by motherhood, partnership, displacement, disability and income (HSESS 2023/24) {.smaller}
+```{r a_h17, results='asis'}
+FIG("h17_adjusted_neet_en.png", "94%")
+```
+
+## Adjusted differences in employment by motherhood, partnership, displacement, disability and income (HSESS 2023/24) {.smaller}
+```{r a_h18, results='asis'}
+FIG("h18_adjusted_employment_en.png", "94%")
+```
+
+## Wages and years of education: `r MM("ret_w")`% per additional year for women, `r MM("ret_m")`% for men (HSESS 2023/24) {.smaller}
+```{r a_h16, results='asis'}
+FIG("h16_predicted_wage_by_education_en.png", "82%")
 ```
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-Ages 15–24, 2021. Labour-force participation: women `r H("lfp_w")`%, men `r H("lfp_m")`%. Employed: women `r H("emp_w")`%, men `r H("emp_m")`%. Unemployment rate: women `r H("unemp_w")`%, men `r H("unemp_m")`%. The public file releases age in bands, so 19–24 cannot be shown separately; HSESS results for 19–24 are in section 3.
+Log monthly net wage on years of education, age and age squared, oblast fixed effects. Adjusted gap between women and men at the same education and age: `r MM("wage_gap_adj")`%.
 :::
 
-## NEET rate at 15–29 (ILO age range): `r H("neet_w_1529")`% for women and `r H("neet_m_1529")`% for men {.smaller}
-```{r f1b, results='asis'}
-FIG("f1b_neet_age_groups_en.png", "62%")
-```
-
-## Outcomes by urban and rural area, 15–24 {.smaller}
-```{r f1c, results='asis'}
-FIG("f1c_outcomes_by_area_en.png", "85%")
-```
-
-## Outcomes by education level, 15–24 {.smaller}
-```{r f1d, results='asis'}
-FIG("f1d_outcomes_by_education_en.png", "92%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Highest level completed. "Vocational" is vocational-technical education; "Secondary or less" includes those still studying.
-:::
-
-## Outcomes by marital status, 15–24 {.smaller}
-```{r f1e, results='asis'}
-FIG("f1e_outcomes_by_marital_en.png", "85%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-The public file has no information on children; marital status is the closest available indicator of household formation. Results by motherhood use HSESS 2023/24 (section 3).
-:::
-
-## Home duties as main reason for inactivity: `r H("home_w_1524")`% of inactive women and `r H("home_m_1524")`% of inactive men, 15–24 {.smaller}
-```{r f2, results='asis'}
-FIG("f2_inactivity_reasons_en.png", "80%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Main reason for being outside the labour force, among those outside it. The category "Home duties / dependent" includes care for family members.
-:::
-
-## Informal employment: `r H("inf_w_1524")`% of employed women and `r H("inf_m_1524")`% of employed men, 15–24 {.smaller}
-```{r f3, results='asis'}
-FIG("f3_job_quality_en.png", "66%")
-```
-
-## Occupational dissimilarity index: `r H("duncan_1524", 1)` at 15–24 and `r H("duncan_all", 1)` for all ages {.smaller}
-```{r f4, results='asis'}
-FIG("f4_occupation_share_en.png", "86%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Share of employed women (or men) who would have to change occupation group for women and men to have the same distribution. Occupations at the first digit of the national classification (9 groups).
-:::
-
-## NEET rate at 15–24 by oblast {.smaller}
-```{r f5, results='asis'}
-FIG("f5_neet_by_oblast_en.png", "56%")
-```
-
-## Long-term unemployment and unemployment after completing education, 15–24 {.smaller}
-```{r f6, results='asis'}
-FIG("f6_unemployment_en.png", "66%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Among those unemployed at the time of the interview: share who have been looking for work for 12 months or more (long-term unemployment), and share whose main reason for unemployment is not having been placed in a job after completing education. Both groups were still unemployed when interviewed; the survey does not record later outcomes.
-:::
-
-## Association between key variables, 15–24 {.smaller}
-```{r f7, results='asis'}
-FIG("f7_relationships_lfs_en.png", "62%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Cramer's V between each pair of variables, weighted (0 = no association, 1 = perfect association).
-:::
-
-# 3 · Household Social and Economic Status Survey 2023/24 {.section-divider background-color="#00377C"}
-
-## In education at 15–24: `r HS("educ_w_1524")`% of women and `r HS("educ_m_1524")`% of men {.smaller}
-```{r h0, results='asis'}
-FIG("h0_education_by_institution_en.png", "90%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Share of each age group currently in education, by type of institution. In higher education at 19–24: women `r HS("higher_w_1924")`%, men `r HS("higher_m_1924")`%. General secondary includes general schools; vocational includes professional-technical institutions.
-:::
-
-## Labour-force participation at 19–24: `r HS("lfp_w")`% for women and `r HS("lfp_m")`% for men {.smaller}
-```{r h1, results='asis'}
-FIG("h1_outcomes_by_sex_en.png", "78%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Ages 19–24 (n = `r HS("n_1924")`). Employed: women `r HS("emp_w")`%, men `r HS("emp_m")`%. In education: women `r HS("educ_w")`%, men `r HS("educ_m")`%. NEET: women `r HS("neet_w_1924")`%, men `r HS("neet_m_1924")`%. Labour-force participation: employed, or looking for work or starting a business.
-:::
-
-## NEET rate at 15–24: `r HS("neet_w")`% for women and `r HS("neet_m")`% for men {.smaller}
-```{r h2, results='asis'}
-FIG("h2_neet_by_age_en.png", "72%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-NEET at 15–29 (ILO age range): women `r HS("neet_w_1529")`%, men `r HS("neet_m_1529")`%.
-:::
-
-## NEET rate at 15–24 by displacement, disability, income, location and parenthood {.smaller}
-```{r h3, results='asis'}
-FIG("h3_neet_by_vulnerability_en.png", "82%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Disability refers to any household member (recorded at household level). Poorest 40%: household income per member. Lives with own child: own child under 18 in the household. Frontline oblasts: Donetsk, Kharkiv, Zaporizhzhia, Kherson, Mykolaiv, Sumy, Chernihiv, Dnipropetrovsk (to be confirmed). Displaced and disability groups have small samples; see the confidence intervals.
-:::
-
-## Women 19–24 by motherhood and partnership: `r HS("mothers_unpartnered")`% of mothers are not married or cohabiting {.smaller}
-```{r h12, results='asis'}
-FIG("h12_motherhood_partnership_en.png", "96%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Mothers: women living with their own child under 18, identified from the household roster (relationships are recorded relative to the household respondent; n = `r HS("n_mothers_1924")` mothers aged 19–24). NEET among mothers: `r HS("neet_mother")`%; among women without children: `r HS("neet_nochild")`%.
-:::
-
-## Daily care of own children: `r HS("care_w")`% of women and `r HS("care_m")`% of men aged 19–24 {.smaller}
-```{r h4a, results='asis'}
-FIG("h4a_daily_childcare_en.png", "66%")
-```
-
-## NEET rate by daily childcare, 19–24 {.smaller}
-```{r h4b, results='asis'}
-FIG("h4b_neet_by_daily_childcare_en.png", "62%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Daily care or teaching of own children and the NEET rate, by sex.
-:::
-
-## Main reason for not working and not looking for work, 19–24 {.smaller}
-```{r h5, results='asis'}
-FIG("h5_reasons_not_working_en.png", "80%")
-```
-
-## Informal employment: `r HS("inf_w")`% of employed women and `r HS("inf_m")`% of employed men aged 19–24 {.smaller}
-```{r h6, results='asis'}
-FIG("h6_job_quality_en.png", "76%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Informal: paid on a verbal agreement, own-account work without registration, or family farm work for sale.
-:::
-
-## Women's share of employment by occupation {.smaller}
-```{r h7, results='asis'}
-FIG("h7_occupation_share_en.png", "82%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Occupation group as reported by the respondent (IND_B6_2), not coded from job titles. Groups for 19–24 have small samples (n shown); bars show 95% confidence intervals. The dashed line marks women's share of all employment at 19–24.
-:::
-
-## Median monthly wage of women: `r GAP("gap_1924")` men's at 19–24 and `r GAP("gap_2564")` at 25–64 {.smaller}
-```{r h8, results='asis'}
-FIG("h8_median_wage_en.png", "62%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Net monthly wage reported by those whose main income is wages. Unadjusted difference in medians, which includes differences in hours, occupation and sector.
-:::
-
-## Main reason children of preschool age do not attend preschool {.smaller}
-```{r h9, results='asis'}
-FIG("h9_preschool_reasons_en.png", "78%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Children who would attend a preschool facility at their age but do not; main reason reported by the household.
-:::
-
-## Association between key variables, 15–24 {.smaller}
-```{r h10, results='asis'}
-FIG("h10_relationships_hsess_en.png", "58%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Cramer's V between each pair of variables, weighted (0 = no association, 1 = perfect association).
-:::
-
-# 4 · Regression analysis {.section-divider background-color="#00377C"}
-
-## Linear probability models: NEET and labour-force participation, 15–24 (LFS 2021) {.smaller}
-```{r f8, results='asis'}
-FIG("f8_coefficients_en.png", "78%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Oblast fixed effects, weighted, standard errors clustered by person. Interaction terms show how the difference between women and men varies with marital status, area and higher education. Associations, not causal effects.
-:::
-
-## Estimates, LFS 2021 {.smaller}
+## Estimates, MICS 2025/26 {.smaller}
 
 ::: {.vmid-s}
 ::: {.tight-table}
-```{r tests}
-if (!is.null(.tests)) kable(ptab(.tests), align = "llrrrr")
+```{r mtests}
+if (!is.null(.mtests)) kable(ptab(.mtests), align = "llrrrr")
 ```
 :::
 :::
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-Effects in percentage points. Controls: urban/rural, education and marital status (except where interacted), oblast fixed effects. The 15–29 estimate also controls for age band.
-:::
-
-## Linear probability model: NEET, 15–24 (HSESS 2023/24) {.smaller}
-```{r h11, results='asis'}
-FIG("h11_coefficients_en.png", "78%")
-```
-
-::: {style="font-size:0.58em; color:#7a7a7a;"}
-Oblast fixed effects, weighted, standard errors clustered by household. Associations, not causal effects.
+Effects in percentage points. Controls: age 18–24, marital status, motherhood, displacement, poorest 40%, rural, education level, household moved and household income decreased since 2022, oblast fixed effects. Functional difficulty is estimated for women 18–24.
 :::
 
 ## Estimates, HSESS 2023/24 {.smaller}
@@ -401,40 +690,36 @@ if (!is.null(.htests)) kable(ptab(.htests), align = "llrrrr")
 :::
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-Effects in percentage points. Controls: age 19–24, rural, displacement, disability in household, poorest 40%, lives with own child, partnership and tertiary education (except where interacted), oblast fixed effects.
+Effects in percentage points. Controls: age 18–24, rural, displacement, disability in household, poorest 40%, lives with own child, partnership and tertiary education (except where interacted), oblast fixed effects.
 :::
 
-# 5 · Next steps {.section-divider background-color="#00377C"}
+## Returns to education, HSESS 2023/24 {.smaller}
 
-## Points for discussion {.smaller .bigtitle}
-
-::: {.vmid}
-::: {.kf-list style="font-size:.84em;"}
-**1. Age groups:** 15–18 and 19–24, with 15–24 and 15–29 for NEET.
-
-**2. Sectors** to cover in the analysis of occupations: reconstruction, technical and digital, energy, manufacturing, green and care.
-
-**3. Frontline oblasts** used for the regional breakdown.
-
-**4. Data:** MICS-7 2025/26 microdata, SSSU wage statistics by occupation and sex, and public expenditure on skills, employment services and childcare.
+::: {.vmid-s}
+::: {.tight-table}
+```{r mincer}
+if (!is.null(.mincer)) kable(.mincer %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, format = "f", digits = 3))), col.names = c("Sample", "Return per year (%)", "95% low", "95% high", "p", "N"), align = "lrrrrr")
+```
 :::
 :::
 
-## Next analyses {.smaller .bigtitle}
-
-::: {.vmid}
-::: {.kf-list style="font-size:.84em;"}
-**Regressions:** contribution of childcare, displacement, disability, income and location to NEET, separately for 15–18 and 19–24; the same models on MICS-7 once available.
-
-**Cost of inaction:** forgone earnings, output and fiscal revenue associated with differences in participation and NEET, using the benefit-cost framework of *A Brighter Future* (2024).
-
-**Occupations:** check the self-reported occupation groups against the reported job titles, in particular the shares of women among machine operators and managers.
-
-**Private sector:** costs and returns for employers of internships and apprenticeships combined with childcare support.
-:::
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+Log monthly net wage on years of education, age and age squared, oblast fixed effects, weighted, standard errors clustered by household. Wage earners aged 19–64.
 :::
 
-# Appendix {.section-divider background-color="#00377C"}
+## Labour Force Survey 2021 (reference): NEET at 15–24, `r H("neet_w")`% for women and `r H("neet_m")`% for men {.smaller}
+```{r a_f1a, results='asis'}
+FIG("f1a_outcomes_by_sex_en.png", "74%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+SSSU Labour Force Survey 2021, collected in 2021. The public file releases age in bands, so 18–24 cannot be shown separately.
+:::
+
+## Labour Force Survey 2021 (reference): occupational dissimilarity index `r H("duncan_1524", 1)` at 15–24 and `r H("duncan_all", 1)` for all ages {.smaller}
+```{r a_f4, results='asis'}
+FIG("f4_occupation_share_en.png", "84%")
+```
 
 ## HSESS variables used {.smaller}
 

@@ -7,7 +7,7 @@ ensure_dirs <- function() {
   invisible(here::here("output"))
 }
 
-save_fig <- function(plot, name, width = 8.5, height = 5.2, dpi = 220) {
+save_fig <- function(plot, name, width = 8.5, height = 5.2, dpi = 160) {
   path <- here::here("output", "figures", paste0(name, ".png"))
   ggsave(path, plot, width = width, height = height, dpi = dpi, bg = "white")
   message("  saved figure: ", basename(path))

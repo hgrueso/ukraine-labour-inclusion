@@ -1,0 +1,7 @@
+sexo,estimate,lo,hi,panel,x,care_daily
+Young women,0.18602711092378788,0.14041620111110792,0.23163802073646783,Cares for own children every day,Young women,NA
+Young men,0.015912424678858932,0.004190819068765134,0.02763403028895273,Cares for own children every day,Young men,NA
+Young women,0.16027914781561567,0.11584688324217554,0.2047114123890558,"NEET rate, by daily childcare",Does not,0
+Young men,0.15394082412709942,0.11058559674419859,0.19729605151000024,"NEET rate, by daily childcare",Does not,0
+Young women,0.778651045384382,0.6661785889660168,0.8911235018027472,"NEET rate, by daily childcare",Cares daily,1
+Young men,0.23107942964211414,0,0.5404622717208265,"NEET rate, by daily childcare",Cares daily,1

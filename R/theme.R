@@ -5,6 +5,7 @@ UNICEF_BLUE <- "#1CABE2"
 UNICEF_DARK <- "#00377C"
 GREY_DARK   <- "#374649"
 GREY_MID    <- "#7A8487"
+GREY_LIGHT  <- "#C9D3DB"
 FILL_SEX    <- c("Young women" = ACCENT_GIRL, "Young men" = ACCENT_BOY)
 
 theme_ukr <- function(base_size = 13) {

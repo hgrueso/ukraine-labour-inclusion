@@ -19,6 +19,7 @@ d <- tibble(
   rel = tr(g("relation"), TR$relation), age = num(g("age")),
   sexo = factor(tr(g("sex"), TR$sex), levels = c("Young women", "Young men")),
   marital = tr(g("marital"), TR$marital), educ = tr(g("educ_level"), TR$education),
+  educ_years = as.numeric(tr(g("educ_level"), TR$educ_years)),
   in_educ = yes_no(g("in_educ")), institution = tr(g("institution"), TR$institution),
   econ = tr(g("econ_status"), TR$econ_status),
   moved = g("moved"), idp_raw = yes_no(g("idp")),
@@ -44,6 +45,9 @@ d <- tibble(
 d <- d %>% mutate(sex_raw = sexo) %>% group_by(key) %>%
   mutate(child_u6 = as.integer(any(age < 6, na.rm = TRUE)), child_u3 = as.integer(any(age < 3, na.rm = TRUE)),
          hh_size = coalesce(hh_size, as.numeric(n())),
+         n_adults = sum(age >= 18, na.rm = TRUE), n_children = sum(age < 18, na.rm = TRUE),
+         hh_children = as.integer(n_children > 0),
+         single_head = as.integer(n_adults == 1 & n_children >= 1),      # one adult living with children
          .kids = sum(rel %in% "Child" & age < 18, na.rm = TRUE),
          .grandkids = sum(rel %in% "Grandchild" & age < 18, na.rm = TRUE),
          .g2 = rel %in% c("Child", "Child-in-law") & age >= 15 & age <= 49,
@@ -57,7 +61,7 @@ d <- d %>% mutate(sex_raw = sexo) %>% group_by(key) %>%
     TRUE ~ 0L)) %>%
   select(-starts_with("."), -sex_raw)
 
-# household file: income, disability, displacement, war damage
+# household file: income, disability, displacement, damage to the dwelling
 if (!is.null(hh) && !is.na(chh["key"])) {
   h <- tibble(key = as.character(gh("key")), hh_income = num(gh("hh_income")),
               disab_hh = as.integer(yes_no(gh("disab_adult")) %in% 1 | yes_no(gh("disab_child")) %in% 1),
@@ -68,7 +72,8 @@ if (!is.null(hh) && !is.na(chh["key"])) {
 }
 
 d <- d %>% mutate(
-  age_group = cut(age, c(-Inf, 14, 18, 24, 29, 64, Inf), labels = c("0-14", "15-18", "19-24", "25-29", "30-64", "65+")),
+  educ = factor(educ, levels = c("Basic secondary or less", "Complete secondary", "Vocational", "Short-cycle tertiary", "Higher (bachelor+)")),
+  age_group = cut(age, c(-Inf, 14, 17, 24, 29, 64, Inf), labels = c("0-14", "15-17", "18-24", "25-29", "30-64", "65+")),
   female = as.integer(sexo == "Young women"),
   partnered = as.integer(marital %in% c("Married", "Cohabiting")),
   frontline = as.integer(oblast %in% FRONTLINE),
@@ -88,15 +93,24 @@ d <- d %>% mutate(
   short_hours = ifelse(employed == 1 & !is.na(hours), as.integer(hours < 30), NA_integer_),
   wants_more_hours = ifelse(employed == 1, as.integer(more_hours %in% "Wants more hours"), NA_integer_),
   wage = ifelse(income_source %in% "Wages" & income_amount > 0, income_amount, NA_real_),
-  pc_income = ifelse(hh_income > 0, hh_income / hh_size, NA_real_)
+  pc_income = ifelse(hh_income > 0 & hh_size > 0, hh_income / hh_size, NA_real_)
 ) %>% select(-idp_raw, -seeking_raw, -moved)
 
 # income quintiles of household income per member (weighted, all individuals)
 qs <- d %>% filter(!is.na(pc_income), w > 0) %>% arrange(pc_income) %>%
   mutate(cw = cumsum(w) / sum(w)) %>% select(key, pc_income, cw)
 br <- sapply(c(.2, .4, .6, .8), function(p) qs$pc_income[which(qs$cw >= p)[1]])
-d <- d %>% mutate(income_q = cut(pc_income, c(-Inf, br, Inf), labels = paste0("Q", 1:5)),
-                  bottom40 = as.integer(income_q %in% c("Q1", "Q2")))
+q40 <- br[2]; br <- unique(br[!is.na(br)])
+d <- if (length(br) >= 1 && !is.na(q40)) d %>% mutate(income_q = cut(pc_income, c(-Inf, br, Inf), labels = paste0("Q", seq_len(length(br) + 1))),
+                                                   bottom40 = ifelse(is.na(pc_income), NA_integer_, as.integer(pc_income <= q40))) else
+  d %>% mutate(income_q = NA_character_, bottom40 = NA_integer_)
+if (!length(br)) message("Household income not available: income quintiles not computed")
+# relative poverty: household income per member below 60% of the (weighted) median across individuals
+med_pc <- if (nrow(qs)) qs$pc_income[which(qs$cw >= .5)[1]] else NA_real_
+d <- d %>% mutate(poor_rel = ifelse(is.na(pc_income) | is.na(med_pc), NA_integer_, as.integer(pc_income < 0.6 * med_pc)),
+                  poor_with_child = ifelse(is.na(poor_rel), NA_integer_, as.integer(poor_rel == 1 & own_child %in% 1)),
+                  single_mother = as.integer(female == 1 & own_child %in% 1 & single_head == 1))
+attr(d, "poverty_line_pc") <- 0.6 * med_pc
 
 attr(d, "vintage") <- "UNICEF HSESS 2023/24, weighted, 95% CIs clustered by household"
 saveRDS(d, here::here("output", "hsess_analysis_ready.rds"))
@@ -105,17 +119,17 @@ used <- tibble(role = c(names(ci), names(chh)), code = c(unname(ci), unname(chh)
                file = c(rep("individual", length(ci)), rep("household", length(chh))))
 write_table(used, "hsess_variables_used")
 
-y <- d %>% filter(age >= 19, age <= 24)
+y <- d %>% filter(age >= 18, age <= 24)
 wm <- function(v, s) round(100 * weighted.mean(y[[v]][y$sexo == s], y$w[y$sexo == s], na.rm = TRUE), 1)
-cat(sprintf("HSESS: %s individuals in %s households | 19-24: %s (women %s, men %s)\n",
+cat(sprintf("HSESS: %s individuals in %s households | 18-24: %s (women %s, men %s)\n",
             format(nrow(d), big.mark = ","), format(dplyr::n_distinct(d$key), big.mark = ","),
             format(nrow(y), big.mark = ","), sum(y$sexo == "Young women", na.rm = TRUE), sum(y$sexo == "Young men", na.rm = TRUE)))
-cat(sprintf("19-24, weighted: NEET women %s%%, men %s%% | in education women %s%%, men %s%% | employed women %s%%, men %s%%\n",
+cat(sprintf("18-24, weighted: NEET women %s%%, men %s%% | in education women %s%%, men %s%% | employed women %s%%, men %s%%\n",
             wm("neet", "Young women"), wm("neet", "Young men"), wm("in_educ", "Young women"), wm("in_educ", "Young men"),
             wm("employed", "Young women"), wm("employed", "Young men")))
-w1924 <- d %>% filter(age >= 19, age <= 24, sexo == "Young women")
-cat(sprintf("Women 19-24 living with own child: %s of %s (relationship unknown for %s); of these, %s%% report caring for own children daily or occasionally\n",
-            sum(w1924$own_child %in% 1), nrow(w1924), sum(is.na(w1924$own_child)),
-            round(100 * mean(w1924$care_children[w1924$own_child %in% 1] %in% c("Daily", "Occasionally")), 1)))
+w1824 <- d %>% filter(age >= 18, age <= 24, sexo == "Young women")
+cat(sprintf("Women 18-24 living with own child: %s of %s (relationship unknown for %s); of these, %s%% report caring for own children daily or occasionally\n",
+            sum(w1824$own_child %in% 1), nrow(w1824), sum(is.na(w1824$own_child)),
+            round(100 * mean(w1824$care_children[w1824$own_child %in% 1] %in% c("Daily", "Occasionally")), 1)))
 if (any(is.na(ci))) cat("Individual variables not found: ", paste(names(ci)[is.na(ci)], collapse = ", "), "\n")
 if (length(chh) && any(is.na(chh))) cat("Household variables not found: ", paste(names(chh)[is.na(chh)], collapse = ", "), "\n")

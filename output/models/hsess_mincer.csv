@@ -1,0 +1,4 @@
+Sample,Return per year (%),lo,hi,p,N
+Women 19-64,5.8,4.8,6.9,5.400000000000001e-28,3112
+Men 19-64,7.2,5.7,8.6,2.5e-23,2772
+Difference women vs men (interaction),-0.9,NA,NA,0.23,5884

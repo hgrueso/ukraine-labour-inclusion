@@ -1,0 +1,11 @@
+educ,sex,median_wage,n
+Basic secondary or less,Men,9000,161
+Basic secondary or less,Women,6000,161
+Complete secondary,Men,10000,362
+Complete secondary,Women,7000,346
+Vocational,Men,12000,1059
+Vocational,Women,8000,874
+Short-cycle tertiary,Men,14000,189
+Short-cycle tertiary,Women,10000,224
+Higher (bachelor+),Men,16000,1001
+Higher (bachelor+),Women,11000,1507
