@@ -1,4 +1,6 @@
 key,value
+educ_w_1417,98.5
+educ_m_1417,96.6
 st_educ_w,38.5
 st_educ_m,51.2
 st_emp_w,33.9
@@ -12,8 +14,8 @@ neet_w_higher,15.1
 neet_w_sec,36.3
 wage_w_higher,11000
 wage_w_sec,7000
-educ_w_1524,52.8
-educ_m_1524,63.7
+educ_w_1524,38.5
+educ_m_1524,51.2
 higher_w_1824,31.5
 higher_m_1824,39.3
 mothers_unpartnered,9

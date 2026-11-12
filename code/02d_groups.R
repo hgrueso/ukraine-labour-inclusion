@@ -67,7 +67,7 @@ save_fig(ggplot(g3, aes(ndis, estimate)) + geom_col(fill = ACCENT_GIRL, width = 
            geom_text(aes(y = hi, label = percent(estimate, accuracy = 1)), vjust = -0.8, size = 3, colour = GREY_DARK) +
            geom_text(aes(y = 0, label = paste0("n=", n)), vjust = 1.6, size = 2.6, colour = GREY_MID) +
            facet_wrap(~source) + scale_y_continuous(labels = percent_format(1), expand = expansion(mult = c(.08, .2))) +
-           labs(subtitle = "NEET among women aged 18-24 by number of disadvantages (motherhood, poorest 40%, rural, displaced, single-headed household)",
+           labs(subtitle = "NEET among women aged 18-24 by number of disadvantages",
                 x = "Number of disadvantages", y = NULL, caption = paste(capm, caph)) + theme_ukr(), "g3_multiple_disadvantage_en", width = 10, height = 5)
 
 # g4: poverty and motherhood: NEET among women 18-24 in four groups, both surveys -------------------
@@ -103,8 +103,7 @@ save_fig(ggplot(g5, aes(indicator, estimate, fill = grp)) + geom_col(position = 
            geom_text(aes(y = hi, label = percent(estimate, accuracy = 1)), position = position_dodge(.75), vjust = -0.8, size = 3, colour = GREY_DARK) +
            scale_fill_manual(values = c("Household with a NEET woman 18-24" = ACCENT_GIRL, "Household with a non-NEET woman 18-24" = GREY_MID)) +
            scale_y_continuous(labels = percent_format(1), expand = expansion(mult = c(0, .2))) +
-           labs(subtitle = sprintf("Children under 18 living in households with a young woman aged 18-24: share in the poorest wealth groups (n = %s and %s children)",
-                                   g5$n[g5$grp == "Household with a NEET woman 18-24"][1], g5$n[g5$grp == "Household with a non-NEET woman 18-24"][1]),
+           labs(subtitle = "Children under 18 living with a woman aged 18-24: share in the poorest wealth groups",
                 x = NULL, y = NULL, caption = capm) + theme_ukr(), "g5_child_poverty_en", width = 9.5, height = 4.8)
 
 # g6: VET profile, HSESS women and men 18-29 ------------------------------------------------------------
@@ -145,7 +144,7 @@ save_fig(ggplot(g7, aes(spec, estimate)) + geom_hline(yintercept = 0, linetype =
            geom_pointrange(aes(ymin = lo, ymax = hi), colour = ACCENT_GIRL, size = .6) +
            geom_text(aes(label = sprintf("%+.0f pp", estimate)), vjust = -1.2, size = 3, colour = GREY_DARK) +
            scale_x_discrete(labels = label_wrap(16)) + scale_y_continuous(labels = function(x) paste0(round(x), " pp")) +
-           labs(subtitle = "Difference in NEET between women with vocational and with complete secondary education, aged 18-29, as controls are added",
+           labs(subtitle = "Vocational vs complete secondary: difference in NEET, women 18-29, as controls are added",
                 x = NULL, y = NULL, caption = paste(caph, "Linear probability models with oblast fixed effects; 95% CI.")) +
            theme_ukr() + theme(panel.grid.major.y = element_line(colour = "grey92")), "g7_vet_effect_controls_en", width = 10, height = 4.8)
 

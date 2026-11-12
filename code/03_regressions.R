@@ -55,14 +55,14 @@ save_fig(ggplot(cf, aes(estimate, term, colour = model)) +
 # ---- HSESS 2023/24: NEET model ------------------------------------------------------
 hp <- here::here("output", "hsess_analysis_ready.rds")
 if (file.exists(hp)) {
-  h <- readRDS(hp) %>% filter(age >= 15, age <= 24, !is.na(sexo), !is.na(neet), !is.na(own_child), w > 0) %>%
-    mutate(age1824 = as.integer(age >= 18), higher = as.integer(educ %in% c("Higher (bachelor+)", "Short-cycle tertiary")))
-  HC <- "age1824 + rural + idp + disab_hh + bottom40 + own_child + partnered + higher"
+  h <- readRDS(hp) %>% filter(age >= 18, age <= 24, !is.na(sexo), !is.na(neet), !is.na(own_child), w > 0) %>%
+    mutate(higher = as.integer(educ %in% c("Higher (bachelor+)", "Short-cycle tertiary")))
+  HC <- "age + rural + idp + disab_hh + bottom40 + own_child + partnered + higher"
   htest <- function(hyp, y, term, rhs) {
     m <- feols(as.formula(paste(y, "~", rhs, "| oblast")), data = h, weights = ~w, cluster = ~key)
     ct <- coeftable(m)
     if (!term %in% rownames(ct)) return(NULL)
-    tibble(Estimate = hyp, Sample = "15-24", `Effect (pp)` = round(100 * ct[term, 1], 1),
+    tibble(Estimate = hyp, Sample = "18-24", `Effect (pp)` = round(100 * ct[term, 1], 1),
            SE = round(100 * ct[term, 2], 1), p = signif(ct[term, 4], 2), N = nobs(m))
   }
   ht <- bind_rows(
@@ -84,26 +84,26 @@ if (file.exists(hp)) {
               data = h, weights = ~w, cluster = ~key)
   hl <- c(female = "Woman", own_child = "Lives with own child", partnered = "Married or cohabiting",
           `female:own_child` = "Woman x lives with own child", `female:partnered` = "Woman x partnered", idp = "Internally displaced",
-          disab_hh = "Disability in household", bottom40 = "Poorest 40%", rural = "Rural", higher = "Tertiary education", age1824 = "Aged 18-24")
+          disab_hh = "Disability in household", bottom40 = "Poorest 40%", rural = "Rural", higher = "Tertiary education", age = "Age (per year)")
   ct <- coeftable(hm); ci <- confint(hm)
   hc <- tibble(term = rownames(ct), estimate = 100 * ct[, 1], lo = 100 * ci[, 1], hi = 100 * ci[, 2]) %>%
     filter(term %in% names(hl)) %>% mutate(term = factor(hl[term], levels = rev(unname(hl))))
   write_table(hc, "hsess_coefficients", sub = "models")
   save_fig(ggplot(hc, aes(estimate, term)) + geom_vline(xintercept = 0, linetype = 2, colour = GREY_MID) +
              geom_pointrange(aes(xmin = lo, xmax = hi), colour = ACCENT_GIRL) +
-             labs(subtitle = "Linear probability model of NEET, 15-24, percentage points (95% CI)", x = NULL, y = NULL,
+             labs(subtitle = "Linear probability model of NEET, 18-24, percentage points (95% CI)", x = NULL, y = NULL,
                   caption = "UNICEF HSESS 2023/24. Oblast fixed effects, weighted, SE clustered by household.") +
              theme_ukr() + theme(panel.grid.major.x = element_line(colour = "grey92"), panel.grid.major.y = element_blank()),
            "h11_coefficients_en", width = 9, height = 5)
 }
 
-# ---- MICS 2025/26: NEET among women 15-24 ----------------------------------------------
+# ---- MICS 2025/26: NEET among women 18-24 ----------------------------------------------
 mp <- here::here("output", "mics_women.rds")
 if (file.exists(mp)) {
-  mw <- readRDS(mp) %>% filter(age >= 15, age <= 24, !is.na(neet)) %>%
-    mutate(age1824 = as.integer(age >= 18), educ_higher = as.integer(educ %in% "Higher"), educ_voc = as.integer(educ %in% "Vocational"))
-  MC <- "age1824 + married + mother + idp + bottom40 + rural + educ_higher + educ_voc + hh_moved + hh_income_down"
-  mtest <- function(lab, term, rhs = MC, data = mw, sample = "Women 15-24") {
+  mw <- readRDS(mp) %>% filter(age >= 18, age <= 24, !is.na(neet)) %>%
+    mutate(educ_higher = as.integer(educ %in% "Higher"), educ_voc = as.integer(educ %in% "Vocational"))
+  MC <- "age + married + mother + idp + bottom40 + rural + educ_higher + educ_voc + hh_moved + hh_income_down"
+  mtest <- function(lab, term, rhs = MC, data = mw, sample = "Women 18-24") {
     m <- feols(as.formula(paste("neet ~", rhs, "| region")), data = data, weights = ~wmweight, cluster = ~psu)
     ct <- coeftable(m); if (!term %in% rownames(ct)) return(NULL)
     tibble(Estimate = lab, Sample = sample, `Effect (pp)` = round(100 * ct[term, 1], 1), SE = round(100 * ct[term, 2], 1),
@@ -117,7 +117,7 @@ if (file.exists(mp)) {
     mtest("NEET: functional difficulty", "disability", paste("disability +", MC), filter(mw, age >= 18, !is.na(disability)), "Women 18-24"))
   write_table(mt, "mics_tests", sub = "models"); print(mt, n = Inf, width = Inf)
   mm <- feols(as.formula(paste("neet ~", MC, "| region")), data = mw, weights = ~wmweight, cluster = ~psu)
-  ml <- c(age1824 = "Aged 18-24", married = "Married or in union", mother = "Mother", idp = "Internally displaced",
+  ml <- c(age = "Age (per year)", married = "Married or in union", mother = "Mother", idp = "Internally displaced",
           bottom40 = "Poorest 40% (wealth)", rural = "Rural", educ_higher = "Higher education", educ_voc = "Vocational education",
           hh_moved = "Household moved since 2022", hh_income_down = "Household income decreased since 2022")
   ct <- coeftable(mm); ci <- confint(mm)
@@ -126,7 +126,7 @@ if (file.exists(mp)) {
   write_table(mc, "mics_coefficients", sub = "models")
   save_fig(ggplot(mc, aes(estimate, term)) + geom_vline(xintercept = 0, linetype = 2, colour = GREY_MID) +
              geom_pointrange(aes(xmin = lo, xmax = hi), colour = ACCENT_GIRL) +
-             labs(subtitle = "Linear probability model of NEET, women 15-24, percentage points (95% CI)", x = NULL, y = NULL,
+             labs(subtitle = "Linear probability model of NEET, women 18-24, percentage points (95% CI)", x = NULL, y = NULL,
                   caption = "MICS 2025/26. Oblast fixed effects, weighted, SE clustered by primary sampling unit.") +
              theme_ukr() + theme(panel.grid.major.x = element_line(colour = "grey92"), panel.grid.major.y = element_blank()),
            "m11_coefficients_en", width = 9, height = 5)
@@ -167,19 +167,19 @@ plot_diff <- function(df, sub, cap, fills = FILL_SEX, by_sex = TRUE) {
 # ---- HSESS: adjusted NEET and employment by motherhood, partnership, displacement, disability, income ----
 if (file.exists(hp)) {
   hall <- readRDS(hp) %>% filter(!is.na(sexo), !is.na(own_child), w > 0) %>%
-    mutate(age1824 = as.integer(age >= 18), higher = as.integer(educ %in% c("Higher (bachelor+)", "Short-cycle tertiary")))
+    mutate(higher = as.integer(educ %in% c("Higher (bachelor+)", "Short-cycle tertiary")))
   HG <- c(own_child = "Lives with own child", partnered = "Married or cohabiting", idp = "Internally displaced",
           disab_hh = "Disability in household", bottom40 = "Poorest 40%")
   HR <- "own_child + partnered + idp + disab_hh + bottom40 + rural + higher"
-  h17 <- map_dfr(c("Young women", "Young men"), function(s) adj_rates(hall %>% filter(sexo == s, age >= 15, age <= 24, !is.na(neet)),
-                                                                 "neet", HG, paste("age1824 +", HR), "w", "key") %>% mutate(sexo = s)) %>%
+  h17 <- map_dfr(c("Young women", "Young men"), function(s) adj_rates(hall %>% filter(sexo == s, age >= 18, age <= 24, !is.na(neet)),
+                                                                 "neet", HG, paste("age +", HR), "w", "key") %>% mutate(sexo = s)) %>%
     mutate(sexo = factor(sexo, levels = c("Young women", "Young men")))
   h18 <- map_dfr(c("Young women", "Young men"), function(s) adj_rates(hall %>% filter(sexo == s, age >= 18, age <= 24, !is.na(employed)),
                                                                  "employed", HG, paste("age +", HR), "w", "key") %>% mutate(sexo = s)) %>%
     mutate(sexo = factor(sexo, levels = c("Young women", "Young men")))
   write_table(h17, "h17_adjusted_neet"); write_table(h18, "h18_adjusted_employment")
   hcap <- "UNICEF HSESS 2023/24. Linear probability models with oblast fixed effects, estimated separately for women and men; predicted rates with everyone set to 'No' and then to 'Yes'; 95% CI on the difference."
-  save_fig(plot_diff(h17, "Adjusted difference in the NEET rate at 15-24 (Yes minus No); labels show the predicted rates", hcap), "h17_adjusted_neet_en", width = 11, height = 5)
+  save_fig(plot_diff(h17, "Adjusted difference in the NEET rate at 18-24 (Yes minus No); labels show the predicted rates", hcap), "h17_adjusted_neet_en", width = 11, height = 5)
   save_fig(plot_diff(h18, "Adjusted difference in the employment rate at 18-24 (Yes minus No); labels show the predicted rates", hcap), "h18_adjusted_employment_en", width = 11, height = 5)
 
   # Mincer wage equation: returns to a year of education, wage earners 19-64
@@ -236,23 +236,23 @@ if (file.exists(hp)) {
               "hsess_model_headlines")
 }
 
-# ---- MICS: adjusted NEET for women 15-24 ----------------------------------------------------
+# ---- MICS: adjusted NEET for women 18-24 ----------------------------------------------------
 if (file.exists(mp)) {
   MG <- c(mother = "Mother", married = "Married or in union", idp = "Internally displaced", bottom40 = "Poorest 40% (wealth)", hh_moved = "Household moved since 2022")
   m13 <- adj_rates(mw, "neet", MG, MC, "wmweight", "psu", fe = "region") %>% mutate(sexo = "Young women")
   write_table(m13, "m13_adjusted_neet")
-  save_fig(plot_diff(m13, "Adjusted difference in the NEET rate among women 15-24 (Yes minus No); labels show the predicted rates",
+  save_fig(plot_diff(m13, "Adjusted difference in the NEET rate among women 18-24 (Yes minus No); labels show the predicted rates",
                      "MICS 2025/26. Linear probability model with oblast fixed effects; predicted rates with everyone set to 'No' and then to 'Yes'; 95% CI on the difference.", by_sex = FALSE),
            "m13_adjusted_neet_en", width = 11, height = 5)
 }
 
 # ---- Slide 5: adjusted NEET by motherhood and partnership, MICS and HSESS side by side (women) ----
 if (exists("m13") && exists("h17")) {
-  s5 <- bind_rows(m13 %>% filter(dimension %in% c("Mother", "Married or in union")) %>% mutate(source = "MICS 2025/26, women 15-24"),
+  s5 <- bind_rows(m13 %>% filter(dimension %in% c("Mother", "Married or in union")) %>% mutate(source = "MICS 2025/26, women 18-24"),
                   h17 %>% filter(sexo == "Young women", dimension %in% c("Lives with own child", "Married or cohabiting")) %>%
-                    mutate(source = "HSESS 2023/24, women 15-24", dimension = ifelse(dimension == "Lives with own child", "Mother", "Married or cohabiting"))) %>%
+                    mutate(source = "HSESS 2023/24, women 18-24", dimension = ifelse(dimension == "Lives with own child", "Mother", "Married or cohabiting"))) %>%
     mutate(group = factor(group, levels = c("No", "Yes")), dimension = factor(dimension, levels = c("Mother", "Married or in union", "Married or cohabiting")),
-           source = factor(source, levels = c("MICS 2025/26, women 15-24", "HSESS 2023/24, women 15-24")))
+           source = factor(source, levels = c("MICS 2025/26, women 18-24", "HSESS 2023/24, women 18-24")))
   write_table(s5, "s5_adjusted_motherhood_neet")
   s5d <- s5 %>% group_by(source, dimension) %>%
     summarise(p0 = estimate[group == "No"], p1 = estimate[group == "Yes"], diff = p1 - p0, lo = lo[group == "Yes"] - p0, hi = hi[group == "Yes"] - p0, .groups = "drop")

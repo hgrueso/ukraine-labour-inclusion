@@ -30,7 +30,7 @@ overall <- function(design, var) { r <- svymean(as.formula(paste0("~", var)), de
 
 # m1: school attendance by level, age group and sex (household roster) ------------------
 LV <- c(in_gensec = "General secondary", in_vocational = "Vocational", in_higher = "Higher education", in_other_educ = "Other")
-AG <- list(`15-17` = subset(dhl, age >= 15 & age <= 17), `18-24` = subset(dhl, age >= 18 & age <= 24), `15-24` = subset(dhl, age >= 15 & age <= 24))
+AG <- list(`14-17` = subset(dhl, age >= 14 & age <= 17), `18-24` = subset(dhl, age >= 18 & age <= 24))
 m1 <- map_dfr(names(AG), function(g) map_dfr(names(LV), ~ wt_pct(AG[[g]], .x, "sexo") %>% mutate(level = LV[[.x]])) %>% mutate(group = g)) %>%
   mutate(group = factor(group, levels = names(AG)), level = factor(level, levels = rev(unname(LV))),
          sex = factor(ifelse(sexo == "Young women", "Women", "Men"), levels = c("Women", "Men")))
@@ -60,10 +60,10 @@ save_fig(ggplot(m2, aes(indicator, estimate, fill = group)) + geom_col(position 
          "m2_women_outcomes_by_age_en", width = 9.5, height = 5)
 
 # m2b: NEET among young women by age group ------------------------------------------------------
-m2b <- m2 %>% filter(indicator == "NEET") %>% mutate(n = c(`15-17` = sum(wm$age >= 15 & wm$age <= 17 & !is.na(wm$neet)),
+m2b <- m2 %>% filter(indicator == "NEET", group != "15-24") %>% mutate(n = c(`15-17` = sum(wm$age >= 15 & wm$age <= 17 & !is.na(wm$neet)),
                                                            `18-24` = sum(wm$age >= 18 & wm$age <= 24 & !is.na(wm$neet)),
                                                            `15-24` = sum(wm$age >= 15 & wm$age <= 24 & !is.na(wm$neet)))[as.character(group)],
-                                                     xlab = factor(sprintf("%s (n = %d)", group, n), levels = sprintf("%s (n = %d)", c("15-17", "18-24", "15-24"), n[match(c("15-17", "18-24", "15-24"), group)])))
+                                                     xlab = factor(sprintf("%s (n = %d)", group, n), levels = sprintf("%s (n = %d)", c("15-17", "18-24"), n[match(c("15-17", "18-24"), group)])))
 write_table(m2b, "m2b_neet_women_by_age")
 save_fig(bars_w(m2b, xlab) + labs(subtitle = "Young women not in education, training or employment"), "m2b_neet_women_by_age_en", width = 7.5, height = 4.8)
 
@@ -202,11 +202,12 @@ write_table(hv$data, "m10_relationships_mics"); save_fig(hv$plot, "m10_relations
 gm <- function(df, ind, g) round(100 * df$estimate[df$indicator == ind & df$group == g][1], 1)
 heads <- tibble(
   key = c("neet_w_1518",
-          "att_w_1524", "att_m_1524", "higher_w_1824", "higher_m_1824", "neet_w_1524", "neet_w_1824", "emp_w_1824", "educ_w_1518",
+          "att_w_1417", "att_m_1417", "att_w_1824", "att_m_1824", "higher_w_1824", "higher_m_1824", "neet_w_1524", "neet_w_1824", "emp_w_1824", "educ_w_1518",
           "mothers_unmarried", "union_u18", "birth_u20", "mother_1824", "care_g", "care_b", "preschool", "hh_moved", "hh_income_down",
           "n_w1524", "n_w1824"),
   value = c(gm(m2, "NEET", "15-17"),
-            round(100 * tot1$total[tot1$group == "15-24" & tot1$sex == "Women"], 1), round(100 * tot1$total[tot1$group == "15-24" & tot1$sex == "Men"], 1),
+            round(100 * tot1$total[tot1$group == "14-17" & tot1$sex == "Women"], 1), round(100 * tot1$total[tot1$group == "14-17" & tot1$sex == "Men"], 1),
+            round(100 * tot1$total[tot1$group == "18-24" & tot1$sex == "Women"], 1), round(100 * tot1$total[tot1$group == "18-24" & tot1$sex == "Men"], 1),
             round(100 * m1$estimate[m1$group == "18-24" & m1$sex == "Women" & m1$level == "Higher education"], 1),
             round(100 * m1$estimate[m1$group == "18-24" & m1$sex == "Men" & m1$level == "Higher education"], 1),
             gm(m2, "NEET", "15-24"), gm(m2, "NEET", "18-24"), gm(m2, "Employed", "18-24"), gm(m2, "In education", "15-17"),

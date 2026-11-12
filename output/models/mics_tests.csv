@@ -1,10 +1,10 @@
 Estimate,Sample,Effect (pp),SE,p,N
-NEET: married or in union,Women 15-24,5.3,5.2,0.3,1060
-NEET: mother,Women 15-24,43.1,6.2,1.5e-11,1060
-NEET: married x mother,Women 15-24,6.2,12.7,0.62,1060
-NEET: internally displaced,Women 15-24,-11.2,5.4,0.038,1060
-NEET: poorest 40% (wealth),Women 15-24,0.9,4,0.82,1060
-NEET: rural,Women 15-24,3.4,3.6,0.35,1060
-NEET: household moved since 2022,Women 15-24,-1.6,5.7,0.79,1060
-NEET: household income decreased since 2022,Women 15-24,0.2,3.4,0.95,1060
-NEET: functional difficulty,Women 18-24,12.7,17.9,0.48,709
+NEET: married or in union,Women 18-24,0.1,5.5,0.99,709
+NEET: mother,Women 18-24,33,7.3,7e-6,709
+NEET: married x mother,Women 18-24,11.2,12.9,0.39,709
+NEET: internally displaced,Women 18-24,-12.9,7.6,0.092,709
+NEET: poorest 40% (wealth),Women 18-24,-0.3,5.5,0.96,709
+NEET: rural,Women 18-24,6.4,4.8,0.18,709
+NEET: household moved since 2022,Women 18-24,-3.2,7.1,0.65,709
+NEET: household income decreased since 2022,Women 18-24,5.3,4.7,0.26,709
+NEET: functional difficulty,Women 18-24,14.1,16.3,0.39,709

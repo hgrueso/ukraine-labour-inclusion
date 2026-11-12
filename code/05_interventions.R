@@ -72,7 +72,7 @@ save_fig(ggplot(a3) +
            geom_text(aes(x = need_high_cost_total, y = intervention, label = sprintf("needed: %s to %s", percent(need_low_cost_total, accuracy = 1), percent(need_high_cost_total, accuracy = 1))), hjust = -0.08, size = 2.8, colour = UNICEF_DARK) +
            geom_text(aes(x = effect_high, y = as.numeric(intervention) + .22, label = sprintf("evidence: %s to %s", percent(effect_low, accuracy = 1), percent(effect_high, accuracy = 1))), hjust = -0.08, size = 2.8, colour = ACCENT_GIRL) +
            scale_y_discrete(labels = label_wrap(26)) + scale_x_continuous(labels = percent_format(1), expand = expansion(mult = c(.02, .6))) +
-           labs(subtitle = "Share of participants who must gain additional employment for 3 years to cover the cost (blue, low to high cost), against the effect range in the evidence (pink)",
+           labs(subtitle = "Employment gain needed to cover the cost (blue) and effects found in evaluations (pink), 3 years",
                 x = "Additional employment among participants", y = NULL,
                 caption = "Break-even from the perspective of net earnings plus government receipts, central-scenario wage and fiscal rates, 5% discount. Costs and effect ranges from code/intervention_parameters.csv (illustrative). Pink to the right of blue: pays off under the evidence; overlap: depends on cost.") +
            theme_ukr(11) + theme(panel.grid.major.y = element_blank(), panel.grid.major.x = element_line(colour = "grey92")), "c7_break_even_by_intervention_en", width = 12, height = 5.2)

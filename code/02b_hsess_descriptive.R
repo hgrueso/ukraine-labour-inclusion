@@ -18,7 +18,7 @@ outcomes_by <- function(design, by = NULL)
 
 # h0: in education, by type of institution, age group and sex ---------------------------
 LV <- c(in_gensec = "General secondary", in_vocational = "Vocational", in_higher = "Higher education", in_other_educ = "Other")
-AG0 <- list(`15-17` = y1518, `18-24` = y1824, `15-24` = y)
+AG0 <- list(`14-17` = subset(des, age >= 14 & age <= 17 & !is.na(sexo)), `18-24` = y1824)
 h0 <- map_dfr(names(AG0), function(g) map_dfr(names(LV), ~ wt_pct(AG0[[g]], .x, "sexo") %>% mutate(level = LV[[.x]])) %>% mutate(group = g)) %>%
   mutate(group = factor(group, levels = names(AG0)), level = factor(level, levels = rev(unname(LV))),
          sex = factor(ifelse(sexo == "Young women", "Women", "Men"), levels = c("Women", "Men")))
@@ -337,13 +337,14 @@ pick <- function(df, ind, sx, grp = NULL) { r <- df[df$indicator == ind & df$sex
   if (!is.null(grp)) r <- r[r$group == grp, ]; round(100 * r$estimate[1], 1) }
 pk <- function(df, sx, col, val) round(100 * df$estimate[df$sexo == sx & df[[col]] == val][1], 1)
 heads <- tibble(
-  key = c("st_educ_w", "st_educ_m", "st_emp_w", "st_emp_m", "st_neet_w", "st_neet_m", "gap_h_1824", "care_neet_w_yes", "care_neet_w_no",
+  key = c("educ_w_1417", "educ_m_1417", "st_educ_w", "st_educ_m", "st_emp_w", "st_emp_m", "st_neet_w", "st_neet_m", "gap_h_1824", "care_neet_w_yes", "care_neet_w_no",
           "neet_w_higher", "neet_w_sec", "wage_w_higher", "wage_w_sec",
           "educ_w_1524", "educ_m_1524", "higher_w_1824", "higher_m_1824", "mothers_unpartnered", "n_mothers_1824",
           "neet_mother", "neet_nochild", "lfp_w", "lfp_m", "emp_w", "emp_m", "educ_w", "educ_m", "neet_w_1824", "neet_m_1824",
           "neet_w", "neet_m", "neet_w_1529", "neet_m_1529", "educ_w_1518", "educ_m_1518",
           "care_w", "care_m", "inf_w", "inf_m", "gap_1824", "gap_2564", "n_1524", "n_1824"),
-  value = c(round(100 * h19$share[h19$age_group == "18-24" & h19$sexo == "Young women" & h19$status == "In education"][1], 1),
+  value = c(round(100 * tot0$total[tot0$group == "14-17" & tot0$sex == "Women"], 1), round(100 * tot0$total[tot0$group == "14-17" & tot0$sex == "Men"], 1),
+            round(100 * h19$share[h19$age_group == "18-24" & h19$sexo == "Young women" & h19$status == "In education"][1], 1),
             round(100 * h19$share[h19$age_group == "18-24" & h19$sexo == "Young men" & h19$status == "In education"][1], 1),
             round(100 * h19$share[h19$age_group == "18-24" & h19$sexo == "Young women" & h19$status == "Employed, not in education"][1], 1),
             round(100 * h19$share[h19$age_group == "18-24" & h19$sexo == "Young men" & h19$status == "Employed, not in education"][1], 1),
@@ -355,7 +356,7 @@ heads <- tibble(
             round(100 * h13$estimate[h13$indicator == "NEET" & h13$sexo == "Young women" & h13$educ == "Complete secondary"][1], 1),
             round(h15$median_wage[h15$sex == "Women" & h15$educ == "Higher (bachelor+)"][1]),
             round(h15$median_wage[h15$sex == "Women" & h15$educ == "Complete secondary"][1]),
-            round(100 * tot0$total[tot0$group == "15-24" & tot0$sex == "Women"], 1), round(100 * tot0$total[tot0$group == "15-24" & tot0$sex == "Men"], 1),
+            round(100 * tot0$total[tot0$group == "18-24" & tot0$sex == "Women"], 1), round(100 * tot0$total[tot0$group == "18-24" & tot0$sex == "Men"], 1),
             round(100 * h0$estimate[h0$group == "18-24" & h0$sex == "Women" & h0$level == "Higher education"], 1),
             round(100 * h0$estimate[h0$group == "18-24" & h0$sex == "Men" & h0$level == "Higher education"], 1),
             mothers_unpartnered, sum(n12$n[grepl("with child", n12$mp)]),
