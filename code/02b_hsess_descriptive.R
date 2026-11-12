@@ -322,13 +322,13 @@ save_fig(ggplot(h9, aes(reorder(preschool_reason, estimate), estimate)) + geom_c
            labs(subtitle = sprintf("Main reason a child of preschool age does not attend (n = %s children)", n9), x = NULL, y = NULL, caption = cap) +
            theme_ukr() + theme(panel.grid.major.y = element_blank()), "h9_preschool_reasons_en", width = 9.5, height = 5)
 
-# h10: relationships between the key variables, 15-24 -------------------------------------
-yy <- d %>% filter(age >= 15, age <= 24, !is.na(sexo)) %>%
-  transmute(Sex = sexo, `Age group` = age_group, Oblast = oblast, Rural = rural, Frontline = frontline, IDP = idp,
+# h10: relationships between the key variables, 18-24 -------------------------------------
+yy <- d %>% filter(age >= 18, age <= 24, !is.na(sexo)) %>%
+  transmute(Sex = sexo, Age = age, Oblast = oblast, Rural = rural, Frontline = frontline, IDP = idp,
             `Disability in household` = disab_hh, `Child under 6` = child_u6, `Lives with own child` = own_child, `Poorest 40%` = bottom40,
             Partnered = partnered, Education = educ, `In education` = in_educ, Employed = employed, NEET = neet,
             `Daily childcare` = care_daily, w)
-hv <- heatmap_v(yy, setdiff(names(yy), "w"), yy$w, "Strength of association between key variables, 15-24 (0 = none, 1 = perfect)", cap)
+hv <- heatmap_v(yy, setdiff(names(yy), "w"), yy$w, "Strength of association between key variables, 18-24 (0 = none, 1 = perfect)", cap)
 write_table(hv$data, "h10_relationships_hsess")
 save_fig(hv$plot, "h10_relationships_hsess_en", width = 9, height = 7)
 

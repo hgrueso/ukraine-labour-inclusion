@@ -124,11 +124,11 @@ save_fig(bars_w(m4c, xlab) + facet_wrap(~dimension, nrow = 1, scales = "free_x",
            theme(axis.text.x = element_text(size = 8)) + labs(subtitle = "NEET among women aged 18-24, by group (n = unweighted sample in each group)"),
          "m4c_neet_by_group_1824_en", width = 12, height = 4.8)
 
-# m5: NEET by macroregion and wealth quintile, women 15-24 ----------------------------------
-m5 <- bind_rows(wt_pct(subset(w1524, !is.na(macroregion)), "neet", "macroregion") %>% rename(group = macroregion) %>% mutate(dimension = "Macroregion"),
-                wt_pct(subset(w1524, !is.na(wealth_q)), "neet", "wealth_q") %>% mutate(group = paste0("Q", wealth_q), dimension = "Wealth quintile (Q1 = poorest)") %>% select(-wealth_q))
+# m5: NEET by macroregion and wealth quintile, women 18-24 ----------------------------------
+m5 <- bind_rows(wt_pct(subset(w1824, !is.na(macroregion)), "neet", "macroregion") %>% rename(group = macroregion) %>% mutate(dimension = "Macroregion"),
+                wt_pct(subset(w1824, !is.na(wealth_q)), "neet", "wealth_q") %>% mutate(group = paste0("Q", wealth_q), dimension = "Wealth quintile (Q1 = poorest)") %>% select(-wealth_q))
 write_table(m5, "m5_neet_region_wealth")
-save_fig(bars_w(m5, group) + facet_wrap(~dimension, scales = "free_x") + labs(subtitle = "NEET among women aged 15-24"),
+save_fig(bars_w(m5, group) + facet_wrap(~dimension, scales = "free_x") + labs(subtitle = "NEET among women aged 18-24"),
          "m5_neet_region_wealth_en", width = 10, height = 4.8)
 
 # m6: early marriage and early motherhood, women 20-24 ---------------------------------------
@@ -190,12 +190,12 @@ write_table(m12, "m12_outcomes_by_education")
 save_fig(bars_w(m12, xlab) + facet_wrap(~indicator) + theme(axis.text.x = element_text(size = 8)) +
            labs(subtitle = "Women aged 18-24, by highest level of education"), "m12_outcomes_by_education_en", width = 11, height = 5)
 
-# m10: association between key variables, women 15-24 -----------------------------------------
-yy <- wm %>% filter(age >= 15, age <= 24) %>%
-  transmute(`Age group` = age_group, Macroregion = macroregion, Rural = rural, `Wealth quintile` = wealth_q,
+# m10: association between key variables, women 18-24 -----------------------------------------
+yy <- wm %>% filter(age >= 18, age <= 24) %>%
+  transmute(Age = age, Macroregion = macroregion, Rural = rural, `Wealth quintile` = wealth_q,
             Education = educ, Married = married, Mother = mother, IDP = idp, `Household moved` = hh_moved,
             `Income decreased` = hh_income_down, `In education` = in_educ, Employed = employed, NEET = neet, w = wmweight)
-hv <- heatmap_v(yy, setdiff(names(yy), "w"), yy$w, "Strength of association between key variables, women 15-24 (0 = none, 1 = perfect)", cap)
+hv <- heatmap_v(yy, setdiff(names(yy), "w"), yy$w, "Strength of association between key variables, women 18-24 (0 = none, 1 = perfect)", cap)
 write_table(hv$data, "m10_relationships_mics"); save_fig(hv$plot, "m10_relationships_mics_en", width = 9, height = 7)
 
 # headline numbers -----------------------------------------------------------------------------

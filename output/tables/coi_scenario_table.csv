@@ -1,0 +1,4 @@
+Scenario,Monthly wage (UAH),Wage basis,Share who work,Basis,Formal jobs,Formality basis
+Pessimistic," 7,000",25th percentile wage of employed women 18-24,11%,NEET young women already looking for work,62%,Employed women 18-24 without tertiary education
+Central," 9,078",Wage predicted for NEET young women (Mincer equation),44%,Closing the NEET gap with young men,75%,All employed women 18-24
+Optimistic,"10,000",Median wage of employed women 18-24,71%,"Looking for work, or out of work because of care duties",86%,Employed women 18-24 with tertiary education

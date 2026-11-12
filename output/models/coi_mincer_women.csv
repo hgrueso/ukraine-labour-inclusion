@@ -1,0 +1,9 @@
+Term,Coefficient,SE,p
+Constant,8.456,0.11,<0.001
+Education: Complete secondary,-0.01,0.044,0.817
+Education: Vocational,0.087,0.039,0.027
+Education: Short-cycle tertiary,0.181,0.046,<0.001
+Education: Higher (bachelor+),0.323,0.038,<0.001
+Age,0.029,0.005,<0.001
+Age squared,-0,0,<0.001
+Rural,-0.212,0.019,<0.001

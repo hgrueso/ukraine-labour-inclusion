@@ -34,7 +34,7 @@ save_fig(ggplot(long, aes(y = intervention)) + geom_vline(xintercept = 1, linety
            facet_wrap(~perspective, nrow = 1, scales = "free_x") + scale_y_discrete(labels = label_wrap(26)) +
            scale_x_continuous(expand = expansion(mult = c(.05, .45))) +
            labs(subtitle = "Benefits per UAH of cost (range from low effect and high cost to high effect and low cost); dashed line = break-even", x = "Benefit-cost ratio", y = NULL,
-                caption = "Illustrative parameters in code/intervention_parameters.csv, to be replaced with country office costs. Benefits: additional employment sustained for 3 years at the central-scenario wage and fiscal rates, 5% discount. Employer returns not included.") +
+                caption = "Costs: existing Ukrainian programme amounts where available (see appendix). Effects: evaluations in other countries. Benefits: additional employment sustained for 3 years at the central-scenario wage and fiscal rates, 5% discount. Employer returns not included.") +
            theme_ukr(11) + theme(panel.grid.major.y = element_blank(), panel.grid.major.x = element_line(colour = "grey92")), "c5_interventions_en", width = 12, height = 5)
 
 # break-even employment effect needed for each cost level (3 years), by perspective
@@ -49,12 +49,12 @@ save_fig(ggplot(be, aes(cost / 1000, effect_needed, colour = perspective)) + geo
            scale_colour_manual(values = c("Net earnings perspective" = ACCENT_GIRL, "Earnings plus receipts" = "#8A0049")) +
            scale_y_continuous(labels = percent_format(1), limits = c(0, .6)) + scale_x_continuous(expand = expansion(mult = c(.02, .25))) +
            labs(subtitle = "Additional employment (share of participants, sustained 3 years) needed to cover the cost per participant; dots = illustrative midpoints", x = "Present value of total programme cost per participant (UAH thousand)", y = NULL,
-                caption = "Lines: break-even effect at the central-scenario wage and fiscal rates, 5% discount. Dots: midpoints of the illustrative cost and effect ranges in code/intervention_parameters.csv.") +
+                caption = "Lines: break-even effect at the central-scenario wage and fiscal rates, 5% discount. Dots: midpoints of the cost and effect ranges in code/intervention_parameters.csv.") +
            theme_ukr() + theme(panel.grid.major.x = element_line(colour = "grey92")), "c6_break_even_en", width = 11, height = 5.2)
 print(bcr %>% select(intervention, target_group, starts_with("Earnings plus")), width = Inf)
 
 # ---- c7: break-even applications by intervention: employment gain needed at each cost level and duration ----
-app <- tidyr::expand_grid(P %>% select(intervention, target_group, cost_low, cost_high, effect_low, effect_high), years = c(1, 3, 5)) %>%
+app <- tidyr::expand_grid(P %>% select(intervention, target_group, cost_low, cost_high, effect_low, effect_high), yrs = c(1, 3, 5)) %>% rename(years = yrs) %>%
   mutate(pv = map_dbl(years, annuity, r = r),
          need_low_cost_earn = cost_low / (annual_net * pv), need_high_cost_earn = cost_high / (annual_net * pv),
          need_low_cost_total = cost_low / ((annual_net + fiscal) * pv), need_high_cost_total = cost_high / ((annual_net + fiscal) * pv))
@@ -74,5 +74,8 @@ save_fig(ggplot(a3) +
            scale_y_discrete(labels = label_wrap(26)) + scale_x_continuous(labels = percent_format(1), expand = expansion(mult = c(.02, .6))) +
            labs(subtitle = "Employment gain needed to cover the cost (blue) and effects found in evaluations (pink), 3 years",
                 x = "Additional employment among participants", y = NULL,
-                caption = "Break-even from the perspective of net earnings plus government receipts, central-scenario wage and fiscal rates, 5% discount. Costs and effect ranges from code/intervention_parameters.csv (illustrative). Pink to the right of blue: pays off under the evidence; overlap: depends on cost.") +
+                caption = "Break-even counting net earnings and government receipts, central-scenario wage and fiscal rates, 5% discount. Costs from Ukrainian programme amounts; effects from evaluations in other countries (sources in the appendix). Pink to the right of blue: pays off; overlap: depends on cost.") +
            theme_ukr(11) + theme(panel.grid.major.y = element_blank(), panel.grid.major.x = element_line(colour = "grey92")), "c7_break_even_by_intervention_en", width = 12, height = 5.2)
+
+write_table(P %>% transmute(Intervention = intervention, `Cost per participant (UAH)` = sprintf("%s to %s", format(cost_low, big.mark = ","), format(cost_high, big.mark = ",")),
+                            `Cost basis` = cost_basis, `Employment effect` = sprintf("%s to %s pp", format(100 * effect_low), format(100 * effect_high)), `Evidence` = effect_basis), "interventions_sources")
