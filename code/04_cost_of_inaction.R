@@ -106,6 +106,26 @@ be_tab <- be %>% transmute(`Cost per participant (UAH)` = format(cost, big.mark 
                            `Public revenues only` = percent(pmin(`Public revenues only`, 9.99), accuracy = 1), `Value to the economy` = percent(`Value to the economy`, accuracy = 1))
 write_table(be_tab, "coi_break_even")
 
+# ---- 8. Break-even for two existing Ukrainian programmes (2026 terms) ------------------------------------------------------
+# Both pay only while the young woman is in work, so the question is additionality: the share of supported women
+# who would not have been working without the programme. Break-even share = cost / (annual value x discounted years in work).
+#   Youth hiring compensation (State Employment Service): 50% of the minimum wage, UAH 4,324 a month in 2026, for 6 months
+#   eYasla: UAH 8,000 a month for a parent who returns to full-time work after the child turns one, until age three (24 months)
+# Benefits use 2023/24 wages while costs are 2026 amounts, so the shares are conservative (higher than with 2026 wages).
+PROG <- list(yhc_month = 4324, yhc_months = 6, ey_month = 8000, ey_months = 24)
+yhc_cost <- PROG$yhc_month * PROG$yhc_months
+ey_cost <- sum(rep(PROG$ey_month * 12, PROG$ey_months / 12) * (1 + COI$discount)^(-(0:(PROG$ey_months / 12 - 1))))
+progs <- tibble::tribble(
+  ~key,    ~Programme,                                                                                  ~cost,     ~years,
+  "yhc_1", "Youth hiring compensation: 50% of the minimum wage for 6 months (State Employment Service)",  yhc_cost,  1,
+  "yhc_3", "Youth hiring compensation: 50% of the minimum wage for 6 months (State Employment Service)",  yhc_cost,  3,
+  "ey_2",  "eYasla: UAH 8,000 a month from the child's first to third birthday (24 months)",             ey_cost,   2,
+  "ey_5",  "eYasla: UAH 8,000 a month from the child's first to third birthday (24 months)",             ey_cost,   5) %>%
+  mutate(need_rev = cost / (pw$revenue * map_dbl(years, annuity)), need_econ = cost / (pw$economy * map_dbl(years, annuity)))
+fmt_need <- function(x) ifelse(x > 1, sprintf("%s: not reachable", percent(x, accuracy = 1)), percent(x, accuracy = 1))
+write_table(progs %>% transmute(Programme, `Cost per woman (UAH)` = format(round(cost), big.mark = ",", trim = TRUE), `Years she stays in work` = years,
+                                `Public revenues only` = fmt_need(need_rev), `Value to the economy` = fmt_need(need_econ)), "coi_programmes")
+
 # ---- c1: headline chart ------------------------------------------------------------------------------------------------
 c1 <- bind_rows(
   tibble(bar = "Economy: value of the additional work", part = c("Net earnings of young women", "Income tax and military levy", "Employer social contribution (ESV)"),
@@ -144,11 +164,11 @@ heads <- tibble(
   key = c("neet_w_h", "neet_m_h", "gap_pp", "pop_w1824", "n_neet_w", "n_gap", "neet_mics", "wage_c", "wage_p25", "wage_med", "formal_c", "formal_lo", "formal_hi",
           "share_seeking", "n_mincer", "r2_mincer", "n_neet_pred", "n_wage", "pw_net", "pw_economy", "pw_revenue", "nat_economy", "nat_revenue", "nat_net",
           "nat_pit_levy", "nat_esv", "nat_vat", paste0("pct_", budget$key), "lifetime_economy", "lifetime_revenue", "share_mothers", "share_poor40", "share_any",
-          "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev"),
+          "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev", "yhc_cost", "ey_cost", paste0("need_rev_", progs$key), paste0("need_econ_", progs$key)),
   value = c(100 * neet_w, 100 * neet_m, 100 * gap, pop, n_neet_w, n_gap, 100 * neet_mics, wage_c, wage_p25, wage_med, 100 * formal_c, 100 * formal_lo, 100 * formal_hi,
             100 * share_seeking, nobs(mz), r2(mz, "r2"), nrow(nw), nrow(ew), pw$net, pw$economy, pw$revenue, central$nat_economy, central$nat_revenue, central$nat_net,
             central$nat_pit_levy, central$nat_esv, central$nat_vat, budget$share, pw$economy * dfac, pw$revenue * dfac,
             100 * c4$share_of_neet[c4$group == "Mothers"], 100 * c4$share_of_neet[c4$group == "Poorest 40%"], 100 * share_any,
             100 * be$`Public revenues only`[be$cost == 25000 & be$years == 1], 100 * be$`Public revenues only`[be$cost == 25000 & be$years == 3],
-            100 * be$`Public revenues only`[be$cost == 100000 & be$years == 3]))
+            100 * be$`Public revenues only`[be$cost == 100000 & be$years == 3], yhc_cost, ey_cost, 100 * progs$need_rev, 100 * progs$need_econ))
 write_table(heads, "coi_headlines"); print(heads, n = Inf); print(sens, width = Inf); print(budget)

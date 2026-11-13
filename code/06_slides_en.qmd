@@ -98,9 +98,13 @@ MH <- function(k, d = 0) { if (is.null(.mh)) return("n/a"); v <- .mh$value[.mh$k
 .mincer <- .rdc("models/hsess_mincer.csv")
 .ch <- .rdc("tables/coi_headlines.csv")
 .gh <- .rdc("tables/groups_headlines.csv")
-.sens <- .rdc("tables/coi_sensitivity.csv"); .bud <- .rdc("tables/coi_budget_table.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
+.sens <- .rdc("tables/coi_sensitivity.csv"); .bud <- .rdc("tables/coi_budget_table.csv"); .prg <- .rdc("tables/coi_programmes.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
 CHK <- function(k) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else format(round(v[1], -3), big.mark = ",", scientific = FALSE) }
+EY_REV <- function() { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == "need_rev_ey_2"]
+  if (!length(v) || is.na(v[1])) return("n/a")
+  if (v[1] > 100) "eYasla cannot pay for itself through public revenues during the payment period, even if every mother is additional"
+  else sprintf("eYasla pays for itself through public revenues during the payment period if about %.0f%% of supported mothers are additional", v[1]) }
 CHM <- function(k, d = 1) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1] / 1e6, format = "f", digits = d) }
 GH <- function(k, d = 0) { if (is.null(.gh)) return("n/a"); v <- .gh$value[.gh$key == k]
@@ -316,6 +320,7 @@ Public revenues forgone each year the gender gap remains, compared with what the
 
 ::: {style="font-size:.62em; line-height:1.35;"}
 - Employers report record shortages: 69% of industrial firms cited a lack of workers in May 2026 (IER monthly enterprise survey), and 78% of employers reported a shortage in 2026 (OLX Robota and European Business Association).
+- At the end of June 2026 there were about 235,000 open vacancies against 93,000 registered unemployed (State Employment Service).
 - Firms are raising wages to recruit and keep staff, and some are hiring women into occupations traditionally held by men.
 - But demand is uneven: only 32% of businesses surveyed by the State Employment Service planned to hire in 2026, and unemployment is still high (about 15% in early 2026, Info Sapiens).
 - So demand exists, but jobs have to be reachable for young mothers: location, hours, childcare and skills matter as much as the number of vacancies.
@@ -343,30 +348,20 @@ FIG("c4_cost_by_group_en.png", "82%")
 MICS 2025/26, women aged 18–24. Groups overlap, and `r CH("share_any")`% of NEET young women belong to at least one of the first five. Mothers are the largest identifiable group, so support that works for young mothers addresses the largest part of the gap.
 :::
 
-## What this means for investment decisions {.smaller}
+## Would existing programmes pay for themselves? {.smaller}
 
-::: {.columns}
-::: {.column width="44%"}
-::: {style="font-size:.66em; line-height:1.4;"}
-Each young woman who moves into work generates about **UAH `r CH("pw_revenue")` a year in public revenues** and UAH `r CH("pw_economy")` for the economy.
-
-The table shows the share of participants in a programme who would need to move into work, and stay in work, for the programme to recover its cost.
-
-For example, a programme costing UAH 25,000 per participant recovers its cost from public revenues alone if `r CH("be_25k_1y_rev")`% of participants work for one year, or `r CH("be_25k_3y_rev")`% for three years.
-
-These thresholds use only the estimates in this analysis; whether a given service reaches them is for programme data to show.
+::: {style="font-size:.64em; line-height:1.4; margin-bottom:.5em;"}
+Each young woman who moves into work generates about **UAH `r CH("pw_revenue")` a year in public revenues** and UAH `r CH("pw_economy")` for the economy. Two existing programmes pay only while a young woman is in work, so whether they pay for themselves depends on one question: **how many of the women they support would not have been working without them?** The table shows the minimum share needed, using each programme's official 2026 amounts.
 :::
-:::
-::: {.column width="56%"}
+
 ::: {.kv-table}
-```{r betab}
-if (!is.null(.bet)) kable(.bet %>% mutate(`Cost per participant (UAH)` = format(`Cost per participant (UAH)`, big.mark = ",")), align = "rrrr")
+```{r prgtab}
+if (!is.null(.prg)) kable(.prg %>% mutate(`Cost per woman (UAH)` = format(`Cost per woman (UAH)`, big.mark = ",")), align = "lrrrr")
 ```
 :::
-::: {style="font-size:0.55em; color:#7a7a7a;"}
-Additional employment attributable to the programme, at the central wage and formality, discounted at 5%. Costs are the present value of total programme cost per participant.
-:::
-:::
+
+::: {style="font-size:0.56em; color:#7a7a7a;"}
+Reading the table: the youth hiring compensation pays for itself through public revenues if about `r CH("need_rev_yhc_1")`% of subsidised hires would not have happened without it and last a year (`r CH("need_rev_yhc_3")`% if they last three years). `r EY_REV()`; it pays for itself in value to the economy if about `r CH("need_econ_ey_2")`% of supported mothers would not otherwise have worked, or `r CH("need_econ_ey_5")`% if they stay in work for five years, before counting any benefits for children. Neither programme has been evaluated, so these shares are tests to apply, not results; eYasla started in January 2026 and could be evaluated by comparing employment of eligible mothers before and after it. Benefits use 2023/24 wages and costs are 2026 amounts, so the shares are conservative. Sources: State Employment Service and Cabinet of Ministers (programme amounts); this analysis (benefits).
 :::
 
 # 5 · Conclusions and recommendations {.section-divider background-color="#00377C"}
@@ -385,7 +380,7 @@ Additional employment attributable to the programme, at the central wage and for
 
 **5. The gender gap is costly.** Closing it would bring about `r CHK("n_gap")` more young women into work, adding UAH `r CH("nat_economy", 1)` billion a year to the economy and UAH `r CH("nat_revenue", 1)` billion to public revenues: about `r CH("pct_preschool", 0)`% of what the state spends on preschool education, or `r CH("pct_lowincome", 0)`% of its support to low-income families.
 
-**6. Support pays back through the budget.** Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues.
+**6. Support can pay back through the budget.** Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues: the youth hiring compensation pays for itself if about `r CH("need_rev_yhc_1")`% of subsidised hires are additional, while eYasla needs to be judged on its value to the economy and to children.
 :::
 :::
 
@@ -394,7 +389,7 @@ Additional employment attributable to the programme, at the central wage and for
 ::: {.kv-table}
 | Finding | Recommendation, building on existing mechanisms | Who | What the model indicates |
 |---|---|---|---|
-| At 18–24, young women and men are employed at the same rate; the NEET gap (`r HS("st_neet_w")`% against `r HS("st_neet_m")`%) mirrors lower education participation (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%) | Support young women to stay in education and training, and bridge the exit with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy; State Employment Service; employers; education and VET institutions; UNICEF (GenU) | Each young woman who moves into work returns about UAH `r CH("pw_revenue")` a year in public revenues |
+| At 18–24, young women and men are employed at the same rate; the NEET gap (`r HS("st_neet_w")`% against `r HS("st_neet_m")`%) mirrors lower education participation (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%) | Support young women to stay in education and training, and bridge the exit with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy; State Employment Service; employers; education and VET institutions; UNICEF (GenU) | The youth hiring compensation pays for itself through public revenues if about `r CH("need_rev_yhc_1")`% of subsidised hires are additional and last a year |
 | NEET is lower with tertiary education (`r GH("tert_neet_w")`% against `r GH("vet_neet_w")`% vocational and `r GH("sec_neet_w")`% secondary, women 18–29); the vocational gap against secondary disappears once motherhood and area are accounted for | Do not treat vocational education as the cause: focus on the transition after it, especially for young mothers and rural women, and on guidance towards fields with employer demand | Ministry of Education and Science; VET institutions; State Employment Service; employers | Needs vacancy, pay and entry-requirement data by occupation (SES dashboard, SSSU) |
 | Women earn less than men at every level of education (median wage gap at 18–24: `r HS("gap_1824")`%), although informal work is less common among women (`r HS("inf_w")`% against `r HS("inf_m")`%) | Pair first-job pathways with formal contracts and decent-work standards; monitor the pay gap by occupation | Employers; State Labour Service; State Employment Service | Formality raises the return: `r CH("formal_c")`% of jobs held by young women are formal today |
 :::
@@ -404,7 +399,7 @@ Additional employment attributable to the programme, at the central wage and for
 ::: {.kv-table}
 | Finding | Recommendation, building on existing mechanisms | Who | What the model indicates |
 |---|---|---|---|
-| Motherhood is the main factor: NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`%, and mothers are `r CH("share_mothers")`% of NEET young women | Build on eYasla (UAH 8,000 a month for parents who return to full-time work): combine it with flexible working arrangements and family-friendly workplace policies, and give young mothers priority in employment services | Ministry of Social Policy, Family and National Unity; local authorities; employers; UNICEF | Mothers are `r CH("share_mothers")`% of NEET young women, so closing the gap depends mostly on them; the cost of support should be judged against the UAH `r CH("pw_revenue")` a year each one returns in revenues |
+| Motherhood is the main factor: NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`%, and mothers are `r CH("share_mothers")`% of NEET young women | Build on eYasla (UAH 8,000 a month for parents who return to full-time work): combine it with flexible working arrangements and family-friendly workplace policies, and give young mothers priority in employment services | Ministry of Social Policy, Family and National Unity; local authorities; employers; UNICEF | Mothers are `r CH("share_mothers")`% of NEET young women. eYasla pays for itself in value to the economy if about `r CH("need_econ_ey_2")`% of supported mothers would not otherwise have worked; evaluating it would show whether it does |
 | Poverty compounds it: NEET is `r GH("g1_poor20_yes")`% in the poorest fifth against `r GH("g1_poor20_no")`%, and `r GH("g4_mics_poor_mother")`% to `r GH("g4_hsess_poor_mother")`% among poor young mothers; it is also higher in single-headed households (`r GH("g2_single_yes_w")`% against `r GH("g2_single_no_w")`% in HSESS) | Link social assistance for low-income and single-headed households with employment services (referrals, case management), so that benefits and job support reach the same young women | Ministry of Social Policy; State Employment Service; hromadas | Existing benefit registries can identify most poor young mothers |
 | Displacement is not associated with higher NEET (`r GH("g1_idp_yes")`% against `r GH("g1_idp_no")`%); disability groups are too small to estimate | Keep inclusive outreach through existing services for displaced young women and young women with disabilities, without a separate programme stream | Hromadas; IDP councils; UNICEF and partners | Not estimated; track outcomes as programmes report |
 :::
@@ -425,6 +420,7 @@ Additional employment attributable to the programme, at the central wage and for
 | Public revenues | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings (consumption share assumed) | Statutory rates |
 | Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys report shortages |
 | Budget comparators | 2024 values (the year the wages were collected): GDP, public revenues, health, Programme of Medical Guarantees, education, preschool education, support to low-income families | See the next slide for values and sources |
+| Programme costs (2026) | Youth hiring compensation: 50% of the minimum wage, UAH 4,324 a month, for 6 months. eYasla: UAH 8,000 a month from the child's first to third birthday | State Employment Service; Cabinet of Ministers |
 | Not included | Effects on children, employers and the wider economy; lost experience; women's work-related expenses | |
 :::
 
