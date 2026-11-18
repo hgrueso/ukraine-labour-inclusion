@@ -14,7 +14,7 @@
 #                        year as the HSESS wages, collected Dec 2023 to Feb 2024)
 # Output: output/tables/coi_*.csv, output/models/coi_mincer_*.csv, output/figures/c1, c4
 source(here::here("code", "00_config.R"))
-suppressPackageStartupMessages({ library(purrr); library(fixest) })
+suppressPackageStartupMessages({ library(purrr); library(fixest); library(survey) })
 
 COI <- list(
   pop_w1824 = NA_real_,   # override with an official estimate of women aged 18-24; NA = HSESS weighted count
@@ -158,17 +158,60 @@ save_fig(ggplot(c4, aes(reorder(group, share_of_neet), share_of_neet)) + geom_co
            theme_ukr() + theme(panel.grid.major.y = element_blank(), plot.caption = element_text(hjust = 0), plot.caption.position = "plot",
                                plot.title.position = "plot", plot.margin = margin(6, 28, 6, 6)), "c4_cost_by_group_en", width = 10, height = 4.8)
 
+# ---- 9. How much of the gender gap is about motherhood (HSESS 18-24) ------------------------------------------------------
+# Arithmetic, not a causal estimate: the NEET rate young women would have if young mothers were NEET at the
+# same rate as young women without children, compared with young men.
+kid <- hs %>% filter(age >= 18, age <= 24, !is.na(neet), !is.na(own_child), !is.na(female))
+dk <- svydesign(ids = ~key, weights = ~w, data = kid)
+grp_rate <- function(sub, lab) { r <- svymean(~neet, sub); tibble(group = lab, estimate = coef(r)[1], se = SE(r)[1], n = nrow(sub$variables)) }
+mg <- bind_rows(
+  grp_rate(subset(dk, female == 1), "Young women, all"),
+  grp_rate(subset(dk, female == 1 & own_child == 0), "Young women without children"),
+  grp_rate(subset(dk, female == 1 & own_child == 1), "Young mothers"),
+  grp_rate(subset(dk, female == 0), "Young men, all")) %>%
+  mutate(lo = pmax(0, estimate - 1.96 * se), hi = estimate + 1.96 * se,
+         group = factor(group, levels = c("Young mothers", "Young women, all", "Young women without children", "Young men, all")))
+write_table(mg, "coi_motherhood_gap")
+r_all <- mg$estimate[mg$group == "Young women, all"]; r_nc <- mg$estimate[mg$group == "Young women without children"]
+r_mo <- mg$estimate[mg$group == "Young mothers"]; r_men <- mg$estimate[mg$group == "Young men, all"]
+gap_k <- r_all - r_men; gap_explained <- (r_all - r_nc) / gap_k
+save_fig(ggplot(mg, aes(group, estimate, fill = group)) + geom_col(width = .62) +
+           geom_errorbar(aes(ymin = lo, ymax = hi), width = .14, colour = GREY_DARK, linewidth = .4) +
+           geom_text(aes(y = hi, label = sprintf("%s\n(n = %d)", percent(estimate, accuracy = 1), n)), vjust = -0.3, size = 3.1, colour = GREY_DARK, lineheight = .9) +
+           geom_hline(yintercept = r_men, linetype = 2, colour = ACCENT_BOY) +
+           scale_fill_manual(values = c("Young mothers" = "#8A0049", "Young women, all" = ACCENT_GIRL, "Young women without children" = "#F39AC6", "Young men, all" = ACCENT_BOY), guide = "none") +
+           scale_x_discrete(labels = label_wrap(14)) + scale_y_continuous(labels = percent_format(1), expand = expansion(mult = c(0, .25))) +
+           labs(subtitle = "NEET rate at ages 18-24; dashed line: young men", x = NULL, y = NULL,
+                caption = "UNICEF HSESS 2023/24, weighted, 95% CIs clustered by household. Children: own child under 18 living in the household.") +
+           theme_ukr(), "c5_motherhood_gap_en", width = 9.5, height = 5)
+
+# ---- 10. Where the NEET young women are: three investment areas ---------------------------------------------------------------
+# Shares from MICS 2025/26 (women 18-24, consistent with the groups slide), applied to the HSESS count of NEET young women.
+nmm <- wm %>% filter(neet == 1)
+sh_mother <- wmean(nmm$mother %in% 1, nmm$wmweight)
+sh_nochild <- wmean(nmm$mother %in% 0, nmm$wmweight)
+sh_poor_single <- wmean(nmm$bottom40 %in% 1 | nmm$single_head %in% 1, nmm$wmweight)
+sh_poor_mother <- wmean(nmm$bottom40 %in% 1 & nmm$mother %in% 1, nmm$wmweight)
+care_reasons <- c("Maternity or childcare leave", "Housework and caring for children")
+nhs <- yw %>% filter(neet == 1)
+sh_care_reason <- wmean(!(nhs$seeking %in% 1) & nhs$reason_inactive %in% care_reasons, nhs$w)
+areas <- tibble(key = c("mothers", "nochild", "poor_single", "poor_mother"),
+                share = c(sh_mother, sh_nochild, sh_poor_single, sh_poor_mother)) %>% mutate(women = share * n_neet_w)
+write_table(areas, "coi_investment_areas")
+
 # ---- headlines --------------------------------------------------------------------------------------------------------------
 ages <- 21:COI$working_life_end; dfac <- sum((1 + COI$discount)^(-(ages - 21)))
 heads <- tibble(
   key = c("neet_w_h", "neet_m_h", "gap_pp", "pop_w1824", "n_neet_w", "n_gap", "neet_mics", "wage_c", "wage_p25", "wage_med", "formal_c", "formal_lo", "formal_hi",
           "share_seeking", "n_mincer", "r2_mincer", "n_neet_pred", "n_wage", "pw_net", "pw_economy", "pw_revenue", "nat_economy", "nat_revenue", "nat_net",
           "nat_pit_levy", "nat_esv", "nat_vat", paste0("pct_", budget$key), "lifetime_economy", "lifetime_revenue", "share_mothers", "share_poor40", "share_any",
-          "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev", "yhc_cost", "ey_cost", paste0("need_rev_", progs$key), paste0("need_econ_", progs$key)),
+          "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev", "yhc_cost", "ey_cost", paste0("need_rev_", progs$key), paste0("need_econ_", progs$key),
+          "mg_all", "mg_nochild", "mg_mothers", "mg_men", "gap_explained", "n_gap_mother", paste0("area_share_", areas$key), paste0("area_n_", areas$key), "share_care_reason"),
   value = c(100 * neet_w, 100 * neet_m, 100 * gap, pop, n_neet_w, n_gap, 100 * neet_mics, wage_c, wage_p25, wage_med, 100 * formal_c, 100 * formal_lo, 100 * formal_hi,
             100 * share_seeking, nobs(mz), r2(mz, "r2"), nrow(nw), nrow(ew), pw$net, pw$economy, pw$revenue, central$nat_economy, central$nat_revenue, central$nat_net,
             central$nat_pit_levy, central$nat_esv, central$nat_vat, budget$share, pw$economy * dfac, pw$revenue * dfac,
             100 * c4$share_of_neet[c4$group == "Mothers"], 100 * c4$share_of_neet[c4$group == "Poorest 40%"], 100 * share_any,
             100 * be$`Public revenues only`[be$cost == 25000 & be$years == 1], 100 * be$`Public revenues only`[be$cost == 25000 & be$years == 3],
-            100 * be$`Public revenues only`[be$cost == 100000 & be$years == 3], yhc_cost, ey_cost, 100 * progs$need_rev, 100 * progs$need_econ))
+            100 * be$`Public revenues only`[be$cost == 100000 & be$years == 3], yhc_cost, ey_cost, 100 * progs$need_rev, 100 * progs$need_econ,
+            100 * r_all, 100 * r_nc, 100 * r_mo, 100 * r_men, 100 * gap_explained, n_gap * min(1, gap_explained), 100 * areas$share, areas$women, 100 * sh_care_reason))
 write_table(heads, "coi_headlines"); print(heads, n = Inf); print(sens, width = Inf); print(budget)

@@ -105,6 +105,9 @@ EY_REV <- function() { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key =
   if (!length(v) || is.na(v[1])) return("n/a")
   if (v[1] > 100) "eYasla cannot pay for itself through public revenues during the payment period, even if every mother is additional"
   else sprintf("eYasla pays for itself through public revenues during the payment period if about %.0f%% of supported mothers are additional", v[1]) }
+GAPX <- function(what = "the gender gap") { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == "gap_explained"]
+  if (!length(v) || is.na(v[1])) return("n/a")
+  if (v[1] > 100) paste("more than all of", what) else if (v[1] >= 90) paste("almost all of", what) else if (v[1] < 5) paste("little of", what) else sprintf("about %.0f%% of %s", v[1], what) }
 CHM <- function(k, d = 1) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1] / 1e6, format = "f", digits = d) }
 GH <- function(k, d = 0) { if (is.null(.gh)) return("n/a"); v <- .gh$value[.gh$key == k]
@@ -348,6 +351,35 @@ FIG("c4_cost_by_group_en.png", "82%")
 MICS 2025/26, women aged 18–24. Groups overlap, and `r CH("share_any")`% of NEET young women belong to at least one of the first five. Mothers are the largest identifiable group, so support that works for young mothers addresses the largest part of the gap.
 :::
 
+## Motherhood accounts for `r GAPX()` {.smaller}
+```{r c5, results='asis'}
+FIG("c5_motherhood_gap_en.png", "70%")
+```
+
+::: {style="font-size:0.58em; color:#7a7a7a;"}
+HSESS 2023/24, ages 18–24. NEET is `r CH("mg_mothers", 0)`% among young mothers and `r CH("mg_nochild", 0)`% among young women without children, against `r CH("mg_men", 0)`% among young men. If young mothers were NEET at the same rate as other young women, the NEET rate of young women would fall from `r CH("mg_all", 0)`% to `r CH("mg_nochild", 0)`%, closing `r GAPX("the gap with young men")`. This is arithmetic on the survey, not a causal estimate`r if (!is.null(.ch) && isTRUE(.ch$value[.ch$key == "gap_explained"][1] >= 50)) ", but it shows that support for young mothers is where most of the gap, and most of its cost, can be closed" else ""`.
+:::
+
+## Two existing programmes: what they offer {.smaller}
+
+::: {.kv-small}
+| | **Youth hiring compensation** | **eYasla** |
+|---|---|---|
+| **GenU priority** | Learning-to-Earning (First Experience) | Inclusive Access and Navigation (care and employment) |
+| **Finding it responds to** | The gap opens at the exit from education into a first job | Motherhood accounts for most of the gap; childcare barriers for children under 3 |
+| **Who is eligible** | Employers who hire registered unemployed people under 25 with up to 12 months of insurance record, or under 35 into their first job | Mothers or other legal representatives who return to full-time work after the child turns one |
+| **Who receives the money** | The employer | The parent |
+| **Amount (2026)** | 50% of the minimum wage: UAH 4,324 a month | UAH 8,000 a month per child (UAH 12,000 for a child with a disability) |
+| **Duration** | Paid every second month, for 6 months in total | From the child's first to third birthday (up to 24 months) |
+| **Condition** | The young person stays employed | The parent works full time |
+| **Reach** | About 6,300 young people since 2022, 1,300 of them in 2026 (State Employment Service) | Started in January 2026; no public take-up figures found |
+| **What it does not include** | Not targeted at women or mothers; no training, mentoring or childcare; reaches only registered unemployed, while `r CH("share_seeking", 0)`% of NEET young women are looking for work | No childcare places or services; does not support part-time or flexible work; starts at age one (a separate UAH 7,000 allowance applies before) |
+:::
+
+::: {style="font-size:0.55em; color:#7a7a7a;"}
+Sources: State Employment Service and Cabinet of Ministers of Ukraine (2026 amounts and eligibility); Law No. 4681-IX of 5 November 2025 (eYasla). These are the two programmes used to illustrate the break-even approach on the next slide: both are in place today, both pay only while a young woman is in work, and each responds to one of the main findings. The same approach can be applied to other programmes once their costs are known.
+:::
+
 ## Would existing programmes pay for themselves? {.smaller}
 
 ::: {style="font-size:.64em; line-height:1.4; margin-bottom:.5em;"}
@@ -366,6 +398,20 @@ Reading the table: the youth hiring compensation pays for itself through public 
 
 # 5 · Conclusions and recommendations {.section-divider background-color="#00377C"}
 
+## Where to invest: three areas {.smaller}
+
+::: {.kv-table}
+| | Investment area | Who it reaches | How many NEET young women | What the data show | Existing mechanisms to build on |
+|---|---|---|---|---|---|
+| **1** | **Care support for young mothers**: childcare places for children under 3, flexible and family-friendly work | Young mothers aged 18–24 | `r CH("area_share_mothers", 0)`%, about `r CHK("area_n_mothers")` | Motherhood accounts for `r GAPX()`; NEET is `r CH("mg_mothers", 0)`% among young mothers | eYasla; preschool expansion; employers' family-friendly policies (Inclusive Access and Navigation) |
+| **2** | **First work experience** at the exit from education: internships, apprenticeships, first-job support | Young women without children leaving education | `r CH("area_share_nochild", 0)`%, about `r CHK("area_n_nochild")` | Women and men work at the same rate; the gap opens in the transition; only `r CH("share_seeking", 0)`% of NEET young women are looking for work | Youth hiring compensation; State Employment Service; employer partnerships (Learning-to-Earning) |
+| **3** | **Linking social assistance and employment** for the poorest and single-headed households | Young women in the poorest 40% or in single-headed households | `r CH("area_share_poor_single", 0)`%, about `r CHK("area_n_poor_single")` | Poverty compounds motherhood: `r CH("area_share_poor_mother", 0)`% of NEET young women are poor mothers | Social assistance registries and case management linked to the State Employment Service |
+:::
+
+::: {style="font-size:0.56em; color:#7a7a7a;"}
+Areas are ranked by how much of the gender gap they can address. Areas 1 and 2 split NEET young women into mothers and women without children; area 3 cuts across both. Shares of NEET young women aged 18–24 from MICS 2025/26, applied to the number of NEET young women in the areas covered by HSESS 2023/24. Choosing specific programmes within each area needs their components, costs and coverage, to be agreed with the country office.
+:::
+
 ## Key messages {.smaller .bigtitle}
 
 ::: {.vmid-s}
@@ -374,7 +420,7 @@ Reading the table: the youth hiring compensation pays for itself through public 
 
 **2. The gap is about education, not employment.** Young women and men work at the same rate (`r HS("st_emp_w")`% and `r HS("st_emp_m")`%); fewer women stay in education (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%).
 
-**3. Motherhood is the main factor.** NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`% among other young women, and the difference remains after adjusting for other characteristics.
+**3. Motherhood is the main factor.** NEET is `r GH("g1_mother_yes")`% among young mothers against `r GH("g1_mother_no")`% among other young women, the difference remains after adjusting for other characteristics, and motherhood accounts for `r GAPX()`.
 
 **4. Poverty compounds it.** Among poor young mothers NEET reaches `r GH("g4_mics_poor_mother")`% to `r GH("g4_hsess_poor_mother")`%; displacement is not associated with higher NEET.
 
@@ -390,7 +436,7 @@ Reading the table: the youth hiring compensation pays for itself through public 
 | Finding | Recommendation, building on existing mechanisms | Who | What the model indicates |
 |---|---|---|---|
 | At 18–24, young women and men are employed at the same rate; the NEET gap (`r HS("st_neet_w")`% against `r HS("st_neet_m")`%) mirrors lower education participation (`r HS("st_educ_w")`% against `r HS("st_educ_m")`%) | Support young women to stay in education and training, and bridge the exit with first work experience (internships, apprenticeships, first-job support) through the State Employment Service and employers | Ministry of Economy; State Employment Service; employers; education and VET institutions; UNICEF (GenU) | The youth hiring compensation pays for itself through public revenues if about `r CH("need_rev_yhc_1")`% of subsidised hires are additional and last a year |
-| NEET is lower with tertiary education (`r GH("tert_neet_w")`% against `r GH("vet_neet_w")`% vocational and `r GH("sec_neet_w")`% secondary, women 18–29); the vocational gap against secondary disappears once motherhood and area are accounted for | Do not treat vocational education as the cause: focus on the transition after it, especially for young mothers and rural women, and on guidance towards fields with employer demand | Ministry of Education and Science; VET institutions; State Employment Service; employers | Needs vacancy, pay and entry-requirement data by occupation (SES dashboard, SSSU) |
+| NEET is lower with tertiary education (`r GH("tert_neet_w")`% against `r GH("vet_neet_w")`% vocational and `r GH("sec_neet_w")`% secondary, women 18–29); there is no significant NEET gap between vocational and secondary education | Do not treat vocational education as the cause: focus on the transition after it, especially for young mothers and rural women, and on guidance towards fields with employer demand | Ministry of Education and Science; VET institutions; State Employment Service; employers | Needs vacancy, pay and entry-requirement data by occupation (SES dashboard, SSSU) |
 | Women earn less than men at every level of education (median wage gap at 18–24: `r HS("gap_1824")`%), although informal work is less common among women (`r HS("inf_w")`% against `r HS("inf_m")`%) | Pair first-job pathways with formal contracts and decent-work standards; monitor the pay gap by occupation | Employers; State Labour Service; State Employment Service | Formality raises the return: `r CH("formal_c")`% of jobs held by young women are formal today |
 :::
 
