@@ -203,12 +203,12 @@ write_table(areas, "coi_investment_areas")
 ages <- 21:COI$working_life_end; dfac <- sum((1 + COI$discount)^(-(ages - 21)))
 heads <- tibble(
   key = c("neet_w_h", "neet_m_h", "gap_pp", "pop_w1824", "n_neet_w", "n_gap", "neet_mics", "wage_c", "wage_p25", "wage_med", "formal_c", "formal_lo", "formal_hi",
-          "share_seeking", "n_mincer", "r2_mincer", "n_neet_pred", "n_wage", "pw_net", "pw_economy", "pw_revenue", "nat_economy", "nat_revenue", "nat_net",
+          "share_seeking", "n_mincer", "r2_mincer", "n_neet_pred", "n_wage", "pw_net", "pw_economy", "pw_revenue", "pw_gross", "pw_pit_levy", "pw_esv", "pw_vat", "nat_economy", "nat_revenue", "nat_net",
           "nat_pit_levy", "nat_esv", "nat_vat", paste0("pct_", budget$key), "lifetime_economy", "lifetime_revenue", "share_mothers", "share_poor40", "share_any",
           "be_25k_1y_rev", "be_25k_3y_rev", "be_100k_3y_rev", "yhc_cost", "ey_cost", paste0("need_rev_", progs$key), paste0("need_econ_", progs$key),
           "mg_all", "mg_nochild", "mg_mothers", "mg_men", "gap_explained", "n_gap_mother", paste0("area_share_", areas$key), paste0("area_n_", areas$key), "share_care_reason"),
   value = c(100 * neet_w, 100 * neet_m, 100 * gap, pop, n_neet_w, n_gap, 100 * neet_mics, wage_c, wage_p25, wage_med, 100 * formal_c, 100 * formal_lo, 100 * formal_hi,
-            100 * share_seeking, nobs(mz), r2(mz, "r2"), nrow(nw), nrow(ew), pw$net, pw$economy, pw$revenue, central$nat_economy, central$nat_revenue, central$nat_net,
+            100 * share_seeking, nobs(mz), r2(mz, "r2"), nrow(nw), nrow(ew), pw$net, pw$economy, pw$revenue, pw$net / (1 - COI$pit - COI$levy), pw$pit_levy, pw$esv, pw$vat, central$nat_economy, central$nat_revenue, central$nat_net,
             central$nat_pit_levy, central$nat_esv, central$nat_vat, budget$share, pw$economy * dfac, pw$revenue * dfac,
             100 * c4$share_of_neet[c4$group == "Mothers"], 100 * c4$share_of_neet[c4$group == "Poorest 40%"], 100 * share_any,
             100 * be$`Public revenues only`[be$cost == 25000 & be$years == 1], 100 * be$`Public revenues only`[be$cost == 25000 & be$years == 3],
