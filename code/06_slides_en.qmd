@@ -2,7 +2,7 @@
 title: "Young Women's Labour-Market Inclusion"
 subtitle: "Findings and cost of inaction, Ukraine"
 author:
-  - name: "Hernando Grueso, PhD"
+  - name: "Hernando Grueso-Hurtado, PhD"
     affiliations: "UNICEF"
 date: "2026-11-19"
 date-format: "MMMM YYYY"
@@ -17,7 +17,7 @@ format:
     slide-number: c/t
     transition: none
     progress: false
-    footer: "<span class='fl fl-l'>Hernando Grueso, UNICEF</span><span class='fl fl-c'>Young Women’s Labour-Market Inclusion · Ukraine</span><span class='fl fl-r'>November 2026</span>"
+    footer: "<span class='fl fl-l'>Hernando Grueso-Hurtado, UNICEF</span><span class='fl fl-c'>Young Women’s Labour-Market Inclusion · Ukraine</span><span class='fl fl-r'>November 2026</span>"
     embed-resources: true
     fig-align: center
     include-in-header:

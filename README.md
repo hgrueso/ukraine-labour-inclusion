@@ -126,7 +126,7 @@ MICS 2025/26 data are available after registration at mics.unicef.org; their ter
 
 ## Contact
 
-**Hernando Grueso, UNICEF**
+**Hernando Grueso-Hurtado, UNICEF**
 `hgrueso@unicef.org`
 
 ## Cost of the gender gap: assumptions
