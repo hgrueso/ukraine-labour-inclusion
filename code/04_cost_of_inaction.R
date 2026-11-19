@@ -49,7 +49,7 @@ ew <- hs %>% filter(female == 1, !is.na(wage), age >= 18, age <= 24)
 wage_p25 <- wq(ew$wage, ew$w, .25); wage_med <- wq(ew$wage, ew$w, .5)
 write_table(as.data.frame(coeftable(mz)) %>% tibble::rownames_to_column("term") %>% filter(!grepl("oblast", term)) %>%
               transmute(Term = recode(sub("^educ", "Education: ", term), `(Intercept)` = "Constant", age = "Age", age2 = "Age squared", rural = "Rural"),
-                        Coefficient = round(Estimate, 3), SE = round(`Std. Error`, 3), p = ifelse(`Pr(>|t|)` < .001, "<0.001", formatC(`Pr(>|t|)`, format = "f", digits = 3))),
+                        Coefficient = ifelse(abs(Estimate) < .01, sprintf("%.5f", Estimate), sprintf("%.3f", Estimate)), SE = ifelse(abs(`Std. Error`) < .01, sprintf("%.5f", `Std. Error`), sprintf("%.3f", `Std. Error`)), p = ifelse(`Pr(>|t|)` < .001, "<0.001", formatC(`Pr(>|t|)`, format = "f", digits = 3))),
             "coi_mincer_women", sub = "models")
 
 # ---- 3. Formality and other shares used in the sensitivity analysis ---------------------------------------------
@@ -83,7 +83,7 @@ budget <- BUDGET %>% mutate(coi_bn = ifelse(measure == "Economy", central$nat_ec
 write_table(budget, "coi_budget")
 write_table(budget %>% transmute(`Compared with (2024)` = comparator, `UAH bn` = format(value_bn, big.mark = ",", trim = TRUE),
                                  `Measured against` = ifelse(measure == "Economy", "Economy", "Revenues"),
-                                 `Share` = sprintf("%.1f%%", share), Source = source), "coi_budget_table")
+                                 `Share` = ifelse(share < 1, sprintf("%.2f%%", share), sprintf("%.1f%%", share)), Source = source), "coi_budget_table")
 
 # ---- 6. Sensitivity: one assumption at a time ---------------------------------------------------------------------------
 sens_row <- function(lab, value_lab, wage, formal, n) { p <- per_woman(wage, formal); tibble(Assumption = lab, Value = value_lab,

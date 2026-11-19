@@ -1,0 +1,139 @@
+/*-- scss:defaults --*/
+// Beamer "Madrid" look, as in the Nepal deck: Computer Modern Sans, blue frame-title bar,
+// three-part blue footline, boxed title and section pages, booktabs-style tables.
+$unicef-blue: #00377C;
+$unicef-light: #1CABE2;
+$font-family-sans-serif: "CMU Sans Serif", "Latin Modern Sans", "Helvetica Neue", Arial, sans-serif;
+$body-bg: #ffffff;
+$body-color: #000000;
+$link-color: #1f5fb0;
+$selection-bg: $unicef-light;
+$presentation-heading-font: $font-family-sans-serif;
+$presentation-heading-color: $unicef-blue;
+$presentation-heading-font-weight: 400;
+$presentation-heading-text-transform: none;
+$presentation-heading-letter-spacing: normal;
+$presentation-h1-font-size: 1.6em;
+
+/*-- scss:rules --*/
+/* Computer Modern Sans is loaded in the slide header (fonts/, SIL Open Font License) */
+
+$pad: 46px;
+
+/* Frame title: full-width blue bar */
+.reveal .slides section.slide.level2 {
+  padding: 0 $pad 30px $pad !important;
+  box-sizing: border-box;
+}
+.reveal .slides section.slide.level2 > h2 {
+  background: $unicef-blue;
+  color: #fff !important;
+  font-weight: 400 !important;
+  font-size: 0.98em !important;
+  line-height: 1.22 !important;
+  margin: 0 (-$pad) 0.75em (-$pad) !important;
+  padding: 0.42em $pad 0.42em $pad !important;
+  border: none;
+}
+
+/* Title page: rounded blue box with a soft shadow */
+.reveal #title-slide { text-align: center; }
+.reveal #title-slide .title {
+  background: $unicef-blue;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 1.32em;
+  line-height: 1.25;
+  border-radius: 16px;
+  box-shadow: 4px 6px 10px rgba(0, 0, 0, 0.35);
+  padding: 0.75em 1.2em;
+  margin: 0 0.4em 0.8em 0.4em;
+}
+.reveal #title-slide .subtitle { color: #000; font-size: 0.82em; margin-bottom: 1.1em; }
+.reveal #title-slide .quarto-title-author-name { font-weight: 700; font-size: 0.8em; }
+.reveal #title-slide .quarto-title-affiliation { font-size: 0.68em; margin-top: 0.3em; color: #000; }
+.reveal #title-slide .date { font-size: 0.62em; color: #000; margin-top: 0.9em; }
+
+/* Section pages: "Section n" above a rounded blue box */
+.reveal .slides section.section-divider { text-align: center; }
+.reveal .slides section.section-divider::before {
+  content: attr(data-label);
+  display: block;
+  font-size: 0.62em;
+  color: #000;
+  margin-bottom: 0.45em;
+}
+.reveal .slides section.section-divider h1 {
+  background: $unicef-blue;
+  color: #fff !important;
+  font-weight: 400;
+  font-size: 0.78em;
+  line-height: 1.3;
+  border-radius: 12px;
+  box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.3);
+  padding: 0.9em 1em;
+  margin: 0 14px;
+}
+
+/* Footline: three blue fields (author, title, date and page) */
+.reveal .footer {
+  position: absolute !important;
+  left: 0; right: 0; bottom: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: $unicef-blue;
+  color: #fff !important;
+  font-size: 13px !important;
+  line-height: 22px;
+  height: 22px;
+  text-align: center;
+  z-index: 3;
+}
+.reveal .footer p { margin: 0 !important; display: contents; }
+.reveal .footer .fl { display: block; color: #fff; white-space: nowrap; overflow: hidden; }
+.reveal .footer .fl-r { text-align: center; padding-right: 70px; }
+.reveal .slide-number, .reveal .slide-number-pdf {
+  background: transparent !important;
+  color: #fff !important;
+  font-family: $font-family-sans-serif;
+  font-size: 13px !important;
+  line-height: 22px;
+  height: 22px;
+  bottom: 0 !important;
+  right: 18px !important;
+  top: auto !important;
+  padding: 0 !important;
+  z-index: 4;
+}
+.reveal .slide-number a, .reveal .slide-number-pdf a { color: #fff !important; }
+
+/* Lists: blue structure colour, as in beamer */
+.reveal ul li::marker, .reveal ol li::marker { color: $unicef-blue; }
+
+/* Tables: booktabs rules, black text, light separators for long text cells */
+.reveal table { border-collapse: collapse; }
+.reveal table thead tr { border-top: 2px solid #000; }
+.reveal table th {
+  color: #000 !important;
+  background: transparent !important;
+  font-weight: 600;
+  border-bottom: 1px solid #000 !important;
+}
+.reveal table td { border-bottom: 0.5px solid #dedede !important; }
+.reveal table tbody tr:last-child td { border-bottom: 2px solid #000 !important; }
+
+/* Figures: keep them inside the frame, below the title bar */
+.reveal .slides section.slide.level2 img {
+  max-height: 490px;
+  width: auto !important;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* PDF export: one footline per printed page */
+.reveal .pdf-page { position: relative; }
+.reveal .pdf-page > .footer { position: absolute !important; bottom: 0 !important; }

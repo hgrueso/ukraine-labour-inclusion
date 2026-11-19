@@ -34,7 +34,9 @@ analysis/
 │   ├── 03_regressions.R             # linear probability models, adjusted comparisons, wage equation
 │   ├── 04_cost_of_inaction.R        # cost of the gender gap, budget perspective, sensitivity, break-even
 │   ├── archive/                     # earlier illustrative intervention comparison (not run)
-│   └── 06_slides_en.qmd             # revealjs deck (exported to PDF)
+│   ├── 06_slides_en.qmd             # revealjs deck (exported to PDF)
+│   ├── beamer_theme.scss            # deck layout: beamer-style frame titles, footline, section pages, booktabs tables
+│   └── fonts/                       # Computer Modern Sans web fonts (SIL Open Font License, see fonts/OFL.txt)
 │
 ├── data/                            # input data (NOT committed)
 │   ├── mics7/                       # MICS 2025/26 SPSS files (hh, hl, wm, bh, ch, fs)
@@ -103,7 +105,7 @@ install.packages(c(
 ))
 ```
 
-[Quarto](https://quarto.org) is required to render the deck; Google Chrome is used to export it to PDF.
+[Quarto](https://quarto.org) is required to render the deck; Google Chrome is used to export it to PDF. The deck follows the layout of the Nepal cost-of-inaction deck (beamer Madrid style, 16:9): the theme is in `code/beamer_theme.scss` and the fonts are embedded in the HTML, so nothing needs to be installed.
 
 ### Run the full pipeline
 

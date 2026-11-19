@@ -1,22 +1,35 @@
 ---
 title: "Young Women's Labour-Market Inclusion"
 subtitle: "Findings and cost of inaction, Ukraine"
-author: "Hernando Grueso, PhD · UNICEF"
-date: "November 2026"
+author:
+  - name: "Hernando Grueso, PhD"
+    affiliations: "UNICEF"
+date: "2026-11-19"
+date-format: "MMMM YYYY"
 lang: en
 format:
   revealjs:
-    theme: default
+    theme: [default, beamer_theme.scss]
+    width: 1280
+    height: 720
+    margin: 0
+    center: false
     slide-number: c/t
-    transition: fade
+    transition: none
+    progress: false
+    footer: "<span class='fl fl-l'>Hernando Grueso, UNICEF</span><span class='fl fl-c'>Young Women’s Labour-Market Inclusion · Ukraine</span><span class='fl fl-r'>November 2026</span>"
     embed-resources: true
     fig-align: center
     include-in-header:
       text: |
         <style>
+        @font-face { font-family: "CMU Sans Serif"; font-style: normal; font-weight: 400; src: url("fonts/cmu-sans-serif-500-roman.woff2") format("woff2"); }
+        @font-face { font-family: "CMU Sans Serif"; font-style: italic; font-weight: 400; src: url("fonts/cmu-sans-serif-500-italic.woff2") format("woff2"); }
+        @font-face { font-family: "CMU Sans Serif"; font-style: normal; font-weight: 600 700; src: url("fonts/cmu-sans-serif-700-roman.woff2") format("woff2"); }
+        @font-face { font-family: "CMU Sans Serif"; font-style: italic; font-weight: 600 700; src: url("fonts/cmu-sans-serif-700-italic.woff2") format("woff2"); }
         .reveal .section-divider h1,
         .reveal .section-divider h2 { color:#fff !important; }
-        .reveal em { color:#E2007A; font-style:normal; font-weight:600; }
+        .reveal em { color:#00377C; font-style:normal; font-weight:600; }
         .reveal .placeholder {
         border:2px dashed #b9c2cc; border-radius:12px; background:#f6f8fa;
         padding:.7em 1em; color:#5a6b73; font-size:.8em; }
@@ -24,13 +37,13 @@ format:
         font-family:monospace; color:#00377C; font-weight:700;
         text-transform:uppercase; font-size:.8em; letter-spacing:.04em; }
         .reveal table { font-size:.46em; }
-        .reveal table th { color:#00377C; border-bottom:2px solid #d9e2ec; }
+        
         .reveal .tight-table table { font-size:.74em; border-collapse:collapse; width:100%; }
         .reveal .tight-table table td, .reveal .tight-table table th { padding:2px 5px; }
-        .reveal .assump-table table { font-size:.6em; border-collapse:collapse; width:100%; }
-        .reveal .kv-table table { font-size:.56em; border-collapse:collapse; width:100%; }
+        .reveal .assump-table table { font-size:.66em; border-collapse:collapse; width:100%; }
+        .reveal .kv-table table { font-size:.63em; border-collapse:collapse; width:100%; }
         .reveal .kv-table td, .reveal .kv-table th { padding:3px 6px; line-height:1.25; }
-        .reveal .kv-small table { font-size:.5em; border-collapse:collapse; width:100%; }
+        .reveal .kv-small table { font-size:.57em; border-collapse:collapse; width:100%; }
         .reveal .kv-small td, .reveal .kv-small th { padding:2px 6px; line-height:1.3; }
         .reveal .assump-table td, .reveal .assump-table th { padding:3px 8px; }
         .toc-grid { font-size:.9em; line-height:1.6; margin-top:1.2em; }
@@ -38,13 +51,13 @@ format:
         .toc-grid b { color:#00377C; }
         .kf-list { font-size:.9em; line-height:1.4; }
         .bn-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1em; margin-top:1.4em; }
-        .bn-tile { border-top:6px solid #E2007A; background:#f7f9fb; border-radius:8px; padding:1em .9em; text-align:center; }
+        .bn-tile { border-top:6px solid #00377C; background:#f7f9fb; border-radius:8px; padding:1em .9em; text-align:center; }
         .bn-num { display:block; font-size:2.1em; font-weight:700; color:#00377C; line-height:1.1; }
         .bn-lab { display:block; font-size:.7em; font-weight:600; color:#1f2a30; margin-top:.3em; }
         .bn-sub { display:block; font-size:.5em; color:#5a6b73; margin-top:.6em; line-height:1.35; }
         .eq-wrap { display:flex; flex-direction:column; gap:.9em; margin-top:.6em; }
         .eq-card { border:1px solid #d9e2ec; border-left:6px solid #00377C; border-radius:8px; background:#f7f9fb; padding:.6em 1em .65em; }
-        .eq-card.pink { border-left-color:#E2007A; }
+        .eq-card.pink { border-left-color:#1CABE2; }
         .eq-label { font-size:.5em; font-weight:700; color:#00377C; text-transform:uppercase; letter-spacing:.04em; }
         .eq { font-family:'Cambria Math','STIX Two Math','Times New Roman',serif; font-size:.92em; text-align:center; margin:.45em 0 .35em; }
         .eq.long { font-size:.7em; }
@@ -54,17 +67,38 @@ format:
         .eq-grid div { font-size:.5em; line-height:1.35; background:#fff; border:1px solid #e3e9ef; border-radius:6px; padding:.45em .6em; }
         .eq-grid b { color:#00377C; }
         .kf-list p { margin-bottom:.7em; }
-        .kf-list b { color:#E2007A; }
-        .reveal h2 { font-size:1.25em !important; line-height:1.15 !important; }
+        .kf-list b { color:#00377C; }
+        
         .vmid { margin-top:2.2em; }
         .vmid-s { margin-top:1.2em; }
         .vmid-l { margin-top:3.5em; }
-        .reveal section.bigtitle h2 { font-size:1.6em !important; }
+        
         .stat-row { display:flex; justify-content:center; gap:1em; margin-top:1em; }
         .stat { flex:1; text-align:center; background:#f6f8fa; border-radius:12px; padding:.8em .4em; }
-        .stat .n { font-size:1.9em; font-weight:800; color:#E2007A; line-height:1.1; }
+        .stat .n { font-size:1.9em; font-weight:800; color:#00377C; line-height:1.1; }
         .stat .l { font-size:.55em; color:#374649; margin-top:.4em; }
         </style>
+    include-after-body:
+      text: |
+        <script>
+        /* Beamer-style footline on every page of the PDF export: copy the footer into each printed page and number pages n / N */
+        (function () {
+          var last = -1, stable = 0;
+          function footlines() {
+            var pages = document.querySelectorAll('.reveal .pdf-page'), f = document.querySelector('.reveal > .footer');
+            if (!pages.length || !f) return false;
+            if (pages.length !== last) { last = pages.length; stable = 0; return false; }
+            if (++stable < 3) return false;
+            pages.forEach(function (pg, i) {
+              if (!pg.querySelector('.footer')) pg.appendChild(f.cloneNode(true));
+              var sn = pg.querySelector('.slide-number-pdf'); if (sn) sn.textContent = (i + 1) + ' / ' + pages.length;
+            });
+            f.style.display = 'none';
+            return true;
+          }
+          var n = 0, t = setInterval(function () { if (footlines() || ++n > 300) clearInterval(t); }, 100);
+        })();
+        </script>
 execute:
   echo: false
   warning: false
@@ -82,6 +116,7 @@ FIG <- function(file, width = "90%") {
     cat("::: {.placeholder}\n<span class='ph-tag'>\u25a2 pending data</span><br>Figure pending: run the corresponding script (see README) to generate it.\n:::\n")
 }
 .rdc <- function(p) tryCatch(readr::read_csv(file.path(OUT, p), show_col_types = FALSE), error = function(e) NULL)
+.rdc_chr <- function(p) tryCatch(readr::read_csv(file.path(OUT, p), col_types = readr::cols(.default = "c")), error = function(e) NULL)
 .hd <- .rdc("tables/lfs_headlines.csv")
 H <- function(k, d = 0) { if (is.null(.hd)) return("n/a"); v <- .hd$value[.hd$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else formatC(v[1], format = "f", digits = d) }
@@ -98,7 +133,7 @@ MH <- function(k, d = 0) { if (is.null(.mh)) return("n/a"); v <- .mh$value[.mh$k
 .mincer <- .rdc("models/hsess_mincer.csv")
 .ch <- .rdc("tables/coi_headlines.csv")
 .gh <- .rdc("tables/groups_headlines.csv")
-.sens <- .rdc("tables/coi_sensitivity.csv"); .bud <- .rdc("tables/coi_budget_table.csv"); .prg <- .rdc("tables/coi_programmes.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
+.sens <- .rdc("tables/coi_sensitivity.csv"); .bud <- .rdc_chr("tables/coi_budget_table.csv"); .prg <- .rdc("tables/coi_programmes.csv"); .bet <- .rdc("tables/coi_break_even.csv"); .mzt <- .rdc_chr("models/coi_mincer_women.csv"); .src <- .rdc("tables/interventions_sources.csv")
 CHK <- function(k) { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == k]
   if (!length(v) || is.na(v[1])) "n/a" else format(round(v[1], -3), big.mark = ",", scientific = FALSE) }
 EY_REV <- function() { if (is.null(.ch)) return("n/a"); v <- .ch$value[.ch$key == "need_rev_ey_2"]
@@ -144,7 +179,7 @@ Appendix
 - **UNICEF Household Social and Economic Status Survey (HSESS)**, December 2023 to February 2024, Institute of Demography and Quality of Life Problems: 18,838 individuals in 8,024 households, all regions covered by the survey (Luhansk oblast is not included). Covers women and men: participation, employment, NEET, job quality, occupations, earnings and childcare.
 - **SSSU Labour Force Survey 2021** (anonymised public-use file), collected in 2021: 265.6k interviews from 151.7k persons aged 15+. Shown for reference only.
 
-# 1 · The problem {.section-divider background-color="#00377C"}
+# The problem {.section-divider label="Section 1"}
 
 ## `r MH("neet_w_1824")`% of women aged 18–24 are NEET {.smaller}
 ```{r q1, results='asis'}
@@ -173,7 +208,7 @@ FIG("m1_attendance_by_level_en.png", "84%")
 MICS 2025/26, household members attending in the current school year. Ages 14–17: girls `r MH("att_w_1417")`%, boys `r MH("att_m_1417")`%. Ages 18–24: women `r MH("att_w_1824")`%, men `r MH("att_m_1824")`%. School attendance is available from age 14; NEET and employment only from age 15. MICS does not show the gap in education at 18–24 that HSESS shows; the surveys differ in date, respondent and definition.
 :::
 
-# 2 · Who is most affected {.section-divider background-color="#00377C"}
+# Who is most affected {.section-divider label="Section 2"}
 
 ## Mothers and the poorest have the highest NEET rates {.smaller}
 ```{r g1, results='asis'}
@@ -229,7 +264,7 @@ FIG("h9b_preschool_reasons_by_age_en.png", "82%")
 HSESS 2023/24: main reason a child does not attend preschool, for children under 3 and aged 3–6. Preschool attendance at ages 3–5 is `r MH("preschool")`% (MICS 2025/26).
 :::
 
-# 3 · From education to earnings {.section-divider background-color="#00377C"}
+# From education to earnings {.section-divider label="Section 3"}
 
 ## NEET falls with education {.smaller}
 ```{r q8, results='asis'}
@@ -258,7 +293,7 @@ FIG("h20_mincer_by_education_en.png", "82%")
 HSESS 2023/24, wage earners aged 18–64. Predicted net monthly wage at age 30 in an urban area. Gap at comparable age and area: `r MM("gap_sec_adj", 0)`% with complete secondary, `r MM("gap_higher_adj", 0)`% with higher education. Each additional year of education is associated with `r MM("ret_w")`% higher wages for women and `r MM("ret_m")`% for men. Not adjusted for hours, occupation or sector.
 :::
 
-# 4 · The cost of the gender gap {.section-divider background-color="#00377C"}
+# The cost of the gender gap {.section-divider label="Section 4"}
 
 ## How the cost of the gender gap is calculated {.smaller}
 
@@ -362,10 +397,10 @@ HSESS 2023/24, ages 18–24. NEET is `r CH("mg_mothers", 0)`% among young mother
 
 ## Two existing programmes: what they offer {.smaller}
 
-::: {.kv-small}
+::: {.kv-small style="font-size:.92em;"}
 | | **Youth hiring compensation** | **eYasla** |
 |---|---|---|
-| **GenU priority** | Learning-to-Earning (First Experience) | Inclusive Access and Navigation (care and employment) |
+| **Fits GenU Ukraine priority** | Learning-to-Earning (First Experience) | Inclusive Access and Navigation (links between protection and employment) |
 | **Finding it responds to** | The gap opens at the exit from education into a first job | Motherhood accounts for most of the gap; childcare barriers for children under 3 |
 | **Who is eligible** | Employers who hire registered unemployed people under 25 with up to 12 months of insurance record, or under 35 into their first job | Mothers or other legal representatives who return to full-time work after the child turns one |
 | **Who receives the money** | The employer | The parent, to pay for registered childcare services (private preschools, registered childcare providers, paid services at public preschools) |
@@ -393,19 +428,19 @@ if (!is.null(.prg)) kable(.prg %>% mutate(`Cost per woman (UAH)` = format(`Cost 
 :::
 
 ::: {style="font-size:0.56em; color:#7a7a7a;"}
-Reading the table: the youth hiring compensation pays for itself through public revenues if about `r CH("need_rev_yhc_1")`% of subsidised hires would not have happened without it and last a year (`r CH("need_rev_yhc_3")`% if they last three years). `r EY_REV()`; it pays for itself in value to the economy if about `r CH("need_econ_ey_2")`% of supported mothers would not otherwise have worked, or `r CH("need_econ_ey_5")`% if they stay in work for five years, before counting any benefits for children. Neither programme has been evaluated, so these shares are tests to apply, not results; eYasla started in January 2026 and could be evaluated by comparing employment of eligible mothers before and after it. Benefits use 2023/24 wages and costs are 2026 amounts, so the shares are conservative. Sources: programme amounts from the [State Employment Service, via RBC-Ukraine (22 July 2026)](https://www.rbc.ua/rus/news/persha-robota-molodi-k-derzhava-dopomagae-1783603871.html) and the [Government of Ukraine (14 January 2026)](https://www.kmu.gov.ua/news/z-1-sichnia-v-ukraini-startuvala-derzhavna-prohrama-pidtrymky-batkiv-iaki-pratsiuiut-ieiasla); benefits from this analysis, calculated step by step in the appendix.
+Years in work: the shorter horizon is built into each programme (the employer must keep the job for 12 months to receive the full compensation; eYasla pays only while the mother works full time, for two years); the longer one is illustrative (a first job that lasts three years; a mother who stays in work until her child starts school at six). Reading the table: the youth hiring compensation pays for itself through public revenues if about `r CH("need_rev_yhc_1")`% of subsidised hires would not have happened without it and last a year (`r CH("need_rev_yhc_3")`% if they last three years). `r EY_REV()`; it pays for itself in value to the economy if about `r CH("need_econ_ey_2")`% of supported mothers would not otherwise have worked, or `r CH("need_econ_ey_5")`% if they stay in work for five years, before counting any benefits for children. Neither programme has been evaluated, so these shares are tests to apply, not results; eYasla started in January 2026 and could be evaluated by comparing employment of eligible mothers before and after it. Benefits use 2023/24 wages and costs are 2026 amounts, so the shares are conservative. Sources: programme amounts from the [State Employment Service, via RBC-Ukraine (22 July 2026)](https://www.rbc.ua/rus/news/persha-robota-molodi-k-derzhava-dopomagae-1783603871.html) and the [Government of Ukraine (14 January 2026)](https://www.kmu.gov.ua/news/z-1-sichnia-v-ukraini-startuvala-derzhavna-prohrama-pidtrymky-batkiv-iaki-pratsiuiut-ieiasla); benefits from this analysis, calculated step by step in the appendix.
 :::
 
-# 5 · Conclusions and recommendations {.section-divider background-color="#00377C"}
+# Conclusions and recommendations {.section-divider label="Section 5"}
 
 ## Where to invest: three areas {.smaller}
 
 ::: {.kv-table}
 | | Investment area | Who it reaches | How many NEET young women | What the data show | Existing mechanisms to build on |
 |---|---|---|---|---|---|
-| **1** | **Care support for young mothers**: childcare places for children under 3, flexible and family-friendly work | Young mothers aged 18–24 | `r CH("area_share_mothers", 0)`%, about `r CHK("area_n_mothers")` | Motherhood accounts for `r GAPX()`; NEET is `r CH("mg_mothers", 0)`% among young mothers | eYasla; preschool expansion; employers' family-friendly policies (Inclusive Access and Navigation) |
+| **1** | **Care support for young mothers**: childcare places for children under 3, flexible and family-friendly work | Young mothers aged 18–24 | `r CH("area_share_mothers", 0)`%, about `r CHK("area_n_mothers")` | Motherhood accounts for `r GAPX()` (HSESS); NEET is `r GH("g1_mother_yes")`% among young mothers (MICS) | eYasla; preschool expansion; employers' family-friendly policies (Inclusive Access and Navigation) |
 | **2** | **First work experience** at the exit from education: internships, apprenticeships, first-job support | Young women without children leaving education | `r CH("area_share_nochild", 0)`%, about `r CHK("area_n_nochild")` | Women and men work at the same rate; the gap opens in the transition; only `r CH("share_seeking", 0)`% of NEET young women are looking for work | Youth hiring compensation; State Employment Service; employer partnerships (Learning-to-Earning) |
-| **3** | **Linking social assistance and employment** for the poorest and single-headed households | Young women in the poorest 40% or in single-headed households | `r CH("area_share_poor_single", 0)`%, about `r CHK("area_n_poor_single")` | Poverty compounds motherhood: `r CH("area_share_poor_mother", 0)`% of NEET young women are poor mothers | Social assistance registries and case management linked to the State Employment Service |
+| **3** | **Linking social assistance and employment** for the poorest and single-headed households | Young women in the poorest 40% or in single-headed households | `r CH("area_share_poor_single", 0)`%, about `r CHK("area_n_poor_single")` | Poverty compounds motherhood: `r GH("comp_mics")`% of NEET young women are poor mothers | Social assistance registries and case management linked to the State Employment Service |
 :::
 
 ::: {style="font-size:0.56em; color:#7a7a7a;"}
@@ -450,7 +485,7 @@ Areas are ranked by how much of the gender gap they can address. Areas 1 and 2 s
 | Displacement is not associated with higher NEET (`r GH("g1_idp_yes")`% against `r GH("g1_idp_no")`%); disability groups are too small to estimate | Keep inclusive outreach through existing services for displaced young women and young women with disabilities, without a separate programme stream | Hromadas; IDP councils; UNICEF and partners | Not estimated; track outcomes as programmes report |
 :::
 
-# Appendix {.section-divider background-color="#00377C"}
+# Appendix {.section-divider}
 
 ## Cost of the gender gap: key assumptions {.smaller}
 
@@ -458,15 +493,15 @@ Areas are ranked by how much of the gender gap they can address. Areas 1 and 2 s
 | Element | Assumption | Source |
 |---|---|---|
 | Gap | NEET rate of women aged 18–24 minus NEET rate of men aged 18–24: `r CH("neet_w_h", 1)`% − `r CH("neet_m_h", 1)`% = `r CH("gap_pp", 1)` pp | HSESS 2023/24 (the only source with both sexes) |
-| Population | `r CHK("pop_w1824")` women aged 18–24, the weighted count in the areas covered by HSESS (excluding areas the survey could not reach); can be replaced by an official estimate (COI$pop_w1824) | HSESS 2023/24 weights |
-| Earnings | Wage predicted for each NEET young woman by the Mincer equation (n = `r CH("n_neet_pred")`): UAH `r CH("wage_c")` a month on average; no wage growth | HSESS 2023/24, nominal UAH, Dec 2023 to Feb 2024 |
+| Population | `r CHK("pop_w1824")` women aged 18–24, the weighted count in the areas covered by HSESS (excluding areas the survey could not reach); can be replaced by an official population estimate | HSESS 2023/24 weights |
+| Earnings | Wage predicted for each of the `r CH("n_neet_pred")` NEET young women in the sample by a Mincer equation estimated on `r CH("n_mincer")` employed women: UAH `r CH("wage_c")` a month on average; no wage growth | HSESS 2023/24, nominal UAH, Dec 2023 to Feb 2024 |
 | Counterfactual | Zero earnings while NEET | Assumption |
 | Formal jobs | `r CH("formal_c")`% formal, as among employed women aged 18–24 | HSESS 2023/24 |
 | Economy | Gross wage plus employer social contribution for formal jobs, net wage for informal jobs: a lower bound on the value of the work | Statutory rates |
 | Public revenues | 18% income tax and 5% military levy on the gross wage; 22% employer social contribution; 20% VAT on 80% of net earnings (consumption share assumed) | Statutory rates |
-| Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employer surveys report shortages |
+| Labour demand | Jobs available at the wage of employed women with the same profile; no displacement of other workers | Assumption; employers report record shortages in 2026 (see "How to read this estimate") |
 | Budget comparators | 2024 values (the year the wages were collected): GDP, public revenues, health, Programme of Medical Guarantees, education, preschool education, support to low-income families | See the next slide for values and sources |
-| Programme costs (2026) | Youth hiring compensation: 50% of the minimum wage, UAH 4,324 a month, for 6 months. eYasla: UAH 8,000 a month from the child's first to third birthday | State Employment Service; Cabinet of Ministers |
+| Programme costs (2026) | Youth hiring compensation: 50% of the minimum wage, UAH 4,324 a month, for up to 6 months. eYasla: UAH 8,000 a month for childcare services, from the child's first to third birthday | [State Employment Service, via RBC-Ukraine, 22 July 2026](https://www.rbc.ua/rus/news/persha-robota-molodi-k-derzhava-dopomagae-1783603871.html); [Government of Ukraine, 14 January 2026](https://www.kmu.gov.ua/news/z-1-sichnia-v-ukraini-startuvala-derzhavna-prohrama-pidtrymky-batkiv-iaki-pratsiuiut-ieiasla) |
 | Not included | Effects on children, employers and the wider economy; lost experience; women's work-related expenses | |
 :::
 
@@ -888,13 +923,13 @@ Effects in percentage points. Ages 18–24. Controls: age, rural, displacement, 
 ::: {.vmid-s}
 ::: {.tight-table}
 ```{r mincer}
-if (!is.null(.mincer)) kable(.mincer %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, format = "f", digits = 3))), col.names = c("Sample", "Return per year (%)", "95% low", "95% high", "p", "N"), align = "lrrrrr")
+if (!is.null(.mincer)) kable(.mincer %>% mutate(p = ifelse(p < .001, "<0.001", formatC(p, format = "f", digits = 3)), across(where(is.numeric), ~ ifelse(is.na(.x), "", as.character(.x)))), col.names = c("Sample", "Return per year (%)", "95% low", "95% high", "p", "N"), align = "lrrrrr")
 ```
 :::
 :::
 
 ::: {style="font-size:0.58em; color:#7a7a7a;"}
-Log monthly net wage on years of education, age and age squared, oblast fixed effects, weighted, standard errors clustered by household. Wage earners aged 19–64.
+Log monthly net wage on years of education, age and age squared, oblast fixed effects, weighted, standard errors clustered by household. Wage earners aged 18–64.
 :::
 
 ## Association between key variables, women 18–24 (MICS) {.smaller}
